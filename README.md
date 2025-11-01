@@ -205,4 +205,6 @@ Bei Fragen oder Problemen erstellen Sie bitte ein Issue auf GitHub oder kontakti
 
 ---
 
-**KodiniTools** - Ultimativer Musikplayer © 2024
+## Autor
+Dinko Ramić Kodini Tools kodinitools.com
+
