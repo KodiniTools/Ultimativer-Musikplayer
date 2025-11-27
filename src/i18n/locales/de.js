@@ -70,11 +70,5 @@ export default {
       question: 'Gibt es ein Limit für die Anzahl der Musikdateien?',
       answer: 'Nein, es gibt keine feste Begrenzung. Sie können so viele Titel hinzufügen, wie Sie möchten. Bei sehr großen Playlists kann die Leistung jedoch von den Fähigkeiten Ihres Geräts abhängen.'
     }
-  },
-  cookie: {
-    notice: '🍪 Cookie-Hinweis: Diese Website verwendet technisch notwendige Cookies für die Grundfunktionalität. Durch die Nutzung stimmen Sie der Verwendung zu.',
-    learn: 'Mehr erfahren',
-    accept: 'Akzeptieren',
-    decline: 'Ablehnen'
   }
 }

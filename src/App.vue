@@ -48,7 +48,6 @@
     </main>
 
     <FAQSection />
-    <CookieBanner />
   </div>
 </template>
 
@@ -69,7 +68,6 @@ import VolumeControl from '@/components/VolumeControl.vue'
 import PlayerControls from '@/components/PlayerControls.vue'
 import Playlist from '@/components/Playlist.vue'
 import FAQSection from '@/components/FAQSection.vue'
-import CookieBanner from '@/components/CookieBanner.vue'
 
 const { t } = useI18n()
 const store = usePlayerStore()
