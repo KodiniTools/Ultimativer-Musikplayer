@@ -70,11 +70,5 @@ export default {
       question: 'Is there a limit to the number of music files?',
       answer: 'No, there is no fixed limit. You can add as many tracks as you like. However, with very large playlists, performance may depend on the capabilities of your device.'
     }
-  },
-  cookie: {
-    notice: '🍪 Cookie Notice: This website uses technically necessary cookies for basic functionality. By using this site, you consent to their use.',
-    learn: 'Learn more',
-    accept: 'Accept',
-    decline: 'Decline'
   }
 }
