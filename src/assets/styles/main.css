@@ -2,17 +2,17 @@
    3D Glasmorphic Design Tokens
    =============== */
 :root {
-  /* Primary Colors - Neues Farbschema */
-  --primary: #F2E28E;
-  --primary-dark: #D9C97D;
-  --primary-light: #F7EDB0;
-  --accent: #A28680;
-  --accent-glow: rgba(162, 134, 128, 0.4);
+  /* Primary Colors - Light Theme (dunklere Töne für besseren Kontrast) */
+  --primary: #C4A82E;
+  --primary-dark: #A89025;
+  --primary-light: #D4BC4E;
+  --accent: #7A5F58;
+  --accent-glow: rgba(122, 95, 88, 0.4);
 
-  /* Glasmorphic Backgrounds */
-  --glass-bg: rgba(94, 95, 105, 0.12);
-  --glass-border: rgba(174, 175, 183, 0.25);
-  --glass-shadow: rgba(12, 12, 16, 0.1);
+  /* Glasmorphic Backgrounds - Light Theme */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(120, 120, 130, 0.3);
+  --glass-shadow: rgba(12, 12, 16, 0.15);
 
   /* 3D-Schatten (Multi-Layer) */
   --shadow-3d-sm:
@@ -746,7 +746,7 @@ h1 {
 .progress-bar {
   flex-grow: 1;
   height: 12px;
-  background: var(--glass-bg);
+  background: rgba(180, 180, 190, 0.4);
   border-radius: 20px;
   position: relative;
   cursor: pointer;
@@ -767,8 +767,8 @@ h1 {
   border-radius: 20px;
   transition: width 0.1s linear;
   box-shadow:
-    0 0 20px rgba(242, 226, 142, 0.4),
-    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    0 0 12px rgba(196, 168, 46, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
   position: relative;
 }
 
@@ -1066,6 +1066,8 @@ h1 {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   background: transparent;
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 .playlist li::before {
@@ -1091,10 +1093,10 @@ h1 {
 
 .playlist li.active {
   background: linear-gradient(90deg,
-    rgba(242, 226, 142, 0.2),
-    rgba(162, 134, 128, 0.1)
+    rgba(196, 168, 46, 0.2),
+    rgba(122, 95, 88, 0.15)
   );
-  color: var(--primary);
+  color: var(--accent);
   font-weight: 700;
   padding-left: 24px;
 }
