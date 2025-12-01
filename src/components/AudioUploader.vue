@@ -29,13 +29,24 @@ const emit = defineEmits(['filesLoaded'])
 const handleFileChange = (event) => {
   const files = event.target.files
   console.log('File input changed:', files.length, 'files selected')
-  
+
   if (files && files.length > 0) {
     console.log('First file:', files[0].name, files[0].type)
-    store.setAudioFiles(files)
+
+    // Add to existing playlist instead of replacing
+    const wasEmpty = store.audioFiles.length === 0
+    store.addAudioFiles(files)
+
     console.log('Store now has', store.audioFiles.length, 'files')
-    emit('filesLoaded', 0)
+
+    // Only auto-play first track if playlist was empty
+    if (wasEmpty) {
+      emit('filesLoaded', 0)
+    }
   }
+
+  // Reset input so same file can be selected again
+  event.target.value = ''
 }
 </script>
 
