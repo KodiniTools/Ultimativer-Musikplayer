@@ -48,15 +48,20 @@
     inset -4px -4px 8px rgba(255, 255, 255, 0.9);
 
   /* Light Theme */
-  --bg-primary: linear-gradient(135deg, #AEAFB7 0%, #5E5F69 100%);
-  --bg-surface: rgba(255, 255, 255, 0.8);
-  --bg-elevated: rgba(255, 255, 255, 0.9);
-  --bg-panel: rgba(255, 255, 255, 0.85);
+  --bg-primary: linear-gradient(135deg, #F0F1F5 0%, #D8D9E0 100%);
+  --bg-surface: rgba(255, 255, 255, 0.9);
+  --bg-elevated: rgba(255, 255, 255, 0.95);
+  --bg-panel: rgba(255, 255, 255, 0.92);
 
-  --text-primary: #0C0C10;
-  --text-secondary: #5E5F69;
-  --text-muted: #AEAFB7;
-  --text-inverse: #0C0C10;
+  --text-primary: #1a1a24;
+  --text-secondary: #4a4b55;
+  --text-muted: #8a8b95;
+  --text-inverse: #1a1a24;
+
+  /* Heading Colors for Light Theme */
+  --heading-primary: #2a2a35;
+  --heading-gradient-start: #1a1a24;
+  --heading-gradient-end: #4a4b55;
 
   --border-primary: rgba(174, 175, 183, 0.4);
   --border-accent: rgba(242, 226, 142, 0.6);
@@ -89,6 +94,11 @@ html[data-theme="dark"] {
   --text-secondary: #AEAFB7;
   --text-muted: #5E5F69;
   --text-inverse: #0C0C10;
+
+  /* Heading Colors for Dark Theme */
+  --heading-primary: #F2E28E;
+  --heading-gradient-start: #F2E28E;
+  --heading-gradient-end: #D9C97D;
 
   --border-primary: rgba(174, 175, 183, 0.25);
   --border-accent: rgba(242, 226, 142, 0.5);
@@ -272,12 +282,13 @@ body::before {
 h1 {
   font-size: 1.15rem;
   margin: 0;
-  font-weight: 600;
-  background: linear-gradient(135deg, var(--text-primary), var(--primary));
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--heading-gradient-start), var(--heading-gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.02em;
+  text-shadow: none;
 }
 
 .header-actions {
@@ -466,9 +477,9 @@ h1 {
 
 .content-section h2 {
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0 0 14px 0;
-  background: linear-gradient(135deg, var(--text-primary), var(--primary));
+  background: linear-gradient(135deg, var(--heading-gradient-start), var(--heading-gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -994,9 +1005,9 @@ h1 {
 
 .panel__header h2 {
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, var(--text-primary), var(--primary));
+  background: linear-gradient(135deg, var(--heading-gradient-start), var(--heading-gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

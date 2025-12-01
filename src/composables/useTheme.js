@@ -21,7 +21,7 @@ export function useTheme() {
   const updateThemeColor = () => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]')
     if (metaThemeColor) {
-      metaThemeColor.setAttribute('content', theme.value === 'dark' ? '#0C0C10' : '#AEAFB7')
+      metaThemeColor.setAttribute('content', theme.value === 'dark' ? '#0C0C10' : '#F0F1F5')
     }
   }
   
