@@ -11,7 +11,7 @@
       @click="handleSeek"
       @keydown="handleKeydown"
     >
-      <div :style="{ width: store.progress + '%' }"></div>
+      <div class="progress-bar__fill" :style="{ width: store.progress + '%' }"></div>
     </div>
     <span class="timechip">-{{ formatTime(store.remainingTime) }}</span>
   </div>
