@@ -56,6 +56,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from '@/stores/playerStore'
 import { useAudioPlayer } from '@/composables/useAudioPlayer'
+import { useTheme } from '@/composables/useTheme'
 
 import AppHeader from '@/components/AppHeader.vue'
 import NavigationTabs from '@/components/NavigationTabs.vue'
@@ -71,6 +72,7 @@ import FAQSection from '@/components/FAQSection.vue'
 
 const { t } = useI18n()
 const store = usePlayerStore()
+useTheme()
 
 const audioElementRef = ref(null)
 const analyser = ref(null)

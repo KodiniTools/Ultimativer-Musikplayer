@@ -74,47 +74,70 @@
 }
 
 html[data-theme="dark"] {
-  /* Dark Mode mit hohem Kontrast */
-  --primary: #F2E28E;
-  --primary-dark: #D9C97D;
-  --primary-light: #F7EDB0;
-  --accent: #A28680;
-  --accent-glow: rgba(242, 226, 142, 0.5);
+  /* Dark Mode - Navy & Gold */
+  --primary: #c9984d;
+  --primary-dark: #091428;
+  --primary-light: #f8e1a9;
+  --accent: #014f99;
+  --accent-glow: rgba(201, 152, 77, 0.5);
 
-  --glass-bg: rgba(12, 12, 16, 0.7);
-  --glass-border: rgba(174, 175, 183, 0.2);
-  --glass-shadow: rgba(0, 0, 0, 0.4);
+  --glass-bg: rgba(14, 28, 50, 0.85);
+  --glass-border: rgba(201, 152, 77, 0.18);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
 
-  --bg-primary: linear-gradient(135deg, #0C0C10 0%, #1a1a22 100%);
-  --bg-surface: rgba(28, 28, 35, 0.8);
-  --bg-elevated: rgba(40, 40, 50, 0.85);
-  --bg-panel: rgba(28, 28, 35, 0.75);
+  --bg-primary: linear-gradient(135deg, #091428 0%, #0E1C32 100%);
+  --bg-surface: rgba(20, 38, 64, 0.85);
+  --bg-elevated: rgba(20, 38, 64, 0.95);
+  --bg-panel: rgba(14, 28, 50, 0.9);
 
-  --text-primary: #F2E28E;
-  --text-secondary: #AEAFB7;
-  --text-muted: #5E5F69;
-  --text-inverse: #0C0C10;
+  --text-primary: #f9f2d5;
+  --text-secondary: #f8e1a9;
+  --text-muted: #7A8DA0;
+  --text-inverse: #091428;
 
   /* Heading Colors for Dark Theme */
-  --heading-primary: #F2E28E;
-  --heading-gradient-start: #F2E28E;
-  --heading-gradient-end: #D9C97D;
+  --heading-primary: #c9984d;
+  --heading-gradient-start: #c9984d;
+  --heading-gradient-end: #f8e1a9;
 
-  --border-primary: rgba(174, 175, 183, 0.25);
-  --border-accent: rgba(242, 226, 142, 0.5);
+  --border-primary: rgba(201, 152, 77, 0.2);
+  --border-accent: rgba(201, 152, 77, 0.45);
+
+  --shadow-3d-sm:
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    0 1px 0 rgba(201, 152, 77, 0.08) inset;
+
+  --shadow-3d-md:
+    0 4px 8px rgba(0, 0, 0, 0.25),
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    0 16px 32px rgba(0, 0, 0, 0.15),
+    0 2px 0 rgba(201, 152, 77, 0.06) inset;
+
+  --shadow-3d-lg:
+    0 8px 16px rgba(0, 0, 0, 0.3),
+    0 16px 32px rgba(0, 0, 0, 0.25),
+    0 32px 64px rgba(0, 0, 0, 0.2),
+    0 3px 0 rgba(201, 152, 77, 0.05) inset;
+
+  --shadow-3d-xl:
+    0 12px 24px rgba(0, 0, 0, 0.35),
+    0 24px 48px rgba(0, 0, 0, 0.3),
+    0 48px 96px rgba(0, 0, 0, 0.2),
+    0 4px 0 rgba(201, 152, 77, 0.04) inset;
 
   --neu-shadow-light:
     8px 8px 16px rgba(0, 0, 0, 0.5),
-    -8px -8px 16px rgba(40, 40, 50, 0.3);
+    -8px -8px 16px rgba(20, 38, 64, 0.4);
 
   --neu-shadow-inset:
-    inset 4px 4px 8px rgba(0, 0, 0, 0.6),
-    inset -4px -4px 8px rgba(40, 40, 50, 0.4);
+    inset 4px 4px 8px rgba(0, 0, 0, 0.5),
+    inset -4px -4px 8px rgba(20, 38, 64, 0.4);
 
-  --glow-primary: 0 0 20px rgba(242, 226, 142, 0.5),
-                   0 0 40px rgba(242, 226, 142, 0.3);
-  --glow-accent: 0 0 20px rgba(162, 134, 128, 0.6),
-                  0 0 40px rgba(162, 134, 128, 0.4);
+  --glow-primary: 0 0 20px rgba(201, 152, 77, 0.4),
+                   0 0 40px rgba(201, 152, 77, 0.2);
+  --glow-accent: 0 0 20px rgba(1, 79, 153, 0.4),
+                  0 0 40px rgba(1, 79, 153, 0.25);
 }
 
 /* ===============
@@ -230,7 +253,7 @@ body::before {
 .app__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px 28px;
@@ -289,60 +312,7 @@ h1 {
   background-clip: text;
   letter-spacing: -0.02em;
   text-shadow: none;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* ===============
-   3D Icon Buttons
-   =============== */
-.icon-button {
-  height: 40px;
-  width: 40px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-  cursor: pointer;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-3d-sm);
-}
-
-.icon-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 10px;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.icon-button:hover {
-  transform: translateY(-4px) translateZ(12px);
-  box-shadow: var(--shadow-3d-md), var(--glow-primary);
-  border-color: var(--border-accent);
-}
-
-.icon-button:hover::before {
-  opacity: 1;
-}
-
-.icon-button:active {
-  transform: translateY(-2px) translateZ(6px);
+  text-align: center;
 }
 
 /* ===============
@@ -416,46 +386,6 @@ h1 {
 }
 
 /* ===============
-   Language Switcher
-   =============== */
-.language-switcher {
-  display: flex;
-  gap: 6px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  padding: 6px;
-  box-shadow: var(--shadow-3d-sm);
-}
-
-.lang-btn {
-  padding: 6px 12px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.75rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.lang-btn.active {
-  background: linear-gradient(135deg, var(--accent), var(--primary-dark, #003971));
-  color: #F5F4D6;
-  box-shadow: var(--shadow-3d-sm);
-  transform: scale(1.05);
-}
-
-.lang-btn:hover:not(.active) {
-  background: var(--glass-bg);
-  color: var(--text-primary);
-  transform: translateY(-2px);
-}
-
-/* ===============
    Content Sections
    =============== */
 .content-section {
@@ -483,6 +413,11 @@ h1 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-align: center;
+}
+
+.content-section h3 {
+  text-align: center;
 }
 
 /* ===============
@@ -1011,6 +946,7 @@ h1 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-align: center;
 }
 
 .panel-title-group {
