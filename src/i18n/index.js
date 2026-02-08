@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n'
 import de from './locales/de'
 import en from './locales/en'
 
-const savedLanguage = localStorage.getItem('musicplayer_language') || 'de'
+const savedLanguage = localStorage.getItem('locale') || 'de'
 
 const i18n = createI18n({
   legacy: false,
