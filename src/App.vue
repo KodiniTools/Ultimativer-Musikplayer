@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from '@/stores/playerStore'
 import { useAudioPlayer } from '@/composables/useAudioPlayer'
@@ -70,9 +70,26 @@ import PlayerControls from '@/components/PlayerControls.vue'
 import Playlist from '@/components/Playlist.vue'
 import FAQSection from '@/components/FAQSection.vue'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const store = usePlayerStore()
 useTheme()
+
+// Sync with SSI nav language-changed event
+const onLanguageChanged = (e) => {
+  const lang = e.detail?.lang
+  if (lang && lang !== locale.value) {
+    locale.value = lang
+    document.documentElement.lang = lang
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('language-changed', onLanguageChanged)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('language-changed', onLanguageChanged)
+})
 
 const audioElementRef = ref(null)
 const analyser = ref(null)
