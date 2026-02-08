@@ -1,8 +1,6 @@
 <template>
   <div class="app">
     <AppHeader />
-    <NavigationTabs />
-    <ContentSection />
 
     <main class="app__main">
       <section class="panel">
@@ -59,8 +57,6 @@ import { useAudioPlayer } from '@/composables/useAudioPlayer'
 import { useTheme } from '@/composables/useTheme'
 
 import AppHeader from '@/components/AppHeader.vue'
-import NavigationTabs from '@/components/NavigationTabs.vue'
-import ContentSection from '@/components/ContentSection.vue'
 import AudioUploader from '@/components/AudioUploader.vue'
 import AudioVisualizer from '@/components/AudioVisualizer.vue'
 import VisualizerControls from '@/components/VisualizerControls.vue'
