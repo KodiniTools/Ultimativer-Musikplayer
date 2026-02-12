@@ -1248,53 +1248,487 @@ h1 {
 /* ===============
    Responsive 3D Design
    =============== */
+
+/* --- Tablet (max 768px) --- */
 @media (max-width: 768px) {
   .app {
     padding: 16px;
     gap: 20px;
     perspective: 1000px;
   }
-  
+
   .panel:hover,
   .glass-panel:hover,
-  .content-section:hover {
+  .content-section:hover,
+  .faq-section:hover {
     transform: translateY(-2px);
   }
-  
+
+  /* Header */
+  .app__header {
+    padding: 16px 20px;
+    gap: 14px;
+  }
+
+  h1 {
+    font-size: 1.05rem;
+  }
+
+  /* Navigation */
+  .nav-tabs {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .nav-tab {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    gap: 8px;
+  }
+
+  /* Uploader */
+  .uploader__label {
+    padding: 28px 20px;
+    gap: 12px;
+  }
+
+  .uploader__label i {
+    font-size: 1.6rem;
+  }
+
+  /* Visualizer */
+  .visualizer {
+    height: 280px;
+  }
+
+  /* Viz Controls */
+  .viz-controls {
+    gap: 16px;
+  }
+
+  .viz-controls .field {
+    min-width: 160px;
+  }
+
+  /* Progress */
+  .progress-container {
+    gap: 10px;
+  }
+
+  /* Volume */
+  .volume-control {
+    gap: 12px;
+  }
+
+  .volume-slider {
+    width: 140px;
+  }
+
+  /* Player Controls */
   .audio-controls {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    max-width: 100%;
   }
-  
+
   .control-button.play-btn {
     grid-column: 2;
     grid-row: 1;
   }
-  
-  .visualizer {
-    height: 280px;
+
+  /* Playlist */
+  .playlist-panel,
+  .panel--playlist {
+    max-height: 400px;
   }
-  
-  .volume-slider {
-    width: 140px;
+
+  .panel__header {
+    padding: 14px 18px;
+  }
+
+  .playlist li {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  /* Delete-Button auf Touch-Geräten immer sichtbar */
+  .delete-track-btn {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Content Sections */
+  .content-section {
+    margin: 28px 0;
+    padding: 22px;
+  }
+
+  .content-section h2 {
+    font-size: 1rem;
+  }
+
+  /* FAQ */
+  .faq-section {
+    margin: 28px 0;
+    padding: 22px;
+  }
+
+  .faq-question {
+    padding: 10px 12px;
+    gap: 12px;
+    font-size: 0.8rem;
+  }
+
+  .faq-answer.open {
+    padding: 14px;
+    max-height: 400px;
   }
 }
 
+/* --- Mobile (max 480px) --- */
 @media (max-width: 480px) {
   body::before {
     animation: float 30s ease-in-out infinite;
+  }
+
+  .app {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  /* Header */
+  .app__header {
+    padding: 14px 16px;
+    gap: 12px;
+    border-radius: 18px;
+  }
+
+  .brand i {
+    font-size: 1.1rem;
+  }
+
+  h1 {
+    font-size: 0.95rem;
+  }
+
+  /* Navigation */
+  .nav-tabs {
+    padding: 6px;
+    gap: 4px;
+    border-radius: 14px;
+  }
+
+  .nav-tab {
+    padding: 8px 10px;
+    font-size: 0.7rem;
+    gap: 6px;
+    border-radius: 8px;
+  }
+
+  .nav-tab i {
+    font-size: 0.75rem;
+  }
+
+  /* Uploader */
+  .uploader__label {
+    padding: 24px 16px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+
+  .uploader__label i {
+    font-size: 1.4rem;
+  }
+
+  /* Panel */
+  .panel {
+    border-radius: 18px;
   }
 
   .panel__body {
     padding: 20px;
   }
 
-  .audio-controls {
-    grid-template-columns: repeat(3, 1fr);
+  .panel:hover {
+    transform: translateY(-3px) scale(1);
   }
 
+  /* Current Title */
+  .current-title {
+    padding: 12px;
+    font-size: 0.85rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Visualizer */
   .visualizer {
-    height: 240px;
+    height: 220px;
+    border-radius: 16px;
+    margin: 16px auto;
+  }
+
+  /* Viz Controls */
+  .viz-controls {
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .viz-controls .field {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .viz-controls select {
+    padding: 12px 14px;
+    font-size: 0.8rem;
+  }
+
+  /* Progress */
+  .progress-container {
+    gap: 8px;
+    margin: 16px 0;
+  }
+
+  .timechip {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+    min-width: 42px;
+  }
+
+  /* Volume */
+  .volume-control {
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .volume-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .volume-slider {
+    width: 120px;
+  }
+
+  /* Player Controls */
+  .audio-controls {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 16px auto;
+    max-width: 100%;
+  }
+
+  .control-button {
+    padding: 10px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+
+  .control-button.play-btn {
+    font-size: 1.05rem;
+  }
+
+  /* Playlist */
+  .playlist-panel,
+  .panel--playlist {
+    max-height: 280px;
+    border-radius: 16px;
+  }
+
+  .panel__header {
+    padding: 12px 16px;
+  }
+
+  .panel__header h2 {
+    font-size: 0.85rem;
+  }
+
+  .panel-title-group {
+    gap: 8px;
+  }
+
+  .playlist li {
+    padding: 10px 14px;
+    gap: 10px;
+    font-size: 0.85rem;
+  }
+
+  .playlist-count-badge {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+  }
+
+  .pill-button {
+    padding: 5px 12px;
+    font-size: 0.7rem;
+  }
+
+  /* Content Sections */
+  .content-section {
+    margin: 20px 0;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .content-section h2 {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+
+  /* FAQ */
+  .faq-section {
+    margin: 20px 0;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .faq-item {
+    margin-bottom: 12px;
+    border-radius: 12px;
+  }
+
+  .faq-question {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    gap: 10px;
+  }
+
+  .faq-answer.open {
+    padding: 12px;
+    max-height: 300px;
+  }
+
+  /* Glass Panel */
+  .glass-panel {
+    border-radius: 16px;
+  }
+}
+
+/* --- Kleine Smartphones (max 360px) --- */
+@media (max-width: 360px) {
+  .app {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  /* Header */
+  .app__header {
+    padding: 12px 14px;
+    gap: 10px;
+    border-radius: 14px;
+  }
+
+  .brand i {
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 0.85rem;
+  }
+
+  /* Navigation */
+  .nav-tabs {
+    padding: 5px;
+    gap: 3px;
+    border-radius: 12px;
+  }
+
+  .nav-tab {
+    padding: 6px 8px;
+    font-size: 0.6rem;
+    gap: 4px;
+  }
+
+  .nav-tab i {
+    font-size: 0.65rem;
+  }
+
+  /* Uploader */
+  .uploader__label {
+    padding: 20px 14px;
+    border-radius: 14px;
+  }
+
+  .uploader__label i {
+    font-size: 1.2rem;
+  }
+
+  /* Panel */
+  .panel {
+    border-radius: 14px;
+  }
+
+  .panel__body {
+    padding: 16px;
+  }
+
+  /* Visualizer */
+  .visualizer {
+    height: 180px;
+    border-radius: 14px;
+    margin: 12px auto;
+  }
+
+  /* Player Controls */
+  .audio-controls {
+    gap: 6px;
+  }
+
+  .control-button {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .control-button.play-btn {
+    font-size: 1rem;
+  }
+
+  /* Volume */
+  .volume-slider {
+    width: 90px;
+  }
+
+  /* Playlist */
+  .playlist-panel,
+  .panel--playlist {
+    max-height: 220px;
+    border-radius: 14px;
+  }
+
+  .panel__header {
+    padding: 10px 12px;
+  }
+
+  .playlist li {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* Content & FAQ */
+  .content-section,
+  .faq-section {
+    margin: 14px 0;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .content-section h2 {
+    font-size: 0.9rem;
+  }
+
+  .faq-question {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+
+  .faq-answer.open {
+    padding: 10px;
+  }
+
+  /* Glass Panel */
+  .glass-panel {
+    border-radius: 14px;
   }
 }
 
