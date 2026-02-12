@@ -10,8 +10,6 @@ const STATIC_ASSETS = [
   BASE_PATH + 'manifest.json',
   BASE_PATH + 'icon-192.png',
   BASE_PATH + 'icon-512.png',
-  // Fonts
-  'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap',
 ];
 
 // Installation: Cache erstellen
@@ -72,7 +70,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   
   // Nur für gleiche Origin
-  if (url.origin !== location.origin && !url.origin.includes('fonts.googleapis.com')) {
+  if (url.origin !== location.origin) {
     return;
   }
 
