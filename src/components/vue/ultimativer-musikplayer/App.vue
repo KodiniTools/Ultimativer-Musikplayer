@@ -13,7 +13,7 @@
             </div>
           </div>
 
-          <AudioVisualizer 
+          <AudioVisualizer
             :analyser="analyser"
             :dataArray="dataArray"
             :timeDomainArray="timeDomainArray"
@@ -23,12 +23,12 @@
 
           <ProgressBar @seek="handleSeek" />
 
-          <VolumeControl 
+          <VolumeControl
             @set-volume="audioPlayer.setVolume"
             @toggle-mute="audioPlayer.toggleMute"
           />
 
-          <PlayerControls 
+          <PlayerControls
             @play="audioPlayer.play"
             @pause="audioPlayer.pause"
             @stop="audioPlayer.stop"
@@ -38,14 +38,12 @@
         </div>
       </section>
 
-      <Playlist 
+      <Playlist
         @track-selected="handleTrackSelected"
       />
 
       <audio ref="audioElementRef" style="display: none;"></audio>
     </main>
-
-    <FAQSection />
   </div>
 </template>
 
@@ -64,7 +62,6 @@ import ProgressBar from './ProgressBar.vue'
 import VolumeControl from './VolumeControl.vue'
 import PlayerControls from './PlayerControls.vue'
 import Playlist from './Playlist.vue'
-import FAQSection from './FAQSection.vue'
 
 const { t, locale } = useI18n()
 const store = usePlayerStore()
