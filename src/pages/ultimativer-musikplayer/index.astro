@@ -1,7 +1,7 @@
 ---
 /**
  * Ultimativer Musikplayer – Landingpage (statisch, SEO-optimiert)
- * Texte aus src/i18n/locales/de.js extrahiert.
+ * i18n via data-i18n Attribute, synchronisiert mit SSI-Navigation language-changed Event.
  */
 import '../../assets/styles/main.css'
 ---
@@ -210,28 +210,28 @@ import '../../assets/styles/main.css'
   <!--#include virtual="/partials/nav.html" -->
 
   <main class="landing">
-    <!-- Hero Section: Was ist der Ultimative Musikplayer? -->
+    <!-- Hero Section -->
     <section class="hero">
-      <h1>Ultimativer Musikplayer</h1>
-      <p>
+      <h1 data-i18n="hero.title">Ultimativer Musikplayer</h1>
+      <p data-i18n="hero.desc">
         Erleben Sie Musik auf eine völlig neue Art mit unserem kostenlosen Musikplayer.
         Ausgestattet mit fortschrittlicher Audio-Visualisierung, umfassenden Playlist-Funktionen
         und modernem, responsivem Design.
       </p>
       <a href="/ultimativer-musikplayer/app" class="cta-button">
         <i class="fa-solid fa-play"></i>
-        Musikplayer jetzt starten
+        <span data-i18n="hero.cta">Musikplayer jetzt starten</span>
       </a>
     </section>
 
     <!-- Hauptfeatures -->
     <section>
-      <h2 class="section-title">Hauptfunktionen</h2>
+      <h2 class="section-title" data-i18n="features.title">Hauptfunktionen</h2>
       <div class="features-grid">
         <div class="feature-card">
           <i class="fa-solid fa-wave-square"></i>
-          <h3>Audio-Visualisierung</h3>
-          <p>
+          <h3 data-i18n="features.viz.title">Audio-Visualisierung</h3>
+          <p data-i18n="features.viz.desc">
             7 verschiedene Visualizer-Modi: Ribbon, Waves, Nebula, Spectrum Rays,
             Orbit Rings, Starfield und Grid Pulse. Passen Sie die Intensität in
             Echtzeit an.
@@ -240,8 +240,8 @@ import '../../assets/styles/main.css'
 
         <div class="feature-card">
           <i class="fa-solid fa-sliders"></i>
-          <h3>Equalizer &amp; Steuerung</h3>
-          <p>
+          <h3 data-i18n="features.eq.title">Equalizer &amp; Steuerung</h3>
+          <p data-i18n="features.eq.desc">
             Volle Kontrolle über Lautstärke, Wiedergabe, Vor-/Zurückspulen
             und Stummschaltung. Loop- und Shuffle-Modi für abwechslungsreiches
             Hören.
@@ -250,8 +250,8 @@ import '../../assets/styles/main.css'
 
         <div class="feature-card">
           <i class="fa-solid fa-list"></i>
-          <h3>Playlist-Management</h3>
-          <p>
+          <h3 data-i18n="features.playlist.title">Playlist-Management</h3>
+          <p data-i18n="features.playlist.desc">
             Laden Sie beliebig viele Titel. Shuffle, Loop, Titel löschen und
             direkte Titelauswahl. Unterstützte Formate: MP3, WAV, FLAC, M4A, OGG.
           </p>
@@ -259,8 +259,8 @@ import '../../assets/styles/main.css'
 
         <div class="feature-card">
           <i class="fa-solid fa-mobile-screen"></i>
-          <h3>Responsive Design</h3>
-          <p>
+          <h3 data-i18n="features.responsive.title">Responsive Design</h3>
+          <p data-i18n="features.responsive.desc">
             Perfekt optimiert für Desktop, Tablet und Smartphone.
             Alle Funktionen sind für Touch-Bedienung optimiert.
           </p>
@@ -268,8 +268,8 @@ import '../../assets/styles/main.css'
 
         <div class="feature-card">
           <i class="fa-solid fa-circle-half-stroke"></i>
-          <h3>Dark &amp; Light Theme</h3>
-          <p>
+          <h3 data-i18n="features.theme.title">Dark &amp; Light Theme</h3>
+          <p data-i18n="features.theme.desc">
             Wählen Sie zwischen einem eleganten dunklen und einem hellen
             Design – anpassbar an Ihre Präferenzen.
           </p>
@@ -277,8 +277,8 @@ import '../../assets/styles/main.css'
 
         <div class="feature-card">
           <i class="fa-solid fa-lock"></i>
-          <h3>Kostenlos &amp; Privat</h3>
-          <p>
+          <h3 data-i18n="features.free.title">Kostenlos &amp; Privat</h3>
+          <p data-i18n="features.free.desc">
             Keine Registrierung, keine Werbung, keine versteckten Kosten.
             Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät.
           </p>
@@ -288,80 +288,179 @@ import '../../assets/styles/main.css'
 
     <!-- FAQ Section -->
     <section class="content-section">
-      <h2 class="section-title">Häufig gestellte Fragen (FAQ)</h2>
+      <h2 class="section-title" data-i18n="faq.title">Häufig gestellte Fragen (FAQ)</h2>
 
       <div class="faq-item">
         <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
-          <span>Welche Audio-Formate werden unterstützt?</span>
+          <span data-i18n="faq.formats.q">Welche Audio-Formate werden unterstützt?</span>
           <i class="fa-solid fa-chevron-down faq-icon"></i>
         </button>
         <div class="faq-answer">
-          <p>Unser Player unterstützt alle gängigen Audio-Formate: MP3, WAV, FLAC, M4A, OGG, AAC und WebM. Die Unterstützung hängt von Ihrem Browser ab, aber moderne Browser unterstützen fast alle Formate.</p>
+          <p data-i18n="faq.formats.a">Unser Player unterstützt alle gängigen Audio-Formate: MP3, WAV, FLAC, M4A, OGG, AAC und WebM. Die Unterstützung hängt von Ihrem Browser ab, aber moderne Browser unterstützen fast alle Formate.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
-          <span>Ist der Musikplayer kostenlos?</span>
+          <span data-i18n="faq.free.q">Ist der Musikplayer kostenlos?</span>
           <i class="fa-solid fa-chevron-down faq-icon"></i>
         </button>
         <div class="faq-answer">
-          <p>Ja, der Player ist vollständig kostenlos und Open Source. Es gibt keine versteckten Kosten, keine Registrierung erforderlich und keine Werbung.</p>
+          <p data-i18n="faq.free.a">Ja, der Player ist vollständig kostenlos und Open Source. Es gibt keine versteckten Kosten, keine Registrierung erforderlich und keine Werbung.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
-          <span>Wie funktioniert die Audio-Visualisierung?</span>
+          <span data-i18n="faq.viz.q">Wie funktioniert die Audio-Visualisierung?</span>
           <i class="fa-solid fa-chevron-down faq-icon"></i>
         </button>
         <div class="faq-answer">
-          <p>Die Visualisierung analysiert in Echtzeit die Frequenzen Ihrer Musik und erstellt dynamische, visuelle Effekte. Sie können zwischen 7 verschiedenen Modi wählen und die Intensität anpassen.</p>
+          <p data-i18n="faq.viz.a">Die Visualisierung analysiert in Echtzeit die Frequenzen Ihrer Musik und erstellt dynamische, visuelle Effekte. Sie können zwischen 7 verschiedenen Modi wählen und die Intensität anpassen.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
-          <span>Funktioniert der Player auf Mobilgeräten?</span>
+          <span data-i18n="faq.mobile.q">Funktioniert der Player auf Mobilgeräten?</span>
           <i class="fa-solid fa-chevron-down faq-icon"></i>
         </button>
         <div class="faq-answer">
-          <p>Ja, der Player ist vollständig responsiv und funktioniert perfekt auf Smartphones und Tablets. Alle Funktionen sind für Touch-Bedienung optimiert.</p>
+          <p data-i18n="faq.mobile.a">Ja, der Player ist vollständig responsiv und funktioniert perfekt auf Smartphones und Tablets. Alle Funktionen sind für Touch-Bedienung optimiert.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
-          <span>Werden meine Dateien irgendwo gespeichert?</span>
+          <span data-i18n="faq.privacy.q">Werden meine Dateien irgendwo gespeichert?</span>
           <i class="fa-solid fa-chevron-down faq-icon"></i>
         </button>
         <div class="faq-answer">
-          <p>Nein, alle Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät. Es werden keine Dateien auf unsere Server hochgeladen. Der Player respektiert vollständig Ihre Privatsphäre.</p>
+          <p data-i18n="faq.privacy.a">Nein, alle Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät. Es werden keine Dateien auf unsere Server hochgeladen. Der Player respektiert vollständig Ihre Privatsphäre.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
-          <span>Gibt es ein Limit für die Anzahl der Musikdateien?</span>
+          <span data-i18n="faq.limit.q">Gibt es ein Limit für die Anzahl der Musikdateien?</span>
           <i class="fa-solid fa-chevron-down faq-icon"></i>
         </button>
         <div class="faq-answer">
-          <p>Nein, es gibt keine feste Begrenzung. Sie können so viele Titel hinzufügen, wie Sie möchten. Bei sehr großen Playlists kann die Leistung jedoch von den Fähigkeiten Ihres Geräts abhängen.</p>
+          <p data-i18n="faq.limit.a">Nein, es gibt keine feste Begrenzung. Sie können so viele Titel hinzufügen, wie Sie möchten. Bei sehr großen Playlists kann die Leistung jedoch von den Fähigkeiten Ihres Geräts abhängen.</p>
         </div>
       </div>
     </section>
 
     <!-- CTA Bottom -->
     <section class="hero" style="padding: 32px 28px;">
-      <p style="margin-bottom: 20px;">Bereit, Musik auf eine neue Art zu erleben?</p>
+      <p style="margin-bottom: 20px;" data-i18n="cta.text">Bereit, Musik auf eine neue Art zu erleben?</p>
       <a href="/ultimativer-musikplayer/app" class="cta-button">
         <i class="fa-solid fa-headphones"></i>
-        Jetzt ausprobieren
+        <span data-i18n="cta.button">Jetzt ausprobieren</span>
       </a>
     </section>
   </main>
 
   <!--#include virtual="/partials/footer.html" -->
   <!--#include virtual="/partials/cookie-banner.html" -->
+
+  <script>
+    (function () {
+      var translations = {
+        de: {
+          'hero.title': 'Ultimativer Musikplayer',
+          'hero.desc': 'Erleben Sie Musik auf eine völlig neue Art mit unserem kostenlosen Musikplayer. Ausgestattet mit fortschrittlicher Audio-Visualisierung, umfassenden Playlist-Funktionen und modernem, responsivem Design.',
+          'hero.cta': 'Musikplayer jetzt starten',
+          'features.title': 'Hauptfunktionen',
+          'features.viz.title': 'Audio-Visualisierung',
+          'features.viz.desc': '7 verschiedene Visualizer-Modi: Ribbon, Waves, Nebula, Spectrum Rays, Orbit Rings, Starfield und Grid Pulse. Passen Sie die Intensität in Echtzeit an.',
+          'features.eq.title': 'Equalizer & Steuerung',
+          'features.eq.desc': 'Volle Kontrolle über Lautstärke, Wiedergabe, Vor-/Zurückspulen und Stummschaltung. Loop- und Shuffle-Modi für abwechslungsreiches Hören.',
+          'features.playlist.title': 'Playlist-Management',
+          'features.playlist.desc': 'Laden Sie beliebig viele Titel. Shuffle, Loop, Titel löschen und direkte Titelauswahl. Unterstützte Formate: MP3, WAV, FLAC, M4A, OGG.',
+          'features.responsive.title': 'Responsive Design',
+          'features.responsive.desc': 'Perfekt optimiert für Desktop, Tablet und Smartphone. Alle Funktionen sind für Touch-Bedienung optimiert.',
+          'features.theme.title': 'Dark & Light Theme',
+          'features.theme.desc': 'Wählen Sie zwischen einem eleganten dunklen und einem hellen Design \u2013 anpassbar an Ihre Präferenzen.',
+          'features.free.title': 'Kostenlos & Privat',
+          'features.free.desc': 'Keine Registrierung, keine Werbung, keine versteckten Kosten. Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät.',
+          'faq.title': 'Häufig gestellte Fragen (FAQ)',
+          'faq.formats.q': 'Welche Audio-Formate werden unterstützt?',
+          'faq.formats.a': 'Unser Player unterstützt alle gängigen Audio-Formate: MP3, WAV, FLAC, M4A, OGG, AAC und WebM. Die Unterstützung hängt von Ihrem Browser ab, aber moderne Browser unterstützen fast alle Formate.',
+          'faq.free.q': 'Ist der Musikplayer kostenlos?',
+          'faq.free.a': 'Ja, der Player ist vollständig kostenlos und Open Source. Es gibt keine versteckten Kosten, keine Registrierung erforderlich und keine Werbung.',
+          'faq.viz.q': 'Wie funktioniert die Audio-Visualisierung?',
+          'faq.viz.a': 'Die Visualisierung analysiert in Echtzeit die Frequenzen Ihrer Musik und erstellt dynamische, visuelle Effekte. Sie können zwischen 7 verschiedenen Modi wählen und die Intensität anpassen.',
+          'faq.mobile.q': 'Funktioniert der Player auf Mobilgeräten?',
+          'faq.mobile.a': 'Ja, der Player ist vollständig responsiv und funktioniert perfekt auf Smartphones und Tablets. Alle Funktionen sind für Touch-Bedienung optimiert.',
+          'faq.privacy.q': 'Werden meine Dateien irgendwo gespeichert?',
+          'faq.privacy.a': 'Nein, alle Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät. Es werden keine Dateien auf unsere Server hochgeladen. Der Player respektiert vollständig Ihre Privatsphäre.',
+          'faq.limit.q': 'Gibt es ein Limit für die Anzahl der Musikdateien?',
+          'faq.limit.a': 'Nein, es gibt keine feste Begrenzung. Sie können so viele Titel hinzufügen, wie Sie möchten. Bei sehr großen Playlists kann die Leistung jedoch von den Fähigkeiten Ihres Geräts abhängen.',
+          'cta.text': 'Bereit, Musik auf eine neue Art zu erleben?',
+          'cta.button': 'Jetzt ausprobieren'
+        },
+        en: {
+          'hero.title': 'Ultimate Music Player',
+          'hero.desc': 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
+          'hero.cta': 'Start Music Player',
+          'features.title': 'Key Features',
+          'features.viz.title': 'Audio Visualization',
+          'features.viz.desc': '7 different visualizer modes: Ribbon, Waves, Nebula, Spectrum Rays, Orbit Rings, Starfield and Grid Pulse. Adjust the intensity in real time.',
+          'features.eq.title': 'Equalizer & Controls',
+          'features.eq.desc': 'Full control over volume, playback, forward/rewind and mute. Loop and shuffle modes for varied listening.',
+          'features.playlist.title': 'Playlist Management',
+          'features.playlist.desc': 'Load as many tracks as you want. Shuffle, loop, delete tracks and direct track selection. Supported formats: MP3, WAV, FLAC, M4A, OGG.',
+          'features.responsive.title': 'Responsive Design',
+          'features.responsive.desc': 'Perfectly optimized for desktop, tablet and smartphone. All functions are optimized for touch operation.',
+          'features.theme.title': 'Dark & Light Theme',
+          'features.theme.desc': 'Choose between an elegant dark and a light design \u2013 customizable to your preferences.',
+          'features.free.title': 'Free & Private',
+          'features.free.desc': 'No registration, no ads, no hidden costs. Your audio files remain local on your device.',
+          'faq.title': 'Frequently Asked Questions (FAQ)',
+          'faq.formats.q': 'Which audio formats are supported?',
+          'faq.formats.a': 'Our player supports all common audio formats: MP3, WAV, FLAC, M4A, OGG, AAC and WebM. Support depends on your browser, but modern browsers support almost all formats.',
+          'faq.free.q': 'Is the music player free?',
+          'faq.free.a': 'Yes, the player is completely free and open source. There are no hidden costs, no registration required and no advertising.',
+          'faq.viz.q': 'How does audio visualization work?',
+          'faq.viz.a': 'The visualization analyzes the frequencies of your music in real time and creates dynamic visual effects. You can choose between 7 different modes and adjust the intensity.',
+          'faq.mobile.q': 'Does the player work on mobile devices?',
+          'faq.mobile.a': 'Yes, the player is fully responsive and works perfectly on smartphones and tablets. All functions are optimized for touch operation.',
+          'faq.privacy.q': 'Are my files stored anywhere?',
+          'faq.privacy.a': 'No, all your audio files remain local on your device. No files are uploaded to our servers. The player fully respects your privacy.',
+          'faq.limit.q': 'Is there a limit to the number of music files?',
+          'faq.limit.a': 'No, there is no fixed limit. You can add as many tracks as you like. However, with very large playlists, performance may depend on the capabilities of your device.',
+          'cta.text': 'Ready to experience music in a new way?',
+          'cta.button': 'Try it now'
+        }
+      };
+
+      function applyLang(lang) {
+        var strings = translations[lang] || translations.de;
+        var elements = document.querySelectorAll('[data-i18n]');
+        for (var i = 0; i < elements.length; i++) {
+          var key = elements[i].getAttribute('data-i18n');
+          if (strings[key]) {
+            elements[i].textContent = strings[key];
+          }
+        }
+        document.documentElement.lang = lang;
+      }
+
+      // Apply saved language on load
+      var saved = localStorage.getItem('locale') || 'de';
+      if (saved !== 'de') {
+        applyLang(saved);
+      }
+
+      // Sync with SSI navigation language switcher
+      window.addEventListener('language-changed', function (e) {
+        var lang = e.detail && e.detail.lang;
+        if (lang) {
+          applyLang(lang);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
