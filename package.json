@@ -1,14 +1,17 @@
 {
-  "name": "ultimate-music-player-vue",
-  "version": "1.0.0",
-  "description": "Ultimativer Musikplayer mit Audio-Visualisierung in Vue.js",
+  "name": "ultimate-music-player-astro",
+  "version": "2.0.0",
+  "description": "Ultimativer Musikplayer mit Audio-Visualisierung – Astro + Vue Hybrid",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
+    "astro": "^4.16.0",
+    "@astrojs/vue": "^4.5.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.0",
     "vue-i18n": "^9.9.0"

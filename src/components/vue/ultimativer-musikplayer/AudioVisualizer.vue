@@ -6,8 +6,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { usePlayerStore } from '@/stores/playerStore'
-import { useVisualizer } from '@/composables/useVisualizer'
+import { usePlayerStore } from './stores/playerStore'
+import { useVisualizer } from './composables/useVisualizer'
 
 const props = defineProps({
   analyser: Object,

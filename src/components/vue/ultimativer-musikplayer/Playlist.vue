@@ -41,7 +41,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { usePlayerStore } from '@/stores/playerStore'
+import { usePlayerStore } from './stores/playerStore'
 
 const { t } = useI18n()
 const store = usePlayerStore()
