@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && mv dist/_astro dist/ultimativer-musikplayer/_astro && mv dist/sw.js dist/ultimativer-musikplayer/sw.js 2>/dev/null; true",
     "preview": "astro preview",
     "astro": "astro"
   },
