@@ -1,22 +1,35 @@
-<!DOCTYPE html>
+---
+/**
+ * Ultimativer Musikplayer – App-Seite
+ * Lädt die Haupt-Vue-Komponente als client:only Island,
+ * da der Player die Browser Web-Audio-API benötigt (kein SSR möglich).
+ */
+import App from '../../components/vue/ultimativer-musikplayer/App.vue'
+---
+
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#F5F4D6" />
-  
+
   <title>Ultimativer Musikplayer - KodiniTools</title>
   <meta name="description" content="Kostenloser Online-Musikplayer mit Audio-Visualisierung. Unterstützt MP3, WAV, FLAC, M4A, OGG." />
-  
+
   <!-- Font Awesome (lokal) -->
   <link rel="stylesheet" href="/fontawesome/css/fontawesome.min.css" />
   <link rel="stylesheet" href="/fontawesome/css/solid.min.css" />
 
+  <!-- Player-Styles -->
+  <style>
+    @import '../../assets/styles/main.css';
+  </style>
 </head>
 <body>
-<!--#include virtual="/partials/nav.html" -->
-  <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
+  <!--#include virtual="/partials/nav.html" -->
+
+  <App client:only="vue" />
+
   <!--#include virtual="/partials/footer.html" -->
   <!--#include virtual="/partials/cookie-banner.html" -->
 </body>

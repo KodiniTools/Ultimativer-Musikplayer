@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { usePlayerStore } from '@/stores/playerStore'
+import { usePlayerStore } from './stores/playerStore'
 
 const store = usePlayerStore()
 

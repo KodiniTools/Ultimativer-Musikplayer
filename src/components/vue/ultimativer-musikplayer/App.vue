@@ -52,19 +52,19 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { usePlayerStore } from '@/stores/playerStore'
-import { useAudioPlayer } from '@/composables/useAudioPlayer'
-import { useTheme } from '@/composables/useTheme'
+import { usePlayerStore } from './stores/playerStore'
+import { useAudioPlayer } from './composables/useAudioPlayer'
+import { useTheme } from './composables/useTheme'
 
-import AppHeader from '@/components/AppHeader.vue'
-import AudioUploader from '@/components/AudioUploader.vue'
-import AudioVisualizer from '@/components/AudioVisualizer.vue'
-import VisualizerControls from '@/components/VisualizerControls.vue'
-import ProgressBar from '@/components/ProgressBar.vue'
-import VolumeControl from '@/components/VolumeControl.vue'
-import PlayerControls from '@/components/PlayerControls.vue'
-import Playlist from '@/components/Playlist.vue'
-import FAQSection from '@/components/FAQSection.vue'
+import AppHeader from './AppHeader.vue'
+import AudioUploader from './AudioUploader.vue'
+import AudioVisualizer from './AudioVisualizer.vue'
+import VisualizerControls from './VisualizerControls.vue'
+import ProgressBar from './ProgressBar.vue'
+import VolumeControl from './VolumeControl.vue'
+import PlayerControls from './PlayerControls.vue'
+import Playlist from './Playlist.vue'
+import FAQSection from './FAQSection.vue'
 
 const { t, locale } = useI18n()
 const store = usePlayerStore()

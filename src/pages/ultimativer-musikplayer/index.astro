@@ -1,0 +1,369 @@
+---
+/**
+ * Ultimativer Musikplayer – Landingpage (statisch, SEO-optimiert)
+ * Texte aus src/i18n/locales/de.js extrahiert.
+ */
+---
+
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#F5F4D6" />
+
+  <title>Ultimativer Musikplayer – Kostenloser Online-Audioplayer | KodiniTools</title>
+  <meta name="description" content="Kostenloser Online-Musikplayer mit 7 Audio-Visualisierungsmodi, Playlist-Management und Equalizer. Unterstützt MP3, WAV, FLAC, M4A, OGG. Keine Registrierung nötig." />
+  <meta name="keywords" content="Musikplayer, Audio Visualizer, Online Player, MP3 Player, kostenlos, Equalizer, Playlist" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Ultimativer Musikplayer – KodiniTools" />
+  <meta property="og:description" content="Erleben Sie Musik auf eine völlig neue Art mit fortschrittlicher Audio-Visualisierung, Playlist-Funktionen und modernem Design." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kodinitools.com/ultimativer-musikplayer/" />
+
+  <!-- Font Awesome (lokal) -->
+  <link rel="stylesheet" href="/fontawesome/css/fontawesome.min.css" />
+  <link rel="stylesheet" href="/fontawesome/css/solid.min.css" />
+
+  <!-- Player-Styles (Design Tokens & Layout) -->
+  <link rel="stylesheet" href="/ultimativer-musikplayer/assets/styles/main.css" />
+
+  <style>
+    /* Landing-Page-spezifische Styles */
+    .landing {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: clamp(20px, 4vw, 40px);
+      display: grid;
+      gap: 32px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 48px 28px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: var(--shadow-3d-lg);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin-bottom: 16px;
+      -webkit-text-fill-color: unset;
+      background: none;
+      color: var(--heading-primary);
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 28px;
+      line-height: 1.7;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--primary-dark, #003971));
+      color: #F5F4D6;
+      text-decoration: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: var(--shadow-3d-md), var(--glow-accent);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-4px) translateZ(10px);
+      box-shadow: var(--shadow-3d-lg), var(--glow-accent);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      padding: 24px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-3d-sm);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-3d-md);
+    }
+
+    .feature-card i {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      display: block;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .feature-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--heading-primary);
+    }
+
+    .feature-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--heading-gradient-start), var(--heading-gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* FAQ auf Landing Page */
+    .landing .faq-item {
+      margin-bottom: 16px;
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-3d-sm);
+    }
+
+    .landing .faq-question {
+      width: 100%;
+      padding: 14px 18px;
+      background: transparent;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-family: inherit;
+    }
+
+    .landing .faq-answer {
+      padding: 0 18px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .landing .faq-answer.open {
+      padding: 14px 18px;
+      max-height: 400px;
+    }
+
+    .landing .faq-answer p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .landing .faq-icon {
+      color: var(--primary);
+      transition: transform 0.3s ease;
+    }
+
+    .landing .faq-icon.open {
+      transform: rotate(180deg);
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 32px 18px;
+      }
+      .hero h1 {
+        font-size: 1.2rem;
+      }
+      .cta-button {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!--#include virtual="/partials/nav.html" -->
+
+  <main class="landing">
+    <!-- Hero Section: Was ist der Ultimative Musikplayer? -->
+    <section class="hero">
+      <h1>Ultimativer Musikplayer</h1>
+      <p>
+        Erleben Sie Musik auf eine völlig neue Art mit unserem kostenlosen Musikplayer.
+        Ausgestattet mit fortschrittlicher Audio-Visualisierung, umfassenden Playlist-Funktionen
+        und modernem, responsivem Design.
+      </p>
+      <a href="/ultimativer-musikplayer/app" class="cta-button">
+        <i class="fa-solid fa-play"></i>
+        Musikplayer jetzt starten
+      </a>
+    </section>
+
+    <!-- Hauptfeatures -->
+    <section>
+      <h2 class="section-title">Hauptfunktionen</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fa-solid fa-wave-square"></i>
+          <h3>Audio-Visualisierung</h3>
+          <p>
+            7 verschiedene Visualizer-Modi: Ribbon, Waves, Nebula, Spectrum Rays,
+            Orbit Rings, Starfield und Grid Pulse. Passen Sie die Intensität in
+            Echtzeit an.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-sliders"></i>
+          <h3>Equalizer &amp; Steuerung</h3>
+          <p>
+            Volle Kontrolle über Lautstärke, Wiedergabe, Vor-/Zurückspulen
+            und Stummschaltung. Loop- und Shuffle-Modi für abwechslungsreiches
+            Hören.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-list"></i>
+          <h3>Playlist-Management</h3>
+          <p>
+            Laden Sie beliebig viele Titel. Shuffle, Loop, Titel löschen und
+            direkte Titelauswahl. Unterstützte Formate: MP3, WAV, FLAC, M4A, OGG.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-mobile-screen"></i>
+          <h3>Responsive Design</h3>
+          <p>
+            Perfekt optimiert für Desktop, Tablet und Smartphone.
+            Alle Funktionen sind für Touch-Bedienung optimiert.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+          <h3>Dark &amp; Light Theme</h3>
+          <p>
+            Wählen Sie zwischen einem eleganten dunklen und einem hellen
+            Design – anpassbar an Ihre Präferenzen.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-lock"></i>
+          <h3>Kostenlos &amp; Privat</h3>
+          <p>
+            Keine Registrierung, keine Werbung, keine versteckten Kosten.
+            Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="content-section">
+      <h2 class="section-title">Häufig gestellte Fragen (FAQ)</h2>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
+          <span>Welche Audio-Formate werden unterstützt?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Unser Player unterstützt alle gängigen Audio-Formate: MP3, WAV, FLAC, M4A, OGG, AAC und WebM. Die Unterstützung hängt von Ihrem Browser ab, aber moderne Browser unterstützen fast alle Formate.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
+          <span>Ist der Musikplayer kostenlos?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Ja, der Player ist vollständig kostenlos und Open Source. Es gibt keine versteckten Kosten, keine Registrierung erforderlich und keine Werbung.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
+          <span>Wie funktioniert die Audio-Visualisierung?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Die Visualisierung analysiert in Echtzeit die Frequenzen Ihrer Musik und erstellt dynamische, visuelle Effekte. Sie können zwischen 7 verschiedenen Modi wählen und die Intensität anpassen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
+          <span>Funktioniert der Player auf Mobilgeräten?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Ja, der Player ist vollständig responsiv und funktioniert perfekt auf Smartphones und Tablets. Alle Funktionen sind für Touch-Bedienung optimiert.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
+          <span>Werden meine Dateien irgendwo gespeichert?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Nein, alle Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät. Es werden keine Dateien auf unsere Server hochgeladen. Der Player respektiert vollständig Ihre Privatsphäre.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.faq-icon').classList.toggle('open')">
+          <span>Gibt es ein Limit für die Anzahl der Musikdateien?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Nein, es gibt keine feste Begrenzung. Sie können so viele Titel hinzufügen, wie Sie möchten. Bei sehr großen Playlists kann die Leistung jedoch von den Fähigkeiten Ihres Geräts abhängen.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Bottom -->
+    <section class="hero" style="padding: 32px 28px;">
+      <p style="margin-bottom: 20px;">Bereit, Musik auf eine neue Art zu erleben?</p>
+      <a href="/ultimativer-musikplayer/app" class="cta-button">
+        <i class="fa-solid fa-headphones"></i>
+        Jetzt ausprobieren
+      </a>
+    </section>
+  </main>
+
+  <!--#include virtual="/partials/footer.html" -->
+  <!--#include virtual="/partials/cookie-banner.html" -->
+</body>
+</html>
