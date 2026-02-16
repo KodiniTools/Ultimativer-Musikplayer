@@ -1143,6 +1143,36 @@ h1 {
   transform: scale(1.1);
 }
 
+.clear-all-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  color: var(--text-secondary);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: grid;
+  place-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-3d-sm);
+  transform-style: preserve-3d;
+}
+
+.clear-all-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: translateY(-2px) translateZ(6px);
+  box-shadow: var(--shadow-3d-md), 0 0 12px rgba(239, 68, 68, 0.2);
+}
+
+.clear-all-btn:active {
+  transform: translateY(-1px) translateZ(3px);
+}
+
 .playlist-count-badge {
   background: linear-gradient(135deg, var(--accent), var(--primary-dark, #003971));
   color: #F5F4D6;

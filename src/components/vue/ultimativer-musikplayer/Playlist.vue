@@ -6,12 +6,13 @@
         <span>{{ t('player.playlist') }}</span>
         <span class="playlist-count-badge">{{ store.playlistCount }}</span>
       </div>
-      <button 
-        class="pill-button" 
+      <button
+        class="clear-all-btn"
         @click="store.clearPlaylist()"
+        :title="t('player.clear')"
         aria-label="Playlist löschen"
       >
-        <span>{{ t('player.clear') }}</span>
+        <i class="fas fa-trash"></i>
       </button>
     </div>
     <ul class="playlist">
