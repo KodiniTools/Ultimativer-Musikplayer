@@ -79,26 +79,37 @@ export const usePlayerStore = defineStore('player', () => {
   }
   
   function playNext() {
-    if (audioFiles.value.length === 0) return
-    
-    let nextIndex
+    if (audioFiles.value.length === 0) return false
+
     if (shufflePlaylist.value) {
-      nextIndex = Math.floor(Math.random() * audioFiles.value.length)
-    } else {
-      nextIndex = currentAudioIndex.value + 1
+      if (audioFiles.value.length === 1) {
+        // Single track: respect loop setting
+        if (loopPlaylist.value) {
+          // Index stays 0, but signal to reload and play
+          return true
+        }
+        return false
+      }
+      // Pick a random track different from the current one
+      let nextIndex
+      do {
+        nextIndex = Math.floor(Math.random() * audioFiles.value.length)
+      } while (nextIndex === currentAudioIndex.value)
+      currentAudioIndex.value = nextIndex
+      return true
     }
-    
+
+    // Sequential mode
+    const nextIndex = currentAudioIndex.value + 1
     if (nextIndex >= audioFiles.value.length) {
       if (loopPlaylist.value) {
         currentAudioIndex.value = 0
         return true
-      } else {
-        return false
       }
-    } else {
-      currentAudioIndex.value = nextIndex
-      return true
+      return false
     }
+    currentAudioIndex.value = nextIndex
+    return true
   }
   
   function playPrevious() {

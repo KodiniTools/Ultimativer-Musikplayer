@@ -57,7 +57,8 @@ const handleTrackClick = (index) => {
 }
 
 const handleDeleteTrack = (index) => {
+  const wasCurrentTrack = index === store.currentAudioIndex
   store.removeTrack(index)
-  emit('trackDeleted', index)
+  emit('trackDeleted', { index, wasCurrentTrack })
 }
 </script>
