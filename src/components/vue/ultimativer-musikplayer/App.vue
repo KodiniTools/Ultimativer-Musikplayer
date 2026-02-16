@@ -42,6 +42,7 @@
 
       <Playlist
         @track-selected="handleTrackSelected"
+        @track-deleted="handleTrackDeleted"
       />
 
       <audio ref="audioElementRef" style="display: none;"></audio>
@@ -133,6 +134,10 @@ const handleTrackSelected = (index) => {
     audioPlayer.loadAudioFile(index)
     audioPlayer.play()
   }, 0)
+}
+
+const handleTrackDeleted = ({ index, wasCurrentTrack }) => {
+  audioPlayer.handleTrackRemoved(index, wasCurrentTrack)
 }
 
 const handleSeek = (percentage) => {

@@ -1,4 +1,4 @@
-import { ref, watch, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount } from 'vue'
 
 export function useAudioPlayer(store) {
   const audioElement = ref(null)
@@ -160,12 +160,14 @@ export function useAudioPlayer(store) {
     }
   }
   
-  // Watch for file changes
-  watch(() => store.currentAudioIndex, (newIndex) => {
-    if (store.audioFiles.length > 0) {
-      loadAudioFile(newIndex)
+  // Handle track removal: reload if the current track was replaced
+  const handleTrackRemoved = (removedIndex, wasCurrentTrack) => {
+    if (wasCurrentTrack && store.audioFiles.length > 0) {
+      loadAudioFile(store.currentAudioIndex)
+    } else if (store.audioFiles.length === 0) {
+      stop()
     }
-  })
+  }
   
   // Cleanup
   onBeforeUnmount(() => {
@@ -191,6 +193,7 @@ export function useAudioPlayer(store) {
     playPrevious,
     seek,
     toggleMute,
-    setVolume
+    setVolume,
+    handleTrackRemoved
   }
 }
