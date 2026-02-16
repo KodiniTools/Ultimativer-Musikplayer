@@ -1,30 +1,30 @@
 <template>
   <div class="volume-control" aria-label="Lautstärke">
-    <i class="fa-solid fa-volume-high"></i>
-    <input 
-      type="range" 
-      :value="store.volume"
-      @input="handleVolumeChange"
-      min="0" 
-      max="1" 
-      step="0.01" 
-    />
-    <button 
-      class="pill-button" 
+    <button
+      class="control-btn-sm"
       :class="{ 'active-mode': store.isMuted }"
       :aria-pressed="store.isMuted"
       @click="emit('toggleMute')"
+      aria-label="Stumm schalten"
     >
-      {{ store.isMuted ? t('player.unmute') : t('player.mute') }}
+      <i :class="store.isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high'"></i>
     </button>
+    <input
+      type="range"
+      class="volume-slider"
+      :value="store.volume"
+      @input="handleVolumeChange"
+      min="0"
+      max="1"
+      step="0.01"
+      aria-label="Lautstärke"
+    />
   </div>
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from './stores/playerStore'
 
-const { t } = useI18n()
 const store = usePlayerStore()
 
 const emit = defineEmits(['setVolume', 'toggleMute'])

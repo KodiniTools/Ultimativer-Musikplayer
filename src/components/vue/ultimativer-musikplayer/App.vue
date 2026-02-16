@@ -19,22 +19,24 @@
             :timeDomainArray="timeDomainArray"
           />
 
-          <VisualizerControls />
-
           <ProgressBar @seek="handleSeek" />
 
-          <VolumeControl
-            @set-volume="audioPlayer.setVolume"
-            @toggle-mute="audioPlayer.toggleMute"
-          />
-
-          <PlayerControls
-            @play="audioPlayer.play"
-            @pause="audioPlayer.pause"
-            @stop="audioPlayer.stop"
-            @play-next="audioPlayer.playNext"
-            @play-previous="audioPlayer.playPrevious"
-          />
+          <div class="controls-bar">
+            <PlayerControls
+              @play="audioPlayer.play"
+              @pause="audioPlayer.pause"
+              @stop="audioPlayer.stop"
+              @play-next="audioPlayer.playNext"
+              @play-previous="audioPlayer.playPrevious"
+            />
+            <span class="controls-divider"></span>
+            <VisualizerControls />
+            <span class="controls-divider"></span>
+            <VolumeControl
+              @set-volume="audioPlayer.setVolume"
+              @toggle-mute="audioPlayer.toggleMute"
+            />
+          </div>
         </div>
       </section>
 
