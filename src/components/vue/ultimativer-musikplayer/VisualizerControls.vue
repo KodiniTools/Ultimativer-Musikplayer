@@ -12,6 +12,9 @@
       <option value="orbits">Orbit Rings</option>
       <option value="starfield">Starfield</option>
       <option value="grid">Grid Pulse</option>
+      <option value="aurora">Aurora</option>
+      <option value="kaleidoscope">Kaleidoscope</option>
+      <option value="particles">Particles</option>
     </select>
     <input
       type="range"

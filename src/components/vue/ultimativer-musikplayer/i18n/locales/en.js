@@ -36,7 +36,7 @@ export default {
     subtitle: 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
     features: {
       title: '✨ Key Features',
-      visualization: '<strong>Audio Visualization:</strong> 7 different visualizer modes (Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid)',
+      visualization: '<strong>Audio Visualization:</strong> 10 different visualizer modes (Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope, Particles)',
       formats: '<strong>Comprehensive Format Support:</strong> MP3, WAV, FLAC, M4A, OGG and more',
       playlist: '<strong>Playlist Management:</strong> Drag & Drop, Shuffle, Loop, Forward/Back navigation',
       responsive: '<strong>Responsive Design:</strong> Perfect on desktop, tablet and smartphone',
@@ -56,7 +56,7 @@ export default {
     },
     visualization: {
       question: 'How does audio visualization work?',
-      answer: 'The visualization analyzes the frequencies of your music in real time and creates dynamic visual effects. You can choose between 7 different modes and adjust the intensity.'
+      answer: 'The visualization analyzes the frequencies of your music in real time and creates dynamic visual effects. You can choose between 10 different modes and adjust the intensity.'
     },
     mobile: {
       question: 'Does the player work on mobile devices?',
