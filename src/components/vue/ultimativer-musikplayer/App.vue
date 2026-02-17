@@ -45,6 +45,8 @@
         @track-deleted="handleTrackDeleted"
       />
 
+      <ToolCards />
+
       <audio ref="audioElementRef" style="display: none;"></audio>
     </main>
   </div>
@@ -65,6 +67,7 @@ import ProgressBar from './ProgressBar.vue'
 import VolumeControl from './VolumeControl.vue'
 import PlayerControls from './PlayerControls.vue'
 import Playlist from './Playlist.vue'
+import ToolCards from './ToolCards.vue'
 
 const { t, locale } = useI18n()
 const store = usePlayerStore()
