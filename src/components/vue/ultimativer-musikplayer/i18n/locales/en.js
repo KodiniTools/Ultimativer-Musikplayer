@@ -44,6 +44,22 @@ export default {
       free: '<strong>Free & Open Source:</strong> No registration required'
     }
   },
+  tools: {
+    title: 'More Audio Tools',
+    cta: 'Try it now',
+    converter: {
+      name: 'MP3 Converter',
+      desc: 'Convert audio files to MP3 format quickly and easily.'
+    },
+    playlist: {
+      name: 'Playlist Converter',
+      desc: 'Convert playlists between different formats and platforms.'
+    },
+    equalizer: {
+      name: 'Equalizer',
+      desc: 'Fine-tune audio frequencies with a professional 19-band equalizer.'
+    }
+  },
   faq: {
     title: '❓ Frequently Asked Questions (FAQ)',
     formats: {
