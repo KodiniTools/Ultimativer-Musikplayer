@@ -55,6 +55,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import i18n from './i18n'
 import { usePlayerStore } from './stores/playerStore'
 import { useAudioPlayer } from './composables/useAudioPlayer'
 import { useTheme } from './composables/useTheme'
@@ -73,23 +74,23 @@ const { t, locale } = useI18n()
 const store = usePlayerStore()
 useTheme()
 
+// Set the global i18n locale so every component (including children) reacts
+function setGlobalLocale(lang) {
+  if (!lang || lang === i18n.global.locale.value) return
+  i18n.global.locale.value = lang
+}
+
 // Sync with SSI nav language switching via event delegation on .global-nav-lang-btn clicks
 // This is more robust than relying on localStorage (not reactive) or custom events alone
 const onNavLangClick = (e) => {
   const btn = e.target.closest('.global-nav-lang-btn')
   if (!btn) return
-  const lang = btn.getAttribute('data-lang')
-  if (lang && lang !== locale.value) {
-    locale.value = lang
-  }
+  setGlobalLocale(btn.getAttribute('data-lang'))
 }
 
 // Also listen for the SSI nav's custom 'locale-changed' event as a fallback
 const onLocaleChanged = (e) => {
-  const lang = e.detail?.locale
-  if (lang && lang !== locale.value) {
-    locale.value = lang
-  }
+  setGlobalLocale(e.detail?.locale)
 }
 
 onMounted(() => {
