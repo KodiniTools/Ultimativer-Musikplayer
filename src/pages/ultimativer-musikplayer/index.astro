@@ -453,12 +453,18 @@ import '../../assets/styles/main.css'
         applyLang(saved);
       }
 
-      // Sync with SSI navigation language switcher
-      window.addEventListener('language-changed', function (e) {
-        var lang = e.detail && e.detail.lang;
-        if (lang) {
-          applyLang(lang);
-        }
+      // Sync with SSI nav via event delegation on lang button clicks
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.global-nav-lang-btn');
+        if (!btn) return;
+        var lang = btn.getAttribute('data-lang');
+        if (lang) applyLang(lang);
+      });
+
+      // Fallback: SSI nav's custom event
+      window.addEventListener('locale-changed', function (e) {
+        var lang = e.detail && e.detail.locale;
+        if (lang) applyLang(lang);
       });
     })();
   </script>
