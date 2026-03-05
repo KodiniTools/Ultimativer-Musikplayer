@@ -73,21 +73,33 @@ const { t, locale } = useI18n()
 const store = usePlayerStore()
 useTheme()
 
-// Sync with SSI nav language-changed event
-const onLanguageChanged = (e) => {
-  const lang = e.detail?.lang
+// Sync with SSI nav language switching via event delegation on .global-nav-lang-btn clicks
+// This is more robust than relying on localStorage (not reactive) or custom events alone
+const onNavLangClick = (e) => {
+  const btn = e.target.closest('.global-nav-lang-btn')
+  if (!btn) return
+  const lang = btn.getAttribute('data-lang')
   if (lang && lang !== locale.value) {
     locale.value = lang
-    document.documentElement.lang = lang
+  }
+}
+
+// Also listen for the SSI nav's custom 'locale-changed' event as a fallback
+const onLocaleChanged = (e) => {
+  const lang = e.detail?.locale
+  if (lang && lang !== locale.value) {
+    locale.value = lang
   }
 }
 
 onMounted(() => {
-  window.addEventListener('language-changed', onLanguageChanged)
+  document.addEventListener('click', onNavLangClick)
+  window.addEventListener('locale-changed', onLocaleChanged)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('language-changed', onLanguageChanged)
+  document.removeEventListener('click', onNavLangClick)
+  window.removeEventListener('locale-changed', onLocaleChanged)
 })
 
 const audioElementRef = ref(null)
