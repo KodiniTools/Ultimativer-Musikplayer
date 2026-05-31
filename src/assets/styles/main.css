@@ -677,11 +677,14 @@ h1 {
 }
 
 .control-btn-sm.play-btn {
-  background: linear-gradient(135deg, var(--accent), var(--primary-dark, #003971));
-  color: #F5F4D6;
   width: 40px;
   height: 40px;
   font-size: 0.9rem;
+}
+
+.control-btn-sm.play-btn.active-mode {
+  background: linear-gradient(135deg, var(--accent), var(--primary-dark, #003971));
+  color: #F5F4D6;
   box-shadow:
     var(--shadow-3d-sm),
     0 0 20px rgba(1, 79, 153, 0.3);
