@@ -72,23 +72,26 @@ export function useAudioPlayer(store) {
     try {
       await audioElement.value.play()
       store.setPlaying(true)
+      store.setStopped(false)
     } catch (error) {
       console.error('Error playing audio:', error)
       store.setPlaying(false)
     }
   }
-  
+
   const pause = () => {
     if (!audioElement.value) return
     audioElement.value.pause()
     store.setPlaying(false)
+    store.setStopped(false)
   }
-  
+
   const stop = () => {
     if (!audioElement.value) return
     audioElement.value.pause()
     audioElement.value.currentTime = 0
     store.setPlaying(false)
+    store.setStopped(true)
   }
   
   const playNext = () => {
@@ -109,9 +112,17 @@ export function useAudioPlayer(store) {
     }
   }
   
-  const seek = (percentage) => {
+  const seek = async (percentage) => {
     if (!audioElement.value || !store.duration) return
-    audioElement.value.currentTime = (percentage / 100) * store.duration
+    try {
+      if (audioContext.value?.state === 'suspended') {
+        await audioContext.value.resume()
+      }
+      const targetTime = Math.max(0, Math.min((percentage / 100) * store.duration, store.duration))
+      audioElement.value.currentTime = targetTime
+    } catch (error) {
+      console.error('Seek error:', error)
+    }
   }
   
   const toggleMute = () => {

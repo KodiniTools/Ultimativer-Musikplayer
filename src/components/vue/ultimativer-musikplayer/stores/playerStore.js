@@ -16,6 +16,7 @@ export const usePlayerStore = defineStore('player', () => {
   // Visualizer state
   const vizMode = ref('ribbon')
   const vizIntensity = ref(0.65)
+  const isStopped = ref(false)
   
   // Computed
   const currentFile = computed(() => {
@@ -163,7 +164,11 @@ export const usePlayerStore = defineStore('player', () => {
   function setVizIntensity(intensity) {
     vizIntensity.value = intensity
   }
-  
+
+  function setStopped(value) {
+    isStopped.value = value
+  }
+
   return {
     // State
     audioFiles,
@@ -177,6 +182,7 @@ export const usePlayerStore = defineStore('player', () => {
     duration,
     vizMode,
     vizIntensity,
+    isStopped,
     
     // Computed
     currentFile,
@@ -200,6 +206,7 @@ export const usePlayerStore = defineStore('player', () => {
     setDuration,
     setPlaying,
     setVizMode,
-    setVizIntensity
+    setVizIntensity,
+    setStopped
   }
 })
