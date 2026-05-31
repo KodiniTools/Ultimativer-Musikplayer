@@ -179,17 +179,17 @@ const handleDrop = async (event) => {
   gap: 0.4rem;
   padding: 0.5rem 1.1rem;
   border-radius: 8px;
-  border: 1px solid var(--color-border, #555);
-  background: var(--color-surface, #2a2a2a);
-  color: inherit;
+  border: 2px solid var(--color-accent, #7c6af7);
+  background: transparent;
+  color: var(--color-accent, #7c6af7);
   font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
 
 .uploader__btn:hover {
   background: var(--color-accent, #7c6af7);
-  border-color: var(--color-accent, #7c6af7);
   color: #fff;
 }
 </style>
