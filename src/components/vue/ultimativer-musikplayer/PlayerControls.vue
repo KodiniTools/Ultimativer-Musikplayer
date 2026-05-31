@@ -18,6 +18,7 @@
     </button>
     <button
       class="control-btn-sm play-btn"
+      :class="{ 'active-mode': store.isPlaying }"
       @click="emit('play')"
       aria-label="Abspielen"
     >
@@ -25,6 +26,7 @@
     </button>
     <button
       class="control-btn-sm"
+      :class="{ 'active-mode': !store.isPlaying && store.audioFiles.length > 0 }"
       @click="emit('pause')"
       aria-label="Pause"
     >
