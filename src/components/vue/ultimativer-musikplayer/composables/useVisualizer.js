@@ -7,48 +7,36 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
   const resizeObserver = ref(null)
 
   let frameCounter = 0
-
-  // Persistent particle state for particle visualizer
   let particles = []
+  let peakHolds = []
+  let lastEnergy = 0
 
-  // Get reactive values
-  const analyser = computed(() => {
-    return typeof analyserRef === 'function' ? analyserRef() : analyserRef
-  })
+  const analyser    = computed(() => typeof analyserRef       === 'function' ? analyserRef()       : analyserRef)
+  const dataArray   = computed(() => typeof dataArrayRef      === 'function' ? dataArrayRef()      : dataArrayRef)
+  const timeDomain  = computed(() => typeof timeDomainArrayRef === 'function' ? timeDomainArrayRef() : timeDomainArrayRef)
 
-  const dataArray = computed(() => {
-    return typeof dataArrayRef === 'function' ? dataArrayRef() : dataArrayRef
-  })
+  // ── Canvas setup ────────────────────────────────────────────
+  let _cssW = 0, _cssH = 0
 
-  const timeDomainArray = computed(() => {
-    return typeof timeDomainArrayRef === 'function' ? timeDomainArrayRef() : timeDomainArrayRef
-  })
-
-  // Resize canvas to match container
   const resizeCanvas = () => {
-    if (!canvas.value || !canvas.value.parentElement) return
-
+    if (!canvas.value?.parentElement) return
     const rect = canvas.value.parentElement.getBoundingClientRect()
-    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
-
-    canvas.value.width = Math.floor(rect.width * dpr)
+    const dpr  = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
+    _cssW = rect.width
+    _cssH = rect.height
+    canvas.value.width  = Math.floor(rect.width  * dpr)
     canvas.value.height = Math.floor(rect.height * dpr)
-    canvas.value.style.width = `${rect.width}px`
+    canvas.value.style.width  = `${rect.width}px`
     canvas.value.style.height = `${rect.height}px`
-
-    if (ctx.value) {
-      ctx.value.setTransform(dpr, 0, 0, dpr, 0, 0)
-    }
+    if (ctx.value) ctx.value.setTransform(dpr, 0, 0, dpr, 0, 0)
+    peakHolds = []
   }
 
-  // Initialize canvas
-  const initCanvas = (canvasElement) => {
-    canvas.value = canvasElement
+  const initCanvas = (el) => {
+    canvas.value = el
     if (!canvas.value) return
-
     ctx.value = canvas.value.getContext('2d', { alpha: false })
     resizeCanvas()
-
     if ('ResizeObserver' in window) {
       resizeObserver.value = new ResizeObserver(resizeCanvas)
       resizeObserver.value.observe(canvas.value.parentElement)
@@ -57,719 +45,615 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
     }
   }
 
-  // --- Helper: compute frequency band averages ---
-  const getBands = (data, bins) => {
-    let low = 0, mid = 0, high = 0
-    for (let i = 0; i < bins; i++) {
-      if (i < bins * 0.25) low += data[i]
-      else if (i < bins * 0.7) mid += data[i]
-      else high += data[i]
+  // ── Helpers ──────────────────────────────────────────────────
+  const getBands = (data) => {
+    const n = data.length
+    let lo = 0, mi = 0, hi = 0
+    for (let i = 0; i < n; i++) {
+      if      (i < n * 0.25) lo += data[i]
+      else if (i < n * 0.70) mi += data[i]
+      else                   hi += data[i]
     }
-    low /= (bins * 0.25)
-    mid /= (bins * 0.45)
-    high /= (bins * 0.3)
-    return { low: low / 255, mid: mid / 255, high: high / 255 }
-  }
-
-  // ============================================================
-  // MODERNIZED VISUALIZERS
-  // ============================================================
-
-  // 1. Ribbon — smooth bezier curves, dual-layer, color-shifting
-  const drawRibbon = (w, h, cx, cy, t, ampMul, glowMul) => {
-    const data = dataArray.value
-    if (!data) return
-
-    const bins = data.length
-    const baseR = Math.min(cx, cy) * 0.6
-    const bands = getBands(data, bins)
-
-    const ampL = bands.low * baseR * 0.65 * ampMul
-    const ampM = bands.mid * baseR * 0.45 * ampMul
-    const ampH = bands.high * baseR * 0.30 * ampMul
-
-    // Color shifts based on frequency content
-    const hueShift = bands.mid * 40
-
-    // Draw two ribbon layers
-    for (let layer = 0; layer < 2; layer++) {
-      const phase = layer * Math.PI * 0.3
-      const layerScale = layer === 0 ? 1.0 : 0.7
-      const alpha = layer === 0 ? 1.0 : 0.6
-
-      const grad = ctx.value.createLinearGradient(cx - baseR, cy - baseR, cx + baseR, cy + baseR)
-      grad.addColorStop(0.0, `hsla(${210 + hueShift}, 80%, 55%, ${alpha})`)
-      grad.addColorStop(0.5, `hsla(${230 + hueShift}, 75%, 65%, ${alpha})`)
-      grad.addColorStop(1.0, `hsla(${260 + hueShift * 0.5}, 70%, 75%, ${alpha})`)
-
-      ctx.value.save()
-      ctx.value.translate(cx, cy)
-      ctx.value.strokeStyle = grad
-      ctx.value.lineWidth = Math.max(1.5, Math.min(w, h) * 0.006 * glowMul) * (layer === 0 ? 1.0 : 0.6)
-      ctx.value.beginPath()
-
-      const points = []
-      const steps = 120
-      for (let i = 0; i <= steps; i++) {
-        const a = (i / steps) * Math.PI * 2
-        const r = (baseR * layerScale
-          + Math.sin(a * 4 + phase) * ampL
-          + Math.cos(a * 2 + phase) * ampM
-          + Math.sin(a * 0.7 + phase) * ampH)
-        points.push({
-          x: Math.cos(a + t * 0.02 + phase * 0.5) * r,
-          y: Math.sin(a + t * 0.02 + phase * 0.5) * r
-        })
-      }
-
-      // Draw smooth bezier curve through points
-      ctx.value.moveTo(points[0].x, points[0].y)
-      for (let i = 0; i < points.length - 1; i++) {
-        const cpx = (points[i].x + points[i + 1].x) / 2
-        const cpy = (points[i].y + points[i + 1].y) / 2
-        ctx.value.quadraticCurveTo(points[i].x, points[i].y, cpx, cpy)
-      }
-      ctx.value.closePath()
-      ctx.value.stroke()
-      ctx.value.restore()
+    return {
+      low:  lo / (n * 0.25 * 255),
+      mid:  mi / (n * 0.45 * 255),
+      high: hi / (n * 0.30 * 255)
     }
   }
 
-  // 2. Waves — bezier curves, gradient fills between waves, color variation
-  const drawWaves = (w, h, ampMul, glowMul) => {
-    const timeDomain = timeDomainArray.value
-    const data = dataArray.value
-    if (!timeDomain || !data) return
+  const energy = (data) => {
+    let e = 0
+    for (let i = 0; i < data.length; i++) e += data[i]
+    return e / (data.length * 255)
+  }
 
-    const bands = getBands(data, data.length)
-    const lines = 3
-    const colors = [
-      { h: 200 + bands.low * 30, s: 80, l: 55 },
-      { h: 230 + bands.mid * 20, s: 75, l: 60 },
-      { h: 260 + bands.high * 25, s: 70, l: 65 }
-    ]
+  const c = ctx  // shorthand
 
-    for (let l = 0; l < lines; l++) {
-      const offsetY = (h / (lines + 1)) * (l + 1)
-      const c = colors[l]
+  const glow = (color, blur) => {
+    c.value.shadowColor = color
+    c.value.shadowBlur  = blur
+  }
+  const noGlow = () => { c.value.shadowBlur = 0 }
 
-      // Filled area under the wave
-      ctx.value.beginPath()
-      const wavePoints = []
-      for (let x = 0; x <= w; x += 3) {
-        const i = Math.floor((x / w) * timeDomain.length)
-        const v = (timeDomain[i] - 128) / 128
-        const y = offsetY + v * (h * 0.18 * ampMul) * (0.6 + l * 0.25)
-        wavePoints.push({ x, y })
-      }
+  // ── 1. MIRROR BARS (ribbon) ──────────────────────────────────
+  const drawBars = (w, h, cx, cy) => {
+    const data = dataArray.value; if (!data) return
+    const bars   = Math.min(96, Math.floor(w / 5.5))
+    const slot   = w / bars
+    const bw     = slot * 0.70
+    const maxH   = cy * 0.88
 
-      // Draw filled gradient area
-      const fillGrad = ctx.value.createLinearGradient(0, offsetY - h * 0.15, 0, offsetY + h * 0.15)
-      fillGrad.addColorStop(0, `hsla(${c.h}, ${c.s}%, ${c.l}%, 0.0)`)
-      fillGrad.addColorStop(0.5, `hsla(${c.h}, ${c.s}%, ${c.l}%, 0.08)`)
-      fillGrad.addColorStop(1, `hsla(${c.h}, ${c.s}%, ${c.l}%, 0.0)`)
+    c.value.globalCompositeOperation = 'source-over'
+    for (let i = 0; i < bars; i++) {
+      const bi  = Math.floor((i / bars) * data.length * 0.8)
+      const v   = data[bi] / 255
+      const bh  = v * maxH * (0.5 + store.vizIntensity * 0.9)
+      if (bh < 1) continue
+      const x   = i * slot + (slot - bw) / 2
+      const hue = 200 + (i / bars) * 120
+      const r   = Math.min(bw / 2, 4)
 
-      ctx.value.beginPath()
-      ctx.value.moveTo(0, offsetY)
-      for (let p = 0; p < wavePoints.length - 1; p++) {
-        const cpx = (wavePoints[p].x + wavePoints[p + 1].x) / 2
-        const cpy = (wavePoints[p].y + wavePoints[p + 1].y) / 2
-        ctx.value.quadraticCurveTo(wavePoints[p].x, wavePoints[p].y, cpx, cpy)
-      }
-      ctx.value.lineTo(w, offsetY)
-      ctx.value.closePath()
-      ctx.value.fillStyle = fillGrad
-      ctx.value.fill()
+      const gr = c.value.createLinearGradient(x, cy - bh, x, cy + bh)
+      gr.addColorStop(0,    `hsl(${hue + 25},95%,82%)`)
+      gr.addColorStop(0.45, `hsl(${hue},85%,58%)`)
+      gr.addColorStop(0.55, `hsl(${hue},85%,58%)`)
+      gr.addColorStop(1,    `hsl(${hue + 25},95%,82%)`)
 
-      // Draw the wave line with bezier curves
-      ctx.value.beginPath()
-      ctx.value.moveTo(wavePoints[0].x, wavePoints[0].y)
-      for (let p = 0; p < wavePoints.length - 1; p++) {
-        const cpx = (wavePoints[p].x + wavePoints[p + 1].x) / 2
-        const cpy = (wavePoints[p].y + wavePoints[p + 1].y) / 2
-        ctx.value.quadraticCurveTo(wavePoints[p].x, wavePoints[p].y, cpx, cpy)
-      }
-      ctx.value.lineWidth = (1.5 + l * 0.3) * glowMul
-      ctx.value.strokeStyle = `hsla(${c.h}, ${c.s}%, ${c.l}%, 0.9)`
-      ctx.value.stroke()
+      c.value.save()
+      glow(`hsl(${hue},90%,65%)`, 10 + store.vizIntensity * 14)
+      c.value.fillStyle = gr
+
+      // upper
+      c.value.beginPath()
+      c.value.moveTo(x + r, cy - bh)
+      c.value.lineTo(x + bw - r, cy - bh)
+      c.value.quadraticCurveTo(x + bw, cy - bh, x + bw, cy - bh + r)
+      c.value.lineTo(x + bw, cy)
+      c.value.lineTo(x, cy)
+      c.value.lineTo(x, cy - bh + r)
+      c.value.quadraticCurveTo(x, cy - bh, x + r, cy - bh)
+      c.value.closePath()
+      c.value.fill()
+
+      // mirror
+      c.value.globalAlpha = 0.32
+      c.value.beginPath()
+      c.value.moveTo(x, cy)
+      c.value.lineTo(x + bw, cy)
+      c.value.lineTo(x + bw, cy + bh - r)
+      c.value.quadraticCurveTo(x + bw, cy + bh, x + bw - r, cy + bh)
+      c.value.lineTo(x + r, cy + bh)
+      c.value.quadraticCurveTo(x, cy + bh, x, cy + bh - r)
+      c.value.closePath()
+      c.value.fill()
+
+      c.value.globalAlpha = 1
+      noGlow()
+      c.value.restore()
     }
   }
 
-  // 3. Nebula — multi-color palette, varying sizes, organic movement
-  const drawNebula = (w, h, cx, cy, t) => {
-    const data = dataArray.value
-    if (!data) return
+  // ── 2. LIQUID WAVE (waves) ────────────────────────────────────
+  const drawLiquid = (w, h, cy) => {
+    const td = timeDomain.value; const fd = dataArray.value
+    if (!td || !fd) return
+    const bands = getBands(fd)
+    const amp   = cy * (0.18 + 0.22 * store.vizIntensity)
 
-    const count = Math.floor(220 + store.vizIntensity * 480)
-    const bins = data.length
-    const bands = getBands(data, bins)
+    const pts = []
+    for (let x = 0; x <= w; x += 2) {
+      const i = Math.floor((x / w) * td.length)
+      pts.push({ x, y: cy + ((td[i] - 128) / 128) * amp })
+    }
 
-    // Multi-color palette: blue, purple, pink, cyan
-    const palette = [
-      { h: 220, s: 85, l: 60 },
-      { h: 270, s: 75, l: 60 },
-      { h: 310, s: 70, l: 65 },
-      { h: 190, s: 80, l: 55 }
-    ]
+    const bezier = (arr) => {
+      c.value.moveTo(arr[0].x, arr[0].y)
+      for (let i = 1; i < arr.length - 1; i++) {
+        c.value.quadraticCurveTo(arr[i].x, arr[i].y,
+          (arr[i].x + arr[i+1].x) / 2, (arr[i].y + arr[i+1].y) / 2)
+      }
+    }
 
+    // fill
+    const fg = c.value.createLinearGradient(0, cy - amp, 0, cy + amp)
+    fg.addColorStop(0,   `hsla(200,90%,65%,0)`)
+    fg.addColorStop(0.4, `hsla(220,85%,60%,${0.09 + bands.mid * 0.18})`)
+    fg.addColorStop(0.6, `hsla(245,80%,58%,${0.09 + bands.low * 0.14})`)
+    fg.addColorStop(1,   `hsla(260,85%,65%,0)`)
+    c.value.beginPath()
+    c.value.moveTo(0, h)
+    bezier(pts)
+    c.value.lineTo(w, h)
+    c.value.closePath()
+    c.value.fillStyle = fg
+    c.value.fill()
+
+    // line
+    c.value.save()
+    glow('hsl(220,90%,70%)', 12 + store.vizIntensity * 10)
+    const lg = c.value.createLinearGradient(0, 0, w, 0)
+    lg.addColorStop(0,   `hsla(200,85%,70%,0.5)`)
+    lg.addColorStop(0.5, `hsla(225,90%,78%,0.95)`)
+    lg.addColorStop(1,   `hsla(260,80%,72%,0.5)`)
+    c.value.strokeStyle = lg
+    c.value.lineWidth   = 2 + store.vizIntensity * 1.5
+    c.value.beginPath()
+    bezier(pts)
+    c.value.stroke()
+    noGlow()
+    c.value.restore()
+  }
+
+  // ── 3. PLASMA BLOBS (nebula) ──────────────────────────────────
+  const drawPlasma = (w, h, cx, cy, t) => {
+    const data = dataArray.value; if (!data) return
+    const bands = getBands(data)
+    const en    = energy(data)
+    const count = 10 + Math.floor(store.vizIntensity * 14)
+    const maxR  = Math.min(cx, cy)
+
+    c.value.globalCompositeOperation = 'source-over'
     for (let i = 0; i < count; i++) {
-      const a = (i / count) * Math.PI * 2 + t * 0.004
-      const spiralR = (Math.sin(i * 0.05 + t * 0.02) * 0.5 + 0.5)
-      const breathe = 1.0 + Math.sin(t * 0.015 + i * 0.1) * 0.08
-      const r = spiralR * Math.min(cx, cy) * (0.4 + 0.5 * store.vizIntensity) * breathe
-      const x = cx + Math.cos(a) * r
-      const y = cy + Math.sin(a) * r
+      const ph  = (i / count) * Math.PI * 2
+      const or  = maxR * (0.12 + 0.35 * store.vizIntensity) * (0.5 + bands.low * 0.8)
+      const bx  = cx + Math.cos(ph + t * 0.007) * or
+      const by  = cy + Math.sin(ph + t * 0.005) * or
+      const bi  = Math.floor((i / count) * data.length)
+      const v   = data[bi] / 255
+      const br  = maxR * (0.18 + v * 0.5 * store.vizIntensity)
+      const hue = (i / count) * 300 + t * 0.4
+      const al  = 0.04 + v * (0.07 + 0.09 * store.vizIntensity)
 
-      const v = data[Math.floor((i + t) % bins)] / 255
-      const rad = 1 + v * (3 + 5 * store.vizIntensity)
-
-      const c = palette[i % palette.length]
-      const brightness = c.l + v * 15
-      ctx.value.beginPath()
-      ctx.value.fillStyle = `hsla(${c.h + bands.mid * 20}, ${c.s}%, ${brightness}%, ${0.06 + v * (0.15 + 0.25 * store.vizIntensity)})`
-      ctx.value.arc(x, y, rad, 0, Math.PI * 2)
-      ctx.value.fill()
+      const bg = c.value.createRadialGradient(bx, by, 0, bx, by, br)
+      bg.addColorStop(0,   `hsla(${hue},90%,72%,${al*2.2})`)
+      bg.addColorStop(0.5, `hsla(${hue+25},85%,60%,${al})`)
+      bg.addColorStop(1,   `hsla(${hue+50},80%,50%,0)`)
+      c.value.fillStyle = bg
+      c.value.beginPath()
+      c.value.arc(bx, by, br, 0, Math.PI * 2)
+      c.value.fill()
     }
+
+    const cr = maxR * 0.08 * (0.8 + en * 1.8)
+    const ch = (t * 0.7) % 360
+    const cg = c.value.createRadialGradient(cx, cy, 0, cx, cy, cr)
+    cg.addColorStop(0, `hsla(${ch},90%,92%,${0.25 + en * 0.5})`)
+    cg.addColorStop(1, `hsla(${ch},85%,62%,0)`)
+    c.value.fillStyle = cg
+    c.value.beginPath()
+    c.value.arc(cx, cy, cr, 0, Math.PI * 2)
+    c.value.fill()
   }
 
-  // 4. Spectrum — enhanced glow, outer dots at ray tips
-  const drawSpectrum = (w, h, cx, cy, t) => {
-    const data = dataArray.value
-    if (!data) return
+  // ── 4. ARC SPECTRUM (spectrum) ────────────────────────────────
+  const drawArcSpectrum = (w, h, cx, cy, t) => {
+    const data = dataArray.value; if (!data) return
+    const bars   = Math.floor(80 + store.vizIntensity * 120)
+    const innerR = Math.min(cx, cy) * 0.20
+    const outerM = Math.min(cx, cy) * 0.88
 
-    const rays = Math.floor(120 + store.vizIntensity * 200)
-    const bins = data.length
+    c.value.save()
+    c.value.translate(cx, cy)
+    c.value.rotate(t * 0.0015)
+    c.value.globalCompositeOperation = 'source-over'
+    c.value.lineCap = 'round'
 
-    ctx.value.lineWidth = Math.max(1.0, 1.4 * (0.7 + store.vizIntensity))
-
-    for (let i = 0; i < rays; i++) {
-      const a = (i / rays) * Math.PI * 2 + t * 0.004
-      const v = data[Math.floor((i / rays) * bins) % bins] / 255
-      const r = (0.25 + v * (0.55 * (0.7 + 0.6 * store.vizIntensity))) * Math.min(w, h)
-
-      const hue = (i / rays) * 360 + t * 0.3
-      const saturation = 70 + v * 30
-      const lightness = 50 + v * 20
-
-      ctx.value.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.7 + v * 0.3})`
-
-      ctx.value.beginPath()
-      ctx.value.moveTo(cx, cy)
-      const tipX = cx + Math.cos(a) * r
-      const tipY = cy + Math.sin(a) * r
-      ctx.value.lineTo(tipX, tipY)
-      ctx.value.stroke()
-
-      // Dot at ray tip for high values
-      if (v > 0.5) {
-        const dotSize = 1.5 + v * 2.5 * store.vizIntensity
-        ctx.value.beginPath()
-        ctx.value.fillStyle = `hsla(${hue}, ${saturation}%, ${lightness + 15}%, ${v * 0.8})`
-        ctx.value.arc(tipX, tipY, dotSize, 0, Math.PI * 2)
-        ctx.value.fill()
-      }
-
-      // Glow effect at high intensity
-      if (v > 0.7 && store.vizIntensity > 0.5) {
-        ctx.value.globalAlpha = (v - 0.7) * 0.4
-        ctx.value.lineWidth = Math.max(1.0, 1.4 * (0.7 + store.vizIntensity)) * 2.5
-        ctx.value.beginPath()
-        ctx.value.moveTo(cx, cy)
-        ctx.value.lineTo(tipX, tipY)
-        ctx.value.stroke()
-        ctx.value.globalAlpha = 1.0
-        ctx.value.lineWidth = Math.max(1.0, 1.4 * (0.7 + store.vizIntensity))
-      }
+    for (let i = 0; i < bars; i++) {
+      const angle = (i / bars) * Math.PI * 2 - Math.PI / 2
+      const bi    = Math.floor((i / bars) * data.length * 0.85)
+      const v     = data[bi] / 255
+      const len   = v * (outerM - innerR) * (0.45 + store.vizIntensity * 0.85)
+      if (len < 1) continue
+      const hue = (i / bars) * 360
+      c.value.save()
+      glow(`hsl(${hue},90%,65%)`, 5 + store.vizIntensity * 10)
+      c.value.strokeStyle = `hsla(${hue},90%,65%,${0.55 + v * 0.45})`
+      c.value.lineWidth   = Math.max(1.5, (Math.PI * 2 * innerR / bars) * 0.70)
+      c.value.beginPath()
+      c.value.moveTo(Math.cos(angle) * innerR,       Math.sin(angle) * innerR)
+      c.value.lineTo(Math.cos(angle) * (innerR+len), Math.sin(angle) * (innerR+len))
+      c.value.stroke()
+      noGlow()
+      c.value.restore()
     }
+
+    c.value.save()
+    glow(`hsl(${(t*0.4)%360},80%,70%)`, 10)
+    c.value.strokeStyle = `hsla(${(t*0.4)%360},80%,70%,0.5)`
+    c.value.lineWidth   = 1.5
+    c.value.beginPath()
+    c.value.arc(0, 0, innerR * 0.88, 0, Math.PI * 2)
+    c.value.stroke()
+    noGlow()
+    c.value.restore()
+    c.value.restore()
   }
 
-  // 5. Orbits — gradient-colored per ring, accent dots at peaks
-  const drawOrbits = (cx, cy, t) => {
-    const data = dataArray.value
-    if (!data) return
+  // ── 5. DNA HELIX (orbits) ─────────────────────────────────────
+  const drawDNA = (w, h, cy, t) => {
+    const data = dataArray.value; const td = timeDomain.value
+    if (!data || !td) return
+    const bands = getBands(data)
+    const amp   = cy * (0.22 + 0.28 * store.vizIntensity) * (0.6 + bands.low * 0.8)
+    const freq  = 2.5 + store.vizIntensity
+    const spd   = t * 0.022
+    const steps = Math.floor(w / 3)
 
-    const rings = 4 + Math.floor(store.vizIntensity * 3)
-    const bins = data.length
-
-    for (let rIdx = 1; rIdx <= rings; rIdx++) {
-      const startBin = Math.floor((rIdx - 1) / rings * bins)
-      const endBin = Math.floor(rIdx / rings * bins)
-      let avg = 0
-      for (let i = startBin; i < endBin; i++) {
-        avg += data[i]
-      }
-      avg /= (endBin - startBin)
-      const intensity = avg / 255
-
-      const baseRadius = (rIdx / (rings + 1)) * Math.min(cx, cy) * (0.8 + 0.2 * store.vizIntensity)
-      const pulseAmount = intensity * 20 * (0.5 + store.vizIntensity)
-      const radius = baseRadius + pulseAmount
-
-      // Color varies from warm inner to cool outer rings
-      const hue = 200 + (rIdx / rings) * 60 + intensity * 30
-      const sat = 70 + intensity * 25
-      const lit = 50 + intensity * 20
-
-      const segments = 64
-      const points = []
-
-      for (let i = 0; i <= segments; i++) {
-        const angle = (i / segments) * Math.PI * 2 + t * 0.001 * (rIdx * 0.3)
-        const binIndex = Math.floor((i / segments) * bins) % bins
-        const segmentIntensity = data[binIndex] / 255
-
-        const r = radius + segmentIntensity * 8 * (0.3 + store.vizIntensity * 0.7)
-        points.push({
-          x: cx + Math.cos(angle) * r,
-          y: cy + Math.sin(angle) * r,
-          v: segmentIntensity
-        })
-      }
-
-      // Draw smooth ring
-      ctx.value.beginPath()
-      ctx.value.moveTo(points[0].x, points[0].y)
-      for (let i = 0; i < points.length - 1; i++) {
-        const cpx = (points[i].x + points[i + 1].x) / 2
-        const cpy = (points[i].y + points[i + 1].y) / 2
-        ctx.value.quadraticCurveTo(points[i].x, points[i].y, cpx, cpy)
-      }
-      ctx.value.closePath()
-      ctx.value.lineWidth = 1.2 + store.vizIntensity * 1.8 + intensity * 1.5
-      ctx.value.strokeStyle = `hsla(${hue}, ${sat}%, ${lit}%, 0.85)`
-      ctx.value.stroke()
-
-      // Accent dots at peaks
-      for (let i = 0; i < points.length - 1; i += 4) {
-        if (points[i].v > 0.65) {
-          ctx.value.beginPath()
-          ctx.value.fillStyle = `hsla(${hue}, ${sat}%, ${lit + 15}%, ${points[i].v * 0.7})`
-          ctx.value.arc(points[i].x, points[i].y, 1.5 + points[i].v * 2.5 * store.vizIntensity, 0, Math.PI * 2)
-          ctx.value.fill()
-        }
-      }
-
-      // Glow for high intensity rings
-      if (intensity > 0.6) {
-        ctx.value.globalAlpha = (intensity - 0.6) * 0.4
-        ctx.value.lineWidth = (1.2 + store.vizIntensity * 1.8) * 2
-        ctx.value.strokeStyle = `hsla(${hue}, ${sat}%, ${lit + 10}%, 0.5)`
-        ctx.value.beginPath()
-        ctx.value.moveTo(points[0].x, points[0].y)
-        for (let i = 0; i < points.length - 1; i++) {
-          const cpx = (points[i].x + points[i + 1].x) / 2
-          const cpy = (points[i].y + points[i + 1].y) / 2
-          ctx.value.quadraticCurveTo(points[i].x, points[i].y, cpx, cpy)
-        }
-        ctx.value.closePath()
-        ctx.value.stroke()
-        ctx.value.globalAlpha = 1.0
-      }
+    const pts1 = [], pts2 = []
+    for (let i = 0; i <= steps; i++) {
+      const x  = (i / steps) * w
+      const ph = (i / steps) * Math.PI * 2 * freq + spd
+      const bi = Math.floor((i / steps) * data.length)
+      const am = (data[bi] / 255) * 0.25
+      pts1.push({ x, y: cy + Math.sin(ph)            * amp * (1 + am) })
+      pts2.push({ x, y: cy + Math.sin(ph + Math.PI)  * amp * (1 + am) })
     }
+
+    c.value.save()
+    c.value.globalCompositeOperation = 'source-over'
+
+    const ri = Math.max(1, Math.floor(steps / 18))
+    for (let i = 0; i < pts1.length; i += ri) {
+      const v = data[Math.floor((i / pts1.length) * data.length)] / 255
+      c.value.strokeStyle = `hsla(${180 + v*80},75%,70%,${0.1 + v*0.28})`
+      c.value.lineWidth   = 1 + v * 1.5 * store.vizIntensity
+      c.value.beginPath()
+      c.value.moveTo(pts1[i].x, pts1[i].y)
+      c.value.lineTo(pts2[i].x, pts2[i].y)
+      c.value.stroke()
+    }
+
+    const strand = (pts, h1, h2) => {
+      c.value.save()
+      glow(`hsl(${h1},90%,65%)`, 7 + store.vizIntensity * 8)
+      const sg = c.value.createLinearGradient(0, 0, w, 0)
+      sg.addColorStop(0,   `hsla(${h1},90%,65%,0.25)`)
+      sg.addColorStop(0.5, `hsla(${h2},90%,72%,0.95)`)
+      sg.addColorStop(1,   `hsla(${h1},90%,65%,0.25)`)
+      c.value.strokeStyle = sg
+      c.value.lineWidth   = 2.5
+      c.value.lineJoin    = 'round'
+      c.value.beginPath()
+      c.value.moveTo(pts[0].x, pts[0].y)
+      for (let i = 1; i < pts.length - 1; i++) {
+        c.value.quadraticCurveTo(pts[i].x, pts[i].y,
+          (pts[i].x+pts[i+1].x)/2, (pts[i].y+pts[i+1].y)/2)
+      }
+      c.value.stroke()
+      noGlow()
+      c.value.restore()
+    }
+    strand(pts1, 200, 225)
+    strand(pts2, 280, 300)
+    c.value.restore()
   }
 
-  // 6. Starfield — star trails, depth-based sizing, color temperature
-  const drawStarfield = (cx, cy, t) => {
-    const data = dataArray.value
-    if (!data) return
+  // ── 6. WARP TUNNEL (starfield) ────────────────────────────────
+  const drawTunnel = (w, h, cx, cy, t) => {
+    const data = dataArray.value; if (!data) return
+    const en    = energy(data)
+    const spd   = (0.8 + store.vizIntensity * 2.5 + en * 3) * 0.012
+    const maxR  = Math.max(cx, cy) * 1.5
+    const rings = 14 + Math.floor(store.vizIntensity * 10)
 
-    const count = Math.floor(200 + 600 * store.vizIntensity)
-    const bins = data.length
-    const maxDist = Math.min(cx, cy) * (0.25 + 0.9 * store.vizIntensity)
-    const speed = 0.02 * (0.6 + store.vizIntensity * 2.0)
+    c.value.globalCompositeOperation = 'source-over'
 
-    for (let i = 0; i < count; i++) {
-      const a = (i / count) * Math.PI * 2
-      const progress = ((t * speed + i * 0.003) % 1)
-      const d = progress * maxDist
-      const x = cx + Math.cos(a) * d
-      const y = cy + Math.sin(a) * d
+    for (let i = 0; i < rings; i++) {
+      const phase = ((t * spd + i / rings) % 1.0)
+      const r     = phase * maxR
+      const alpha = Math.pow(1 - phase, 1.4) * (0.3 + 0.4 * store.vizIntensity)
+      if (alpha < 0.01) continue
+      const bi  = Math.floor((i / rings) * data.length * 0.7)
+      const v   = data[bi] / 255
+      const hue = ((i / rings) * 160 + t * 0.25) % 360
 
-      const v = data[Math.floor((i * 7 + t) % bins)] / 255
-
-      // Depth-based sizing: farther stars are bigger
-      const depthScale = 0.3 + progress * 0.7
-      const size = (0.7 + v * (1.2 + 2.4 * store.vizIntensity)) * depthScale
-
-      // Color temperature: inner = warm blue-white, outer = cool blue
-      const hue = 210 + (1 - progress) * 30
-      const lightness = 60 + v * 25 + progress * 10
-      const alpha = (0.05 + v * (0.2 + 0.3 * store.vizIntensity)) * depthScale
-
-      // Draw trail line for fast-moving stars
-      if (progress > 0.15 && v > 0.3) {
-        const trailLen = Math.min(d * 0.08, 8) * (0.5 + store.vizIntensity)
-        const tx = cx + Math.cos(a) * (d - trailLen)
-        const ty = cy + Math.sin(a) * (d - trailLen)
-        ctx.value.beginPath()
-        ctx.value.strokeStyle = `hsla(${hue}, 70%, ${lightness}%, ${alpha * 0.5})`
-        ctx.value.lineWidth = size * 0.6
-        ctx.value.moveTo(tx, ty)
-        ctx.value.lineTo(x, y)
-        ctx.value.stroke()
+      c.value.save()
+      glow(`hsl(${hue},85%,65%)`, 5 + store.vizIntensity * 8)
+      c.value.strokeStyle = `hsla(${hue},85%,65%,${alpha * (0.4 + v * 0.6)})`
+      c.value.lineWidth   = Math.max(0.8, (1 + phase * 3) * store.vizIntensity)
+      c.value.beginPath()
+      for (let j = 0; j <= 72; j++) {
+        const a   = (j / 72) * Math.PI * 2
+        const bj  = Math.floor((j / 72) * data.length)
+        const wob = 1 + (data[bj] / 255) * 0.06 * store.vizIntensity
+        const px  = cx + Math.cos(a) * r * wob
+        const py  = cy + Math.sin(a) * r * wob
+        j === 0 ? c.value.moveTo(px, py) : c.value.lineTo(px, py)
       }
-
-      // Draw star dot
-      ctx.value.beginPath()
-      ctx.value.fillStyle = `hsla(${hue}, 70%, ${lightness}%, ${alpha})`
-      ctx.value.arc(x, y, size, 0, Math.PI * 2)
-      ctx.value.fill()
+      c.value.closePath()
+      c.value.stroke()
+      noGlow()
+      c.value.restore()
     }
+
+    const dr  = 3 + en * 14
+    const dh  = (t * 0.4) % 360
+    const dg  = c.value.createRadialGradient(cx, cy, 0, cx, cy, dr * 3)
+    dg.addColorStop(0, `hsla(${dh},90%,96%,${0.7 + en * 0.3})`)
+    dg.addColorStop(1, `hsla(${dh},85%,65%,0)`)
+    c.value.fillStyle = dg
+    c.value.beginPath()
+    c.value.arc(cx, cy, dr * 3, 0, Math.PI * 2)
+    c.value.fill()
   }
 
-  // 7. Grid — HSL color variation, rounded cells
-  const drawGrid = (w, h, t) => {
-    const data = dataArray.value
-    if (!data) return
+  // ── 7. LED EQUALIZER (grid) ───────────────────────────────────
+  const drawEqualizer = (w, h) => {
+    const data = dataArray.value; if (!data) return
+    const bars    = Math.min(60, Math.floor(w / 9))
+    const slotW   = w / bars
+    const barW    = Math.floor(slotW * 0.72)
+    const segCnt  = 28
+    const segH    = Math.floor((h * 0.82) / segCnt)
+    const segGap  = Math.max(1, Math.floor(segH * 0.22))
+    const segNet  = segH - segGap
+    const baseY   = h * 0.91
 
-    const cell = Math.max(8, Math.floor(Math.min(w, h) / (18 + 30 * (1 - store.vizIntensity))))
-    const bins = data.length
+    if (peakHolds.length !== bars) peakHolds = new Float32Array(bars)
+    c.value.globalCompositeOperation = 'source-over'
 
-    for (let y = 0; y < h; y += cell) {
-      for (let x = 0; x < w; x += cell) {
-        const v = data[Math.floor(((x + y + t) % (w + h)) / (w + h) * bins)] / 255
+    for (let i = 0; i < bars; i++) {
+      const bi   = Math.floor((i / bars) * data.length * 0.78)
+      const v    = data[bi] / 255
+      const lit  = Math.round(v * segCnt * (0.4 + store.vizIntensity * 0.8))
+      const x    = Math.floor(i * slotW + (slotW - barW) / 2)
 
-        // HSL color based on frequency bin position
-        const hue = 200 + v * 80 + ((x + y) / (w + h)) * 40
-        const sat = 65 + v * 30
-        const lit = 40 + v * 30
-        const alpha = 0.06 + v * (0.25 + 0.25 * store.vizIntensity)
+      for (let s = 0; s < lit; s++) {
+        const sy    = baseY - (s + 1) * segH
+        const ratio = s / segCnt
+        const hue   = ratio < 0.60 ? 130 : ratio < 0.82 ? 55 : 0
+        c.value.fillStyle = `hsla(${hue},90%,52%,${0.6 + ratio * 0.4})`
+        c.value.fillRect(x, sy, barW, segNet)
+      }
 
-        ctx.value.fillStyle = `hsla(${hue}, ${sat}%, ${lit}%, ${alpha})`
-        const inset = (1 - v) * (cell * 0.35 * (0.2 + 0.8 * store.vizIntensity))
-        const size = cell - inset * 2
-        const r = Math.min(size * 0.2, 4)
-        const sx = x + inset
-        const sy = y + inset
+      if (lit > peakHolds[i]) peakHolds[i] = lit
+      else peakHolds[i] = Math.max(0, peakHolds[i] - 0.8)
 
-        // Rounded rectangle
-        ctx.value.beginPath()
-        ctx.value.moveTo(sx + r, sy)
-        ctx.value.lineTo(sx + size - r, sy)
-        ctx.value.quadraticCurveTo(sx + size, sy, sx + size, sy + r)
-        ctx.value.lineTo(sx + size, sy + size - r)
-        ctx.value.quadraticCurveTo(sx + size, sy + size, sx + size - r, sy + size)
-        ctx.value.lineTo(sx + r, sy + size)
-        ctx.value.quadraticCurveTo(sx, sy + size, sx, sy + size - r)
-        ctx.value.lineTo(sx, sy + r)
-        ctx.value.quadraticCurveTo(sx, sy, sx + r, sy)
-        ctx.value.closePath()
-        ctx.value.fill()
+      const ps = Math.floor(peakHolds[i])
+      if (ps > 1) {
+        const py   = baseY - (ps + 1) * segH
+        const pr   = ps / segCnt
+        const phue = pr < 0.60 ? 130 : pr < 0.82 ? 55 : 0
+        c.value.save()
+        glow(`hsl(${phue},90%,65%)`, 6)
+        c.value.fillStyle = `hsl(${phue},90%,76%)`
+        c.value.fillRect(x, py, barW, segNet)
+        noGlow()
+        c.value.restore()
       }
     }
   }
 
-  // ============================================================
-  // NEW VISUALIZERS
-  // ============================================================
-
-  // 8. Aurora — flowing northern lights curtains with gradient fills
+  // ── 8. AURORA (aurora) ────────────────────────────────────────
   const drawAurora = (w, h, t) => {
-    const data = dataArray.value
-    if (!data) return
-
-    const bins = data.length
-    const bands = getBands(data, bins)
-    const layers = 5 + Math.floor(store.vizIntensity * 3)
-
-    // Aurora color palette: green, cyan, purple, pink
-    const auroraColors = [
-      { h: 140, s: 80, l: 55 },
-      { h: 170, s: 75, l: 50 },
-      { h: 200, s: 70, l: 55 },
-      { h: 260, s: 65, l: 55 },
-      { h: 290, s: 60, l: 60 },
-      { h: 320, s: 55, l: 60 },
-      { h: 150, s: 75, l: 50 },
-      { h: 180, s: 70, l: 55 }
+    const data = dataArray.value; if (!data) return
+    const bands  = getBands(data)
+    const layers = 7 + Math.floor(store.vizIntensity * 4)
+    const pal = [
+      [130,85,50],[160,80,48],[195,75,52],[230,70,55],
+      [260,68,55],[290,62,58],[320,58,60],[155,80,48],
+      [185,75,52],[110,88,46]
     ]
 
+    c.value.globalCompositeOperation = 'source-over'
     for (let l = 0; l < layers; l++) {
-      const layerRatio = l / layers
-      const baseY = h * (0.2 + layerRatio * 0.5)
-      const amplitude = h * (0.08 + 0.12 * store.vizIntensity) * (1 - layerRatio * 0.4)
-      const c = auroraColors[l % auroraColors.length]
+      const lr   = l / layers
+      const baseY = h * (0.12 + lr * 0.60)
+      const amp   = h * (0.055 + 0.13 * store.vizIntensity) * (1 - lr * 0.32)
+      const [ch, cs, cl] = pal[l % pal.length]
 
-      // Build wave points
-      const points = []
-      const step = 4
-      for (let x = 0; x <= w; x += step) {
-        const binIdx = Math.floor((x / w) * bins) % bins
-        const v = data[binIdx] / 255
-
-        const wave1 = Math.sin(x * 0.008 + t * 0.012 + l * 1.2) * amplitude
-        const wave2 = Math.sin(x * 0.015 + t * 0.008 - l * 0.7) * amplitude * 0.5
-        const audioDisp = v * amplitude * 0.6 * (0.5 + store.vizIntensity)
-
-        const y = baseY + wave1 + wave2 + audioDisp
-        points.push({ x, y })
+      const pts = []
+      for (let x = 0; x <= w; x += 3) {
+        const bi = Math.floor((x / w) * data.length) % data.length
+        const v  = data[bi] / 255
+        const w1 = Math.sin(x * 0.006 + t * 0.010 + l * 1.25) * amp
+        const w2 = Math.sin(x * 0.011 + t * 0.006 - l * 0.75) * amp * 0.38
+        pts.push({ x, y: baseY + w1 + w2 + v * amp * 0.45 * (0.4 + store.vizIntensity) })
       }
 
-      // Draw filled curtain
-      const grad = ctx.value.createLinearGradient(0, baseY - amplitude, 0, baseY + amplitude * 2)
-      const alpha = 0.04 + 0.06 * store.vizIntensity + bands.mid * 0.04
-      grad.addColorStop(0, `hsla(${c.h}, ${c.s}%, ${c.l}%, 0)`)
-      grad.addColorStop(0.3, `hsla(${c.h}, ${c.s}%, ${c.l}%, ${alpha})`)
-      grad.addColorStop(0.6, `hsla(${c.h + 20}, ${c.s}%, ${c.l + 10}%, ${alpha * 1.2})`)
-      grad.addColorStop(1, `hsla(${c.h}, ${c.s}%, ${c.l}%, 0)`)
+      const al  = 0.025 + 0.065 * store.vizIntensity + bands.mid * 0.055
+      const gr  = c.value.createLinearGradient(0, baseY - amp*1.6, 0, baseY + amp*2.6)
+      gr.addColorStop(0,    `hsla(${ch},${cs}%,${cl}%,0)`)
+      gr.addColorStop(0.32, `hsla(${ch},${cs}%,${cl}%,${al*1.1})`)
+      gr.addColorStop(0.62, `hsla(${ch+20},${cs}%,${cl+8}%,${al*1.35})`)
+      gr.addColorStop(1,    `hsla(${ch},${cs}%,${cl}%,0)`)
 
-      ctx.value.beginPath()
-      ctx.value.moveTo(0, h)
-      for (let i = 0; i < points.length - 1; i++) {
-        const cpx = (points[i].x + points[i + 1].x) / 2
-        const cpy = (points[i].y + points[i + 1].y) / 2
-        ctx.value.quadraticCurveTo(points[i].x, points[i].y, cpx, cpy)
-      }
-      ctx.value.lineTo(w, h)
-      ctx.value.closePath()
-      ctx.value.fillStyle = grad
-      ctx.value.fill()
-
-      // Draw the bright edge line
-      ctx.value.beginPath()
-      ctx.value.moveTo(points[0].x, points[0].y)
-      for (let i = 0; i < points.length - 1; i++) {
-        const cpx = (points[i].x + points[i + 1].x) / 2
-        const cpy = (points[i].y + points[i + 1].y) / 2
-        ctx.value.quadraticCurveTo(points[i].x, points[i].y, cpx, cpy)
-      }
-      ctx.value.strokeStyle = `hsla(${c.h}, ${c.s}%, ${c.l + 15}%, ${0.15 + bands.high * 0.2})`
-      ctx.value.lineWidth = 1.0 + store.vizIntensity * 1.5
-      ctx.value.stroke()
-    }
-  }
-
-  // 9. Kaleidoscope — rotational symmetry with reflected geometric patterns
-  const drawKaleidoscope = (w, h, cx, cy, t) => {
-    const data = dataArray.value
-    if (!data) return
-
-    const bins = data.length
-    const bands = getBands(data, bins)
-    const symmetry = 6 + Math.floor(store.vizIntensity * 4)
-    const maxR = Math.min(cx, cy) * 0.9
-
-    ctx.value.save()
-    ctx.value.translate(cx, cy)
-
-    for (let s = 0; s < symmetry; s++) {
-      const baseAngle = (s / symmetry) * Math.PI * 2
-
-      ctx.value.save()
-      ctx.value.rotate(baseAngle + t * 0.003)
-
-      // Draw mirrored pattern
-      for (let mirror = 0; mirror < 2; mirror++) {
-        ctx.value.save()
-        if (mirror === 1) ctx.value.scale(1, -1)
-
-        // Draw shapes along the segment
-        const shapes = 8 + Math.floor(store.vizIntensity * 8)
-        for (let i = 0; i < shapes; i++) {
-          const binIdx = Math.floor((s * shapes + i) / (symmetry * shapes) * bins) % bins
-          const v = data[binIdx] / 255
-          const dist = (i / shapes) * maxR * (0.3 + 0.7 * v)
-
-          const hue = (s / symmetry) * 360 + t * 0.5 + v * 60
-          const alpha = 0.08 + v * (0.2 + 0.2 * store.vizIntensity)
-
-          // Draw petal/diamond shapes
-          const size = (3 + v * 12 * store.vizIntensity) * (0.5 + (i / shapes) * 0.5)
-          const angle = (i / shapes) * 0.5 + Math.sin(t * 0.01 + i) * 0.1
-
-          ctx.value.save()
-          ctx.value.translate(dist * Math.cos(angle), dist * Math.sin(angle))
-          ctx.value.rotate(t * 0.005 + i * 0.3)
-
-          ctx.value.beginPath()
-          ctx.value.fillStyle = `hsla(${hue}, ${70 + v * 25}%, ${50 + v * 20}%, ${alpha})`
-          // Diamond shape
-          ctx.value.moveTo(0, -size)
-          ctx.value.quadraticCurveTo(size * 0.5, 0, 0, size)
-          ctx.value.quadraticCurveTo(-size * 0.5, 0, 0, -size)
-          ctx.value.fill()
-
-          // Connecting line
-          if (i > 0) {
-            ctx.value.strokeStyle = `hsla(${hue}, 60%, 60%, ${alpha * 0.4})`
-            ctx.value.lineWidth = 0.5 + v * store.vizIntensity
-            ctx.value.beginPath()
-            ctx.value.moveTo(0, 0)
-            ctx.value.lineTo(-dist * 0.15, 0)
-            ctx.value.stroke()
-          }
-
-          ctx.value.restore()
+      const bezierPts = (arr) => {
+        for (let i = 0; i < arr.length - 1; i++) {
+          c.value.quadraticCurveTo(arr[i].x, arr[i].y,
+            (arr[i].x+arr[i+1].x)/2, (arr[i].y+arr[i+1].y)/2)
         }
-
-        ctx.value.restore()
       }
 
-      ctx.value.restore()
+      c.value.beginPath()
+      c.value.moveTo(0, h)
+      bezierPts(pts)
+      c.value.lineTo(w, h)
+      c.value.closePath()
+      c.value.fillStyle = gr
+      c.value.fill()
+
+      c.value.save()
+      glow(`hsl(${ch},${cs}%,${cl+22}%)`, 4 + store.vizIntensity * 6)
+      c.value.strokeStyle = `hsla(${ch},${cs}%,${cl+22}%,${0.1 + bands.high * 0.22})`
+      c.value.lineWidth   = 1 + store.vizIntensity * 1.4
+      c.value.beginPath()
+      c.value.moveTo(pts[0].x, pts[0].y)
+      bezierPts(pts)
+      c.value.stroke()
+      noGlow()
+      c.value.restore()
     }
-
-    // Central glow
-    const centerGlow = ctx.value.createRadialGradient(0, 0, 0, 0, 0, maxR * 0.15)
-    centerGlow.addColorStop(0, `hsla(${t * 0.5 % 360}, 80%, 70%, ${0.15 + bands.low * 0.2})`)
-    centerGlow.addColorStop(1, 'hsla(0, 0%, 0%, 0)')
-    ctx.value.fillStyle = centerGlow
-    ctx.value.beginPath()
-    ctx.value.arc(0, 0, maxR * 0.15, 0, Math.PI * 2)
-    ctx.value.fill()
-
-    ctx.value.restore()
   }
 
-  // 10. Particles — physics-based particle system with bursts and gravity
-  const drawParticles = (w, h, cx, cy, t) => {
-    const data = dataArray.value
-    if (!data) return
+  // ── 9. MANDALA (kaleidoscope) ─────────────────────────────────
+  const drawMandala = (w, h, cx, cy, t) => {
+    const data = dataArray.value; if (!data) return
+    const bands = getBands(data)
+    const maxR  = Math.min(cx, cy) * 0.88
 
-    const bins = data.length
-    const bands = getBands(data, bins)
+    c.value.save()
+    c.value.translate(cx, cy)
+    c.value.globalCompositeOperation = 'source-over'
 
-    // Compute overall energy to trigger bursts
-    let energy = 0
-    for (let i = 0; i < bins; i++) energy += data[i]
-    energy /= (bins * 255)
+    for (let layer = 0; layer < 3; layer++) {
+      const lR    = maxR * (0.30 + layer * 0.32)
+      const iR    = lR   * 0.28
+      const rot   = t * 0.0018 * (layer % 2 === 0 ? 1 : -1.4)
+      const hBase = (layer * 130 + t * 0.35) % 360
+      const res   = 256
+      const pts   = []
 
-    const maxParticles = Math.floor(300 + 500 * store.vizIntensity)
+      for (let i = 0; i <= res; i++) {
+        const angle = (i / res) * Math.PI * 2 + rot
+        const bi    = Math.floor((i / res) * data.length) % data.length
+        const v     = data[bi] / 255
+        const r     = iR + v * (lR - iR) * (0.35 + store.vizIntensity * 0.85)
+        pts.push({ x: Math.cos(angle) * r, y: Math.sin(angle) * r })
+      }
 
-    // Spawn new particles on energy beats
-    const spawnCount = Math.floor(energy * (3 + 8 * store.vizIntensity))
-    for (let i = 0; i < spawnCount; i++) {
-      if (particles.length >= maxParticles) break
-      const angle = Math.random() * Math.PI * 2
-      const speed = (1.5 + Math.random() * 3) * (0.5 + store.vizIntensity) * (0.5 + energy)
-      const hue = 200 + Math.random() * 160 + bands.high * 60
+      c.value.save()
+      glow(`hsl(${hBase},85%,65%)`, 7 + store.vizIntensity * 10)
+      c.value.beginPath()
+      c.value.moveTo(pts[0].x, pts[0].y)
+      for (let i = 1; i < pts.length - 1; i++) {
+        c.value.quadraticCurveTo(pts[i].x, pts[i].y,
+          (pts[i].x+pts[i+1].x)/2, (pts[i].y+pts[i+1].y)/2)
+      }
+      c.value.closePath()
+
+      const al  = 0.10 + store.vizIntensity * 0.13 + bands.mid * 0.10
+      const fg  = c.value.createRadialGradient(0, 0, iR*0.4, 0, 0, lR)
+      fg.addColorStop(0,   `hsla(${hBase},     85%,65%,${al*0.55})`)
+      fg.addColorStop(0.5, `hsla(${hBase+40},  80%,60%,${al})`)
+      fg.addColorStop(1,   `hsla(${hBase+80},  75%,55%,${al*0.3})`)
+      c.value.fillStyle   = fg
+      c.value.fill()
+      c.value.strokeStyle = `hsla(${hBase+20},85%,70%,${0.28 + bands.high * 0.3})`
+      c.value.lineWidth   = 0.7 + store.vizIntensity * 1.1
+      c.value.stroke()
+      noGlow()
+      c.value.restore()
+    }
+
+    const cr  = Math.min(cx, cy) * 0.055 * (1 + bands.low * 1.6)
+    const ch2 = (t * 0.55) % 360
+    const cg2 = c.value.createRadialGradient(0, 0, 0, 0, 0, cr)
+    cg2.addColorStop(0, `hsla(${ch2},90%,88%,${0.35 + bands.low * 0.45})`)
+    cg2.addColorStop(1, `hsla(${ch2},85%,60%,0)`)
+    c.value.fillStyle = cg2
+    c.value.beginPath()
+    c.value.arc(0, 0, cr, 0, Math.PI * 2)
+    c.value.fill()
+    c.value.restore()
+  }
+
+  // ── 10. SPARKS (particles) ────────────────────────────────────
+  const drawSparks = (w, h, cx, cy) => {
+    const data = dataArray.value; if (!data) return
+    const bands = getBands(data)
+    const en    = energy(data)
+    const beat  = en - lastEnergy > 0.038 * (1.6 - store.vizIntensity)
+    lastEnergy  = en * 0.75 + lastEnergy * 0.25
+
+    const maxP  = Math.floor(180 + 420 * store.vizIntensity)
+    const spawn = Math.floor(en * (2 + 7 * store.vizIntensity)) + (beat ? Math.floor(10 + 14 * store.vizIntensity) : 0)
+
+    for (let i = 0; i < spawn && particles.length < maxP; i++) {
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * (beat ? 1.4 : 0.5)
+      const spd   = (1.8 + Math.random() * 4.5) * (0.5 + store.vizIntensity) * (0.4 + en * 1.8)
+      const hue   = beat ? 35 + Math.random() * 35 : 195 + Math.random() * 150
       particles.push({
-        x: cx + (Math.random() - 0.5) * 20,
-        y: cy + (Math.random() - 0.5) * 20,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 1,
+        x: cx + (Math.random() - 0.5) * 25 * (beat ? 2.5 : 1),
+        y: cy + (Math.random() - 0.5) * 15,
+        vx: Math.cos(angle) * spd,
+        vy: Math.sin(angle) * spd,
         life: 1.0,
-        decay: 0.005 + Math.random() * 0.01 + 0.005 * store.vizIntensity,
-        size: 1.5 + Math.random() * 3 * store.vizIntensity,
-        hue: hue,
-        sat: 70 + Math.random() * 25,
-        lit: 55 + Math.random() * 20
+        decay: 0.007 + Math.random() * 0.013 + 0.005 * store.vizIntensity,
+        size: (beat ? 2.2 : 1.2) + Math.random() * 2.8 * store.vizIntensity,
+        hue, sat: 80 + Math.random() * 18, lit: 55 + Math.random() * 22
       })
     }
 
-    // Update and draw particles
-    const gravity = 0.03 + 0.02 * store.vizIntensity
-    const drag = 0.995
-    const alive = []
+    const gravity = 0.038 + 0.028 * store.vizIntensity
+    const alive   = []
+    c.value.globalCompositeOperation = 'lighter'
 
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i]
-
-      // Physics
-      p.vy += gravity
-      p.vx *= drag
-      p.vy *= drag
-      p.x += p.vx
-      p.y += p.vy
-      p.life -= p.decay
-
-      if (p.life <= 0) continue
-      if (p.x < -10 || p.x > w + 10 || p.y < -10 || p.y > h + 10) continue
-
+    for (const p of particles) {
+      p.vy += gravity; p.vx *= 0.994; p.vy *= 0.994
+      p.x  += p.vx;   p.y  += p.vy;  p.life -= p.decay
+      if (p.life <= 0 || p.x < -20 || p.x > w + 20 || p.y > h + 20) continue
       alive.push(p)
-
-      // Draw particle with trail
-      const alpha = p.life * (0.4 + 0.5 * store.vizIntensity)
-      const trailLen = Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 2
-
-      if (trailLen > 1) {
-        const nx = p.vx / trailLen * 2
-        const ny = p.vy / trailLen * 2
-        ctx.value.beginPath()
-        ctx.value.strokeStyle = `hsla(${p.hue}, ${p.sat}%, ${p.lit}%, ${alpha * 0.4})`
-        ctx.value.lineWidth = p.size * 0.5 * p.life
-        ctx.value.moveTo(p.x - nx * trailLen, p.y - ny * trailLen)
-        ctx.value.lineTo(p.x, p.y)
-        ctx.value.stroke()
+      const al  = p.life * (0.45 + 0.4 * store.vizIntensity)
+      const spd2 = Math.hypot(p.vx, p.vy)
+      if (spd2 > 0.5) {
+        const nx = p.vx / spd2, ny = p.vy / spd2
+        const tl = Math.min(spd2 * 2.5, 14)
+        c.value.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.lit}%,${al*0.32})`
+        c.value.lineWidth   = p.size * 0.55 * p.life
+        c.value.beginPath()
+        c.value.moveTo(p.x - nx*tl, p.y - ny*tl)
+        c.value.lineTo(p.x, p.y)
+        c.value.stroke()
       }
-
-      // Draw particle body
-      ctx.value.beginPath()
-      ctx.value.fillStyle = `hsla(${p.hue}, ${p.sat}%, ${p.lit}%, ${alpha})`
-      ctx.value.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2)
-      ctx.value.fill()
+      c.value.fillStyle = `hsla(${p.hue},${p.sat}%,${p.lit+15}%,${al})`
+      c.value.beginPath()
+      c.value.arc(p.x, p.y, Math.max(0.4, p.size * p.life), 0, Math.PI * 2)
+      c.value.fill()
     }
-
     particles = alive
+    c.value.globalCompositeOperation = 'source-over'
   }
 
-  // ============================================================
-  // Main draw loop
-  // ============================================================
+  // ── Main draw loop ───────────────────────────────────────────
+  const TRAIL = {
+    ribbon: 0, waves: 0, nebula: 0.16, spectrum: 0.12,
+    orbits: 0, starfield: 0.10, grid: 0, aurora: 0.14,
+    kaleidoscope: 0.13, particles: 0.10
+  }
+
   const draw = () => {
     if (!analyser.value || !ctx.value || !canvas.value) return
-    if (!dataArray.value || !timeDomainArray.value) return
+    if (!dataArray.value || !timeDomain.value) return
 
     analyser.value.getByteFrequencyData(dataArray.value)
-    analyser.value.getByteTimeDomainData(timeDomainArray.value)
+    analyser.value.getByteTimeDomainData(timeDomain.value)
 
-    const w = canvas.value.width
-    const h = canvas.value.height
+    const w  = _cssW || canvas.value.width
+    const h  = _cssH || canvas.value.height
     const cx = w / 2
     const cy = h / 2
+    const mode = store.vizMode
 
-    const trail = Math.max(0.08, 0.30 - store.vizIntensity * 0.22)
+    // background
+    const trail = TRAIL[mode] ?? 0
+    c.value.globalCompositeOperation = 'source-over'
+    if (trail > 0) {
+      c.value.fillStyle = `rgba(0,0,0,${trail})`
+    } else {
+      c.value.fillStyle = '#000'
+    }
+    c.value.fillRect(0, 0, w, h)
 
-    ctx.value.globalCompositeOperation = 'source-over'
-    ctx.value.fillStyle = `rgba(0,0,0,${trail})`
-    ctx.value.fillRect(0, 0, w, h)
-
-    ctx.value.globalCompositeOperation = 'lighter'
-
-    const glowMul = 0.6 + store.vizIntensity * 0.8
-    const ampMul = 0.5 + store.vizIntensity * 0.9
-
-    switch (store.vizMode) {
-      case 'ribbon':
-        drawRibbon(w, h, cx, cy, frameCounter, ampMul, glowMul)
-        break
-      case 'waves':
-        drawWaves(w, h, ampMul, glowMul)
-        break
-      case 'nebula':
-        drawNebula(w, h, cx, cy, frameCounter)
-        break
-      case 'spectrum':
-        drawSpectrum(w, h, cx, cy, frameCounter)
-        break
-      case 'orbits':
-        drawOrbits(cx, cy, frameCounter)
-        break
-      case 'starfield':
-        drawStarfield(cx, cy, frameCounter)
-        break
-      case 'grid':
-        drawGrid(w, h, frameCounter)
-        break
-      case 'aurora':
-        drawAurora(w, h, frameCounter)
-        break
-      case 'kaleidoscope':
-        drawKaleidoscope(w, h, cx, cy, frameCounter)
-        break
-      case 'particles':
-        drawParticles(w, h, cx, cy, frameCounter)
-        break
+    switch (mode) {
+      case 'ribbon':       drawBars(w, h, cx, cy);              break
+      case 'waves':        drawLiquid(w, h, cy);                break
+      case 'nebula':       drawPlasma(w, h, cx, cy, frameCounter); break
+      case 'spectrum':     drawArcSpectrum(w, h, cx, cy, frameCounter); break
+      case 'orbits':       drawDNA(w, h, cy, frameCounter);     break
+      case 'starfield':    drawTunnel(w, h, cx, cy, frameCounter); break
+      case 'grid':         drawEqualizer(w, h);                 break
+      case 'aurora':       drawAurora(w, h, frameCounter);      break
+      case 'kaleidoscope': drawMandala(w, h, cx, cy, frameCounter); break
+      case 'particles':    drawSparks(w, h, cx, cy);            break
     }
 
     frameCounter++
     animationFrameId.value = requestAnimationFrame(draw)
   }
 
-  // Start/stop animation
   const start = () => {
-    if (!analyser.value) return
-    if (animationFrameId.value) return
-
+    if (!analyser.value || animationFrameId.value) return
     draw()
   }
 
@@ -782,36 +666,20 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
 
   const reset = () => {
     stop()
-    if (ctx.value && canvas.value) {
-      ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-    }
+    if (ctx.value && canvas.value) ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
     frameCounter = 0
-    particles = []
+    particles    = []
+    peakHolds    = []
+    lastEnergy   = 0
   }
 
-  // Watch for playing state
-  watch(() => store.isPlaying, (playing) => {
-    if (playing) {
-      start()
-    } else {
-      stop()
-    }
-  })
+  watch(() => store.isPlaying, (playing) => { playing ? start() : stop() })
 
-  // Cleanup
   onBeforeUnmount(() => {
     stop()
-    if (resizeObserver.value) {
-      resizeObserver.value.disconnect()
-    } else {
-      window.removeEventListener('resize', resizeCanvas)
-    }
+    if (resizeObserver.value) resizeObserver.value.disconnect()
+    else window.removeEventListener('resize', resizeCanvas)
   })
 
-  return {
-    initCanvas,
-    start,
-    stop,
-    reset
-  }
+  return { initCanvas, start, stop, reset }
 }
