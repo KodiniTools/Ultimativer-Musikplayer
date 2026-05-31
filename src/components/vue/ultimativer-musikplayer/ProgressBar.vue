@@ -1,30 +1,46 @@
 <template>
   <div class="progress-container" aria-label="Wiedergabefortschritt">
-    <span class="timechip">{{ formatTime(store.currentTime) }}</span>
+    <span class="timechip">{{ formatTime(displayTime) }}</span>
     <div
       class="progress-bar"
+      :class="{ 'progress-bar--dragging': isDragging }"
       role="slider"
       aria-valuemin="0"
       aria-valuemax="100"
-      :aria-valuenow="Math.round(store.progress)"
+      :aria-valuenow="Math.round(displayProgress)"
       tabindex="0"
       @mousedown="startDrag"
       @touchstart.passive="startTouchDrag"
-      @click="handleSeek"
       @keydown="handleKeydown"
     >
-      <div class="progress-bar__fill" :style="{ width: store.progress + '%' }"></div>
+      <div class="progress-bar__fill" :style="{ width: displayProgress + '%' }"></div>
     </div>
-    <span class="timechip">-{{ formatTime(store.remainingTime) }}</span>
+    <span class="timechip">-{{ formatTime(displayRemaining) }}</span>
   </div>
 </template>
 
 <script setup>
-import { onBeforeUnmount } from 'vue'
+import { ref, computed, onBeforeUnmount } from 'vue'
 import { usePlayerStore } from './stores/playerStore'
 
 const store = usePlayerStore()
 const emit  = defineEmits(['seek'])
+
+// While dragging we show a local preview position; on release we actually seek.
+const isDragging    = ref(false)
+const dragProgress  = ref(0)   // 0-100
+
+const displayProgress = computed(() =>
+  isDragging.value ? dragProgress.value : store.progress
+)
+const displayTime = computed(() => {
+  if (!isDragging.value) return store.currentTime
+  return (dragProgress.value / 100) * store.duration
+})
+const displayRemaining = computed(() => {
+  if (!isDragging.value) return store.remainingTime
+  return Math.max(0, store.duration - displayTime.value)
+})
 
 const formatTime = (seconds) => {
   if (!isFinite(seconds) || isNaN(seconds)) return '0:00'
@@ -33,63 +49,68 @@ const formatTime = (seconds) => {
   return `${mins}:${secs < 10 ? '0' + secs : secs}`
 }
 
-const percentageFromEvent = (event, element) => {
-  const rect  = element.getBoundingClientRect()
-  const ratio = (event.clientX - rect.left) / rect.width
-  return Math.max(0, Math.min(100, ratio * 100))
-}
-
-const handleSeek = (event) => {
-  emit('seek', percentageFromEvent(event, event.currentTarget))
+const ratioFromClient = (clientX, element) => {
+  const rect = element.getBoundingClientRect()
+  return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
 }
 
 // ── Mouse drag ──────────────────────────────────────────────
-let dragBar = null
+let dragEl = null
 
-const onMouseMove = (event) => {
-  if (!dragBar) return
-  emit('seek', percentageFromEvent(event, dragBar))
+const onMouseMove = (e) => {
+  if (!dragEl) return
+  dragProgress.value = ratioFromClient(e.clientX, dragEl) * 100
 }
 
-const onMouseUp = () => {
-  dragBar = null
+const onMouseUp = (e) => {
+  if (dragEl) {
+    emit('seek', ratioFromClient(e.clientX, dragEl) * 100)
+  }
+  isDragging.value = false
+  dragEl = null
   window.removeEventListener('mousemove', onMouseMove)
   window.removeEventListener('mouseup',   onMouseUp)
 }
 
-const startDrag = (event) => {
-  dragBar = event.currentTarget
+const startDrag = (e) => {
+  isDragging.value   = true
+  dragProgress.value = store.progress
+  dragEl             = e.currentTarget
   window.addEventListener('mousemove', onMouseMove)
   window.addEventListener('mouseup',   onMouseUp)
 }
 
 // ── Touch drag ──────────────────────────────────────────────
-let touchBar = null
+let touchEl = null
 
-const onTouchMove = (event) => {
-  if (!touchBar) return
-  const touch = event.touches[0]
-  const rect  = touchBar.getBoundingClientRect()
-  const ratio = (touch.clientX - rect.left) / rect.width
-  emit('seek', Math.max(0, Math.min(100, ratio * 100)))
+const onTouchMove = (e) => {
+  if (!touchEl) return
+  dragProgress.value = ratioFromClient(e.touches[0].clientX, touchEl) * 100
 }
 
-const onTouchEnd = () => {
-  touchBar = null
+const onTouchEnd = (e) => {
+  if (touchEl) {
+    const clientX = e.changedTouches?.[0]?.clientX
+    if (clientX != null) emit('seek', ratioFromClient(clientX, touchEl) * 100)
+  }
+  isDragging.value = false
+  touchEl = null
   window.removeEventListener('touchmove', onTouchMove)
   window.removeEventListener('touchend',  onTouchEnd)
 }
 
-const startTouchDrag = (event) => {
-  touchBar = event.currentTarget
+const startTouchDrag = (e) => {
+  isDragging.value   = true
+  dragProgress.value = store.progress
+  touchEl            = e.currentTarget
   window.addEventListener('touchmove', onTouchMove, { passive: true })
   window.addEventListener('touchend',  onTouchEnd)
 }
 
 // ── Keyboard ────────────────────────────────────────────────
-const handleKeydown = (event) => {
-  if (event.key === 'ArrowRight') emit('seek', Math.min(100, store.progress + 5))
-  else if (event.key === 'ArrowLeft') emit('seek', Math.max(0,  store.progress - 5))
+const handleKeydown = (e) => {
+  if (e.key === 'ArrowRight') emit('seek', Math.min(100, store.progress + 5))
+  else if (e.key === 'ArrowLeft') emit('seek', Math.max(0, store.progress - 5))
 }
 
 onBeforeUnmount(() => {

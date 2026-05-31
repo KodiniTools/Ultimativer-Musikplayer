@@ -855,8 +855,18 @@ h1 {
   transition: opacity 0.3s ease;
 }
 
-.progress-bar:hover .progress-bar__fill::after {
+.progress-bar:hover .progress-bar__fill::after,
+.progress-bar--dragging .progress-bar__fill::after {
   opacity: 1;
+}
+
+.progress-bar--dragging {
+  cursor: grabbing;
+  transform: scaleY(1.3);
+}
+
+.progress-bar--dragging .progress-bar__fill {
+  transition: none;
 }
 
 .timechip {
