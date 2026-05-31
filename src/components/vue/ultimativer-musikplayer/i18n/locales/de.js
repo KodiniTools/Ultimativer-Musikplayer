@@ -8,7 +8,10 @@ export default {
     current: 'Ultimativer Player'
   },
   upload: {
-    text: 'Audio auswählen'
+    text: 'Audio auswählen',
+    files: 'Dateien auswählen',
+    folder: 'Ordner auswählen',
+    dropHint: 'Dateien oder Ordner hier ablegen'
   },
   player: {
     nofile: 'Keine Datei ausgewählt',

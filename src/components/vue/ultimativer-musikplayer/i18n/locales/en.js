@@ -8,7 +8,10 @@ export default {
     current: 'Ultimate Player'
   },
   upload: {
-    text: 'Select Audio'
+    text: 'Select Audio',
+    files: 'Select Files',
+    folder: 'Select Folder',
+    dropHint: 'Drop files or a folder here'
   },
   player: {
     nofile: 'No file selected',
