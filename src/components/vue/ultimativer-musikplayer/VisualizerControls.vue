@@ -5,16 +5,16 @@
       @change="store.setVizMode($event.target.value)"
       aria-label="Visualisierungsmodus"
     >
-      <option value="ribbon">Ribbon</option>
-      <option value="waves">Waves</option>
-      <option value="nebula">Nebula</option>
-      <option value="spectrum">Spectrum Rays</option>
-      <option value="orbits">Orbit Rings</option>
-      <option value="starfield">Starfield</option>
-      <option value="grid">Grid Pulse</option>
+      <option value="ribbon">Mirror Bars</option>
+      <option value="waves">Liquid Wave</option>
+      <option value="nebula">Plasma</option>
+      <option value="spectrum">Arc Spectrum</option>
+      <option value="orbits">DNA Helix</option>
+      <option value="starfield">Warp Tunnel</option>
+      <option value="grid">LED Equalizer</option>
       <option value="aurora">Aurora</option>
-      <option value="kaleidoscope">Kaleidoscope</option>
-      <option value="particles">Particles</option>
+      <option value="kaleidoscope">Mandala</option>
+      <option value="particles">Sparks</option>
     </select>
     <input
       type="range"
