@@ -34,6 +34,7 @@
     </button>
     <button
       class="control-btn-sm"
+      :class="{ 'active-mode': store.isStopped && store.audioFiles.length > 0 }"
       @click="emit('stop')"
       aria-label="Stopp"
     >
