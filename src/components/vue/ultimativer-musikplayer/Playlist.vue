@@ -8,9 +8,9 @@
       </div>
       <button
         class="clear-all-btn"
-        @click="store.clearPlaylist()"
         :title="t('player.clear')"
         aria-label="Playlist löschen"
+        @click="store.clearPlaylist()"
       >
         <i class="fas fa-trash"></i>
       </button>
@@ -35,6 +35,7 @@
     </ul>
     <div class="info-tab" role="note">
       <i class="fa-solid fa-circle-info"></i>
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <span v-html="t('player.formats')"></span>
     </div>
   </aside>

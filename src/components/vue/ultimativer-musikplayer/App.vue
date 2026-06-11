@@ -15,8 +15,8 @@
 
           <AudioVisualizer
             :analyser="analyser"
-            :dataArray="dataArray"
-            :timeDomainArray="timeDomainArray"
+            :data-array="dataArray"
+            :time-domain-array="timeDomainArray"
           />
 
           <ProgressBar @seek="handleSeek" />
@@ -70,7 +70,7 @@ import PlayerControls from './PlayerControls.vue'
 import Playlist from './Playlist.vue'
 import ToolCards from './ToolCards.vue'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const store = usePlayerStore()
 useTheme()
 

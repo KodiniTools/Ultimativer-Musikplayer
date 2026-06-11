@@ -1,6 +1,6 @@
 <template>
   <div class="visualizer" aria-label="Audio-Visualizer">
-    <canvas ref="canvasRef" id="vizCanvas"></canvas>
+    <canvas id="vizCanvas" ref="canvasRef"></canvas>
   </div>
 </template>
 
@@ -10,9 +10,9 @@ import { usePlayerStore } from './stores/playerStore'
 import { useVisualizer } from './composables/useVisualizer'
 
 const props = defineProps({
-  analyser: Object,
-  dataArray: Object,
-  timeDomainArray: Object
+  analyser: { type: Object, default: null },
+  dataArray: { type: Object, default: null },
+  timeDomainArray: { type: Object, default: null },
 })
 
 const store = usePlayerStore()

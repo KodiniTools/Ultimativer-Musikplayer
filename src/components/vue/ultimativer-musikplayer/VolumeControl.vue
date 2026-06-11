@@ -4,8 +4,8 @@
       class="control-btn-sm"
       :class="{ 'active-mode': store.isMuted }"
       :aria-pressed="store.isMuted"
-      @click="emit('toggleMute')"
       aria-label="Stumm schalten"
+      @click="emit('toggleMute')"
     >
       <i :class="store.isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high'"></i>
     </button>
@@ -13,11 +13,11 @@
       type="range"
       class="volume-slider"
       :value="store.volume"
-      @input="handleVolumeChange"
       min="0"
       max="1"
       step="0.01"
       aria-label="Lautstärke"
+      @input="handleVolumeChange"
     />
   </div>
 </template>

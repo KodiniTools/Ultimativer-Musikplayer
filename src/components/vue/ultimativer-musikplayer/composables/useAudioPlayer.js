@@ -41,7 +41,6 @@ export function useAudioPlayer(store) {
       return
     }
     
-    console.log('Loading audio file:', file.name)
     const objectURL = URL.createObjectURL(file)
     audioElement.value.src = objectURL
     audioElement.value.load()

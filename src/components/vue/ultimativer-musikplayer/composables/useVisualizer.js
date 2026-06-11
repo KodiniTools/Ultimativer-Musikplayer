@@ -551,7 +551,6 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
   // ── 10. SPARKS (particles) ────────────────────────────────────
   const drawSparks = (w, h, cx, cy) => {
     const data = dataArray.value; if (!data) return
-    const bands = getBands(data)
     const en    = energy(data)
     const beat  = en - lastEnergy > 0.038 * (1.6 - store.vizIntensity)
     lastEnergy  = en * 0.75 + lastEnergy * 0.25
