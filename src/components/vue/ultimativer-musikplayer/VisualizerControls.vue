@@ -2,8 +2,8 @@
   <div class="viz-controls" aria-label="Visualizer Einstellungen">
     <select
       :value="store.vizMode"
-      @change="store.setVizMode($event.target.value)"
       aria-label="Visualisierungsmodus"
+      @change="store.setVizMode($event.target.value)"
     >
       <option value="ribbon">Mirror Bars</option>
       <option value="waves">Liquid Wave</option>
@@ -20,11 +20,11 @@
       type="range"
       class="viz-slider"
       :value="store.vizIntensity"
-      @input="store.setVizIntensity(parseFloat($event.target.value))"
       min="0"
       max="1"
       step="0.01"
       aria-label="Visualisierungsintensität"
+      @input="store.setVizIntensity(parseFloat($event.target.value))"
     />
   </div>
 </template>

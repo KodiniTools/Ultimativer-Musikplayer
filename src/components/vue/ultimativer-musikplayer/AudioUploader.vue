@@ -1,10 +1,10 @@
 <template>
   <div
     class="uploader"
+    :class="{ 'uploader--dragging': isDragging }"
     @dragover.prevent="isDragging = true"
     @dragleave.prevent="isDragging = false"
     @drop.prevent="handleDrop"
-    :class="{ 'uploader--dragging': isDragging }"
   >
     <div class="uploader__drop-area">
       <i class="fa-solid fa-music uploader__icon"></i>
@@ -24,21 +24,21 @@
 
     <!-- Single-file input — no webkitdirectory -->
     <input
-      type="file"
       id="fileInput"
+      ref="fileInputRef"
+      type="file"
       accept="audio/*"
       multiple
-      ref="fileInputRef"
       @change="handleFileChange"
     />
     <!-- Folder input — webkitdirectory must be in the DOM at parse time -->
     <input
-      type="file"
       id="folderInput"
+      ref="folderInputRef"
+      type="file"
       accept="audio/*"
       multiple
       webkitdirectory
-      ref="folderInputRef"
       @change="handleFileChange"
     />
   </div>
