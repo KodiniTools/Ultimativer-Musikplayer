@@ -1,6 +1,6 @@
 // 🎵 Kodini Tools Service Worker v2 - Sony 80s Retro PWA Ready! 🖼️
 const CACHE_VERSION = 'kodini-tools-v2';
-const BASE_PATH = '/ultimativermusikplayer/';
+const BASE_PATH = '/ultimativer-musikplayer/';
 
 // Assets die gecacht werden sollen - mit korrekten Pfaden
 const STATIC_ASSETS = [
