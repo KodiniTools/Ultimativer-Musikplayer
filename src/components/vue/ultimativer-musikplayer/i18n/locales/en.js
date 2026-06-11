@@ -1,4 +1,40 @@
 export default {
+  hero: {
+    title: 'Ultimate Music Player',
+    desc: 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
+    cta: 'Start Music Player'
+  },
+  features: {
+    title: 'Key Features',
+    viz: {
+      title: 'Audio Visualization',
+      desc: '10 different visualizer modes: Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope and Particles. Adjust the intensity in real time.'
+    },
+    eq: {
+      title: 'Equalizer & Controls',
+      desc: 'Full control over volume, playback, forward/rewind and mute. Loop and shuffle modes for varied listening.'
+    },
+    playlist: {
+      title: 'Playlist Management',
+      desc: 'Load as many tracks as you want. Shuffle, loop, delete tracks and direct track selection. Supported formats: MP3, WAV, FLAC, M4A, OGG.'
+    },
+    responsive: {
+      title: 'Responsive Design',
+      desc: 'Perfectly optimized for desktop, tablet and smartphone. All functions are optimized for touch operation.'
+    },
+    theme: {
+      title: 'Dark & Light Theme',
+      desc: 'Choose between an elegant dark and a light design – customizable to your preferences.'
+    },
+    free: {
+      title: 'Free & Private',
+      desc: 'No registration, no ads, no hidden costs. Your audio files remain local on your device.'
+    }
+  },
+  cta: {
+    text: 'Ready to experience music in a new way?',
+    button: 'Try it now'
+  },
   nav: {
     title: 'Ultimate Music Player',
     playlist: 'Playlist Generator',
