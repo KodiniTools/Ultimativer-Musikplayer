@@ -7,17 +7,32 @@
     "dev": "astro dev",
     "build": "astro build && mv dist/_astro dist/ultimativer-musikplayer/_astro && mv dist/sw.js dist/ultimativer-musikplayer/sw.js 2>/dev/null; true",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
-    "astro": "^4.16.0",
     "@astrojs/vue": "^4.5.0",
+    "astro": "^4.16.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.0",
     "vue-i18n": "^9.9.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.61.0",
+    "@typescript-eslint/parser": "^8.61.0",
     "@vitejs/plugin-vue": "^5.2.4",
-    "vite": "^5.0.0"
+    "@vue/eslint-config-typescript": "^14.8.0",
+    "eslint": "^10.4.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-vue": "^10.9.2",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.4",
+    "vite": "^5.0.0",
+    "vue-eslint-parser": "^10.4.1"
   }
 }
