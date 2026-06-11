@@ -6,28 +6,16 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { usePlayerStore } from './stores/playerStore'
-import { useVisualizer } from './composables/useVisualizer'
 
 const props = defineProps({
-  analyser: { type: Object, default: null },
-  dataArray: { type: Object, default: null },
-  timeDomainArray: { type: Object, default: null },
+  onInit: { type: Function, default: null },
 })
 
-const store = usePlayerStore()
 const canvasRef = ref(null)
 
-const { initCanvas } = useVisualizer(
-  store,
-  () => props.analyser, 
-  () => props.dataArray, 
-  () => props.timeDomainArray
-)
-
 onMounted(() => {
-  if (canvasRef.value) {
-    initCanvas(canvasRef.value)
+  if (canvasRef.value && props.onInit) {
+    props.onInit(canvasRef.value)
   }
 })
 </script>

@@ -13,11 +13,7 @@
             </div>
           </div>
 
-          <AudioVisualizer
-            :analyser="analyser"
-            :data-array="dataArray"
-            :time-domain-array="timeDomainArray"
-          />
+          <AudioVisualizer :on-init="visualizer.initCanvas" />
 
           <ProgressBar @seek="handleSeek" />
 
@@ -64,6 +60,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from './stores/playerStore'
 import { useAudioPlayer } from './composables/useAudioPlayer'
+import { useVisualizer } from './composables/useVisualizer'
 import { useTheme } from './composables/useTheme'
 import { useI18nSync } from './composables/useI18nSync'
 
@@ -83,11 +80,8 @@ useTheme()
 useI18nSync()
 
 const audioElementRef = ref(null)
-const analyser = ref(null)
-const dataArray = ref(null)
-const timeDomainArray = ref(null)
-
 const audioPlayer = useAudioPlayer(store)
+const visualizer  = useVisualizer(store, audioPlayer.analyser, audioPlayer.dataArray, audioPlayer.timeDomainArray)
 
 onMounted(() => {
   if (audioElementRef.value) {
@@ -100,9 +94,6 @@ const handleFilesLoaded = (index) => {
     audioPlayer.setupAudioElement(audioElementRef.value)
   }
   audioPlayer.initAudioContext()
-  analyser.value = audioPlayer.analyser.value
-  dataArray.value = audioPlayer.dataArray.value
-  timeDomainArray.value = audioPlayer.timeDomainArray.value
   if (store.audioFiles.length > 0) {
     store.setCurrentIndex(index)
     setTimeout(() => audioPlayer.loadAudioFile(index), 0)

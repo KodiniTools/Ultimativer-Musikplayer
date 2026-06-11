@@ -1,4 +1,4 @@
-import { ref, watch, onBeforeUnmount, computed } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
 import { drawBars }        from './visualizers/bars.js'
 import { drawLiquid }      from './visualizers/waves.js'
 import { drawPlasma }      from './visualizers/nebula.js'
@@ -28,9 +28,9 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
   // Mutable state passed into draw functions that need it across frames
   const sparksState = { particles: [], lastEnergy: 0 }
 
-  const analyser   = computed(() => typeof analyserRef          === 'function' ? analyserRef()          : analyserRef)
-  const dataArray  = computed(() => typeof dataArrayRef         === 'function' ? dataArrayRef()         : dataArrayRef)
-  const timeDomain = computed(() => typeof timeDomainArrayRef   === 'function' ? timeDomainArrayRef()   : timeDomainArrayRef)
+  const analyser   = analyserRef
+  const dataArray  = dataArrayRef
+  const timeDomain = timeDomainArrayRef
 
   // ── Canvas setup ─────────────────────────────────────────────
   let _cssW = 0, _cssH = 0
