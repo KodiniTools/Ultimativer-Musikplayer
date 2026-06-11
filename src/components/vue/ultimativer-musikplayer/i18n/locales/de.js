@@ -1,4 +1,40 @@
 export default {
+  hero: {
+    title: 'Ultimativer Musikplayer',
+    desc: 'Erleben Sie Musik auf eine völlig neue Art mit unserem kostenlosen Musikplayer. Ausgestattet mit fortschrittlicher Audio-Visualisierung, umfassenden Playlist-Funktionen und modernem, responsivem Design.',
+    cta: 'Musikplayer jetzt starten'
+  },
+  features: {
+    title: 'Hauptfunktionen',
+    viz: {
+      title: 'Audio-Visualisierung',
+      desc: '10 verschiedene Visualizer-Modi: Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope und Particles. Passen Sie die Intensität in Echtzeit an.'
+    },
+    eq: {
+      title: 'Equalizer & Steuerung',
+      desc: 'Volle Kontrolle über Lautstärke, Wiedergabe, Vor-/Zurückspulen und Stummschaltung. Loop- und Shuffle-Modi für abwechslungsreiches Hören.'
+    },
+    playlist: {
+      title: 'Playlist-Management',
+      desc: 'Laden Sie beliebig viele Titel. Shuffle, Loop, Titel löschen und direkte Titelauswahl. Unterstützte Formate: MP3, WAV, FLAC, M4A, OGG.'
+    },
+    responsive: {
+      title: 'Responsive Design',
+      desc: 'Perfekt optimiert für Desktop, Tablet und Smartphone. Alle Funktionen sind für Touch-Bedienung optimiert.'
+    },
+    theme: {
+      title: 'Dark & Light Theme',
+      desc: 'Wählen Sie zwischen einem eleganten dunklen und einem hellen Design – anpassbar an Ihre Präferenzen.'
+    },
+    free: {
+      title: 'Kostenlos & Privat',
+      desc: 'Keine Registrierung, keine Werbung, keine versteckten Kosten. Ihre Audio-Dateien bleiben lokal auf Ihrem Gerät.'
+    }
+  },
+  cta: {
+    text: 'Bereit, Musik auf eine neue Art zu erleben?',
+    button: 'Jetzt ausprobieren'
+  },
   nav: {
     title: 'Ultimativer Musikplayer',
     playlist: 'Playlist-Generator',
