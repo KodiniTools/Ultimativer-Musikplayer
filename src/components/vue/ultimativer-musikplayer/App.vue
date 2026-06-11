@@ -49,6 +49,13 @@
 
       <audio ref="audioElementRef" style="display: none;"></audio>
     </main>
+
+    <Transition name="toast">
+      <div v-if="store.errorMessage" class="error-toast" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        {{ store.errorMessage }}
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -118,3 +125,36 @@ const handleSeek = (percentage) => {
   audioPlayer.seek(percentage)
 }
 </script>
+
+<style scoped>
+.error-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(220, 53, 69, 0.92);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  max-width: min(420px, 90vw);
+  text-align: center;
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(12px);
+}
+</style>

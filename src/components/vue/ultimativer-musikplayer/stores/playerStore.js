@@ -17,6 +17,9 @@ export const usePlayerStore = defineStore('player', () => {
   const vizMode = ref('ribbon')
   const vizIntensity = ref(0.65)
   const isStopped = ref(false)
+  const errorMessage = ref('')
+
+  let errorTimer = null
   
   // Computed
   const currentFile = computed(() => {
@@ -169,6 +172,12 @@ export const usePlayerStore = defineStore('player', () => {
     isStopped.value = value
   }
 
+  function setError(message, durationMs = 4000) {
+    errorMessage.value = message
+    clearTimeout(errorTimer)
+    errorTimer = setTimeout(() => { errorMessage.value = '' }, durationMs)
+  }
+
   return {
     // State
     audioFiles,
@@ -183,7 +192,8 @@ export const usePlayerStore = defineStore('player', () => {
     vizMode,
     vizIntensity,
     isStopped,
-    
+    errorMessage,
+
     // Computed
     currentFile,
     playlistCount,
@@ -207,6 +217,7 @@ export const usePlayerStore = defineStore('player', () => {
     setPlaying,
     setVizMode,
     setVizIntensity,
-    setStopped
+    setStopped,
+    setError,
   }
 })

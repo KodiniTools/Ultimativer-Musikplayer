@@ -31,13 +31,13 @@ export function useAudioPlayer(store) {
   // Load audio file
   const loadAudioFile = (index) => {
     if (!audioElement.value) {
-      console.warn('Audio element not ready')
+      store.setError('Audio-Element nicht bereit. Bitte Seite neu laden.')
       return
     }
-    
+
     const file = store.audioFiles[index]
     if (!file) {
-      console.warn('No file at index', index)
+      store.setError('Titel nicht gefunden.')
       return
     }
     
@@ -54,9 +54,8 @@ export function useAudioPlayer(store) {
   const play = async () => {
     if (!audioElement.value) return
     
-    // Check if a file is loaded
     if (!audioElement.value.src) {
-      console.warn('No audio file loaded')
+      store.setError('Keine Audiodatei geladen. Bitte zuerst eine Datei auswählen.')
       return
     }
     
@@ -72,8 +71,8 @@ export function useAudioPlayer(store) {
       await audioElement.value.play()
       store.setPlaying(true)
       store.setStopped(false)
-    } catch (error) {
-      console.error('Error playing audio:', error)
+    } catch {
+      store.setError('Wiedergabe fehlgeschlagen. Format wird möglicherweise nicht unterstützt.')
       store.setPlaying(false)
     }
   }
@@ -119,8 +118,8 @@ export function useAudioPlayer(store) {
       }
       const targetTime = Math.max(0, Math.min((percentage / 100) * store.duration, store.duration))
       audioElement.value.currentTime = targetTime
-    } catch (error) {
-      console.error('Seek error:', error)
+    } catch {
+      store.setError('Sprung zur Position fehlgeschlagen.')
     }
   }
   
