@@ -47,7 +47,8 @@ export default {
     text: 'Audio auswählen',
     files: 'Dateien auswählen',
     folder: 'Ordner auswählen',
-    dropHint: 'Dateien oder Ordner hier ablegen'
+    dropHint: 'Dateien oder Ordner hier ablegen',
+    pasteHint: 'Oder Audiodateien mit Strg+V einfügen'
   },
   player: {
     nofile: 'Keine Datei ausgewählt',
