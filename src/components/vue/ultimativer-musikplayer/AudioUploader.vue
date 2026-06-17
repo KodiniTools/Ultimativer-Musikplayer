@@ -9,6 +9,7 @@
     <div class="uploader__drop-area">
       <i class="fa-solid fa-music uploader__icon"></i>
       <p class="uploader__hint">{{ t('upload.dropHint') }}</p>
+      <p class="uploader__hint uploader__hint--paste">{{ t('upload.pasteHint') }}</p>
 
       <div class="uploader__buttons">
         <button type="button" class="uploader__btn" @click="fileInputRef.click()">
@@ -45,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from './stores/playerStore'
 
@@ -103,6 +104,27 @@ function readDirectory(dirEntry) {
     readBatch()
   })
 }
+
+const handlePaste = (event) => {
+  const items = event.clipboardData?.items
+  if (!items) return
+
+  const audioFiles = []
+  for (const item of Array.from(items)) {
+    if (item.kind === 'file') {
+      const file = item.getAsFile()
+      if (file) audioFiles.push(file)
+    }
+  }
+
+  if (audioFiles.length) {
+    event.preventDefault()
+    commitFiles(audioFiles)
+  }
+}
+
+onMounted(() => document.addEventListener('paste', handlePaste))
+onUnmounted(() => document.removeEventListener('paste', handlePaste))
 
 const handleDrop = async (event) => {
   isDragging.value = false
@@ -164,6 +186,11 @@ const handleDrop = async (event) => {
   margin: 0;
   font-size: 0.85rem;
   opacity: 0.6;
+}
+
+.uploader__hint--paste {
+  font-size: 0.75rem;
+  opacity: 0.4;
 }
 
 .uploader__buttons {

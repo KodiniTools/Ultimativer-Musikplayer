@@ -47,7 +47,8 @@ export default {
     text: 'Select Audio',
     files: 'Select Files',
     folder: 'Select Folder',
-    dropHint: 'Drop files or a folder here'
+    dropHint: 'Drop files or a folder here',
+    pasteHint: 'Or paste audio files with Ctrl+V'
   },
   player: {
     nofile: 'No file selected',
