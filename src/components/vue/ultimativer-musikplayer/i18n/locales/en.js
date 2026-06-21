@@ -71,6 +71,12 @@ export default {
     },
     formats: 'Supported formats: <strong>MP3</strong>, <strong>WAV</strong>, <strong>FLAC</strong>, <strong>M4A</strong>, <strong>OGG</strong>'
   },
+  shared: {
+    loading: 'Loading {count} normalised file(s) …',
+    loaded: '{count} normalised file(s) loaded successfully.',
+    empty: 'No shared files found.',
+    error: 'Error loading shared files.'
+  },
   content: {
     title: '🎵 Professional Audio Player with Visualization',
     subtitle: 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
