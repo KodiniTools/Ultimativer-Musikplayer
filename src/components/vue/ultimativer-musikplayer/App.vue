@@ -18,31 +18,10 @@
 
           <AudioUploader @files-loaded="handleFilesLoaded" />
 
-          <div class="meta">
-            <div class="current-title">
-              {{ store.currentFile ? store.currentFile.name : t('player.nofile') }}
-            </div>
-          </div>
-
           <AudioVisualizer :on-init="visualizer.initCanvas" />
 
-          <ProgressBar @seek="handleSeek" />
-
-          <div class="controls-bar">
-            <PlayerControls
-              @play="audioPlayer.play"
-              @pause="audioPlayer.pause"
-              @stop="audioPlayer.stop"
-              @play-next="audioPlayer.playNext"
-              @play-previous="audioPlayer.playPrevious"
-            />
-            <span class="controls-divider"></span>
+          <div class="viz-controls-bar">
             <VisualizerControls />
-            <span class="controls-divider"></span>
-            <VolumeControl
-              @set-volume="audioPlayer.setVolume"
-              @toggle-mute="audioPlayer.toggleMute"
-            />
           </div>
         </div>
       </section>
@@ -56,6 +35,17 @@
 
       <audio ref="audioElementRef" style="display: none;"></audio>
     </main>
+
+    <PlayerBar
+      @play="audioPlayer.play"
+      @pause="audioPlayer.pause"
+      @stop="audioPlayer.stop"
+      @play-next="audioPlayer.playNext"
+      @play-previous="audioPlayer.playPrevious"
+      @seek="handleSeek"
+      @set-volume="audioPlayer.setVolume"
+      @toggle-mute="audioPlayer.toggleMute"
+    />
 
     <Transition name="toast">
       <div v-if="store.errorMessage" class="error-toast" role="alert">
@@ -80,9 +70,7 @@ import AppHeader from './AppHeader.vue'
 import AudioUploader from './AudioUploader.vue'
 import AudioVisualizer from './AudioVisualizer.vue'
 import VisualizerControls from './VisualizerControls.vue'
-import ProgressBar from './ProgressBar.vue'
-import VolumeControl from './VolumeControl.vue'
-import PlayerControls from './PlayerControls.vue'
+import PlayerBar from './PlayerBar.vue'
 import Playlist from './Playlist.vue'
 import ToolCards from './ToolCards.vue'
 
