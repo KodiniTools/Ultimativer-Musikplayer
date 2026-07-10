@@ -39,6 +39,13 @@
           <i class="fas fa-backward-step"></i>
         </button>
         <button
+          class="pbar-btn"
+          :aria-label="t('player.stop')"
+          @click="emit('stop')"
+        >
+          <i class="fas fa-stop"></i>
+        </button>
+        <button
           class="pbar-btn pbar-btn--play"
           :aria-label="store.isPlaying ? t('player.pause') : t('player.play')"
           @click="togglePlay"
@@ -63,15 +70,8 @@
         </button>
       </div>
 
-      <!-- Right: volume + stop -->
+      <!-- Right: volume -->
       <div class="player-bar__right">
-        <button
-          class="pbar-btn pbar-btn--ghost"
-          :aria-label="t('player.stop')"
-          @click="emit('stop')"
-        >
-          <i class="fas fa-stop"></i>
-        </button>
         <VolumeControl
           @set-volume="emit('setVolume', $event)"
           @toggle-mute="emit('toggleMute')"

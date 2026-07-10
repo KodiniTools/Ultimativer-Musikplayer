@@ -24,6 +24,7 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
 
   let frameCounter = 0
   let peakHolds    = new Float32Array(0)
+  let windDown     = 0   // frames to keep animating after playback stops
 
   // Mutable state passed into draw functions that need it across frames
   const sparksState = { particles: [], lastEnergy: 0 }
@@ -66,6 +67,23 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
   const draw = () => {
     if (!analyser.value || !ctx.value || !canvas.value) return
     if (!dataArray.value || !timeDomain.value) return
+
+    // Once playback is paused/stopped, keep animating for a short while so
+    // the bars recede to zero (the analyser decays to silence), then end the
+    // loop with a clean canvas instead of freezing on the last frame.
+    if (!store.isPlaying) {
+      if (windDown > 0) {
+        windDown--
+      } else {
+        animationFrameId.value = null
+        const cw = _cssW || canvas.value.width
+        const ch = _cssH || canvas.value.height
+        ctx.value.globalCompositeOperation = 'source-over'
+        ctx.value.fillStyle = '#000'
+        ctx.value.fillRect(0, 0, cw, ch)
+        return
+      }
+    }
 
     analyser.value.getByteFrequencyData(dataArray.value)
     analyser.value.getByteTimeDomainData(timeDomain.value)
@@ -117,6 +135,7 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
 
   const reset = () => {
     stop()
+    windDown = 0
     if (ctx.value && canvas.value) ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
     frameCounter = 0
     peakHolds    = new Float32Array(0)
@@ -124,7 +143,16 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
     sparksState.lastEnergy = 0
   }
 
-  watch(() => store.isPlaying, (playing) => { playing ? start() : stop() })
+  watch(() => store.isPlaying, (playing) => {
+    if (playing) {
+      windDown = 0
+      start()
+    } else {
+      // Keep the loop running so the bars can animate their retreat.
+      windDown = 90 // ~1.5s at 60fps
+      start()
+    }
+  })
 
   // Clear the canvas when no track is loaded anymore (e.g. playlist cleared
   // or last track removed) so the visualizer does not stay frozen on the
