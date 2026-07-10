@@ -52,6 +52,13 @@ export default {
   },
   player: {
     nofile: 'No file selected',
+    ready: 'Ready to play',
+    trackOf: 'Track {index} of {total}',
+    play: 'Play',
+    pause: 'Pause',
+    stop: 'Stop',
+    prev: 'Previous track',
+    next: 'Next track',
     mode: 'Mode',
     intensity: 'Intensity',
     playlist: 'Playlist',
