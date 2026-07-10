@@ -190,12 +190,21 @@ export function useAudioPlayer(store) {
     store.setDuration(0)
   }
 
-  // Handle track removal: reload if the current track was replaced
+  // Handle track removal: reload the replacement track and keep the
+  // play/pause state consistent.
   const handleTrackRemoved = (removedIndex, wasCurrentTrack) => {
-    if (wasCurrentTrack && store.audioFiles.length > 0) {
-      loadAudioFile(store.currentAudioIndex)
-    } else if (store.audioFiles.length === 0) {
+    if (store.audioFiles.length === 0) {
       unloadAudio()
+      return
+    }
+    if (wasCurrentTrack) {
+      const wasPlaying = store.isPlaying
+      loadAudioFile(store.currentAudioIndex)
+      if (wasPlaying) {
+        play() // continue with the track that took its place
+      } else {
+        store.setPlaying(false)
+      }
     }
   }
 
