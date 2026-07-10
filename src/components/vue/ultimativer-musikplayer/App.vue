@@ -29,6 +29,7 @@
       <Playlist
         @track-selected="handleTrackSelected"
         @track-deleted="handleTrackDeleted"
+        @playlist-cleared="handlePlaylistCleared"
       />
 
       <ToolCards />
@@ -160,6 +161,10 @@ const handleTrackSelected = (index) => {
 
 const handleTrackDeleted = ({ index, wasCurrentTrack }) => {
   audioPlayer.handleTrackRemoved(index, wasCurrentTrack)
+}
+
+const handlePlaylistCleared = () => {
+  audioPlayer.clearPlaylist()
 }
 
 const handleSeek = (percentage) => {

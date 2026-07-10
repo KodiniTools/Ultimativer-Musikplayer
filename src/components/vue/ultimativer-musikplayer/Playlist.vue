@@ -10,7 +10,7 @@
         class="clear-all-btn"
         :title="t('player.clear')"
         aria-label="Playlist löschen"
-        @click="store.clearPlaylist()"
+        @click="emit('playlistCleared')"
       >
         <i class="fas fa-trash"></i>
       </button>
@@ -48,7 +48,7 @@ import { usePlayerStore } from './stores/playerStore'
 const { t } = useI18n()
 const store = usePlayerStore()
 
-const emit = defineEmits(['trackSelected', 'trackDeleted'])
+const emit = defineEmits(['trackSelected', 'trackDeleted', 'playlistCleared'])
 
 const handleTrackClick = (index) => {
   if (index === store.currentAudioIndex && store.isPlaying) {

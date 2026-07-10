@@ -9,7 +9,8 @@ export function useAudioPlayer(store) {
   const sourceNode = ref(null)
   
   let lastVolume = 1
-  
+  let currentObjectURL = null
+
   // Initialize Audio Context
   const initAudioContext = () => {
     if (audioContext.value) return
@@ -41,7 +42,11 @@ export function useAudioPlayer(store) {
       return
     }
     
+    if (currentObjectURL) {
+      URL.revokeObjectURL(currentObjectURL)
+    }
     const objectURL = URL.createObjectURL(file)
+    currentObjectURL = objectURL
     audioElement.value.src = objectURL
     audioElement.value.load()
     
@@ -169,13 +174,35 @@ export function useAudioPlayer(store) {
     }
   }
   
+  // Stop playback and fully unload the media element (frees the source)
+  const unloadAudio = () => {
+    if (!audioElement.value) return
+    audioElement.value.pause()
+    audioElement.value.removeAttribute('src')
+    audioElement.value.load()
+    if (currentObjectURL) {
+      URL.revokeObjectURL(currentObjectURL)
+      currentObjectURL = null
+    }
+    store.setPlaying(false)
+    store.setStopped(false)
+    store.setCurrentTime(0)
+    store.setDuration(0)
+  }
+
   // Handle track removal: reload if the current track was replaced
   const handleTrackRemoved = (removedIndex, wasCurrentTrack) => {
     if (wasCurrentTrack && store.audioFiles.length > 0) {
       loadAudioFile(store.currentAudioIndex)
     } else if (store.audioFiles.length === 0) {
-      stop()
+      unloadAudio()
     }
+  }
+
+  // Clear the whole playlist: stop audio, unload element, reset store
+  const clearPlaylist = () => {
+    unloadAudio()
+    store.clearPlaylist()
   }
   
   // Cleanup
@@ -203,6 +230,7 @@ export function useAudioPlayer(store) {
     seek,
     toggleMute,
     setVolume,
-    handleTrackRemoved
+    handleTrackRemoved,
+    clearPlaylist
   }
 }
