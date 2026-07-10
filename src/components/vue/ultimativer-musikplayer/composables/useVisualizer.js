@@ -126,6 +126,11 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
 
   watch(() => store.isPlaying, (playing) => { playing ? start() : stop() })
 
+  // Clear the canvas when no track is loaded anymore (e.g. playlist cleared
+  // or last track removed) so the visualizer does not stay frozen on the
+  // last rendered frame.
+  watch(() => store.audioFiles.length, (len) => { if (len === 0) reset() })
+
   onBeforeUnmount(() => {
     stop()
     if (resizeObserver.value) resizeObserver.value.disconnect()
