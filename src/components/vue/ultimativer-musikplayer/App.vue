@@ -36,16 +36,18 @@
       <audio ref="audioElementRef" style="display: none;"></audio>
     </main>
 
-    <PlayerBar
-      @play="audioPlayer.play"
-      @pause="audioPlayer.pause"
-      @stop="audioPlayer.stop"
-      @play-next="audioPlayer.playNext"
-      @play-previous="audioPlayer.playPrevious"
-      @seek="handleSeek"
-      @set-volume="audioPlayer.setVolume"
-      @toggle-mute="audioPlayer.toggleMute"
-    />
+    <Teleport to="body">
+      <PlayerBar
+        @play="audioPlayer.play"
+        @pause="audioPlayer.pause"
+        @stop="audioPlayer.stop"
+        @play-next="audioPlayer.playNext"
+        @play-previous="audioPlayer.playPrevious"
+        @seek="handleSeek"
+        @set-volume="audioPlayer.setVolume"
+        @toggle-mute="audioPlayer.toggleMute"
+      />
+    </Teleport>
 
     <Transition name="toast">
       <div v-if="store.errorMessage" class="error-toast" role="alert">
