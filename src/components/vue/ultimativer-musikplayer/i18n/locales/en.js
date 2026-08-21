@@ -105,6 +105,23 @@ export default {
       restored: 'Playlist restored ({count} track(s)).',
     },
   },
+  equalizer: {
+    title: 'Equalizer',
+    enable: 'Toggle equalizer',
+    preset: 'Preset',
+    reset: 'Reset',
+    presets: {
+      flat: 'Flat',
+      rock: 'Rock',
+      pop: 'Pop',
+      jazz: 'Jazz',
+      classical: 'Classical',
+      bass: 'Bass boost',
+      treble: 'Treble boost',
+      vocal: 'Vocal',
+      custom: 'Custom',
+    },
+  },
   shortcuts: {
     title: 'Keyboard shortcuts',
     playPause: 'Play / pause',

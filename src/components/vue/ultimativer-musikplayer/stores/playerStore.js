@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useToastStore } from './toastStore'
 import { fileKey } from '../utils/audioMetadata'
+import { EQ_BAND_COUNT, EQ_PRESETS } from '../utils/equalizerPresets'
 
 export const usePlayerStore = defineStore('player', () => {
   // State
@@ -22,6 +23,11 @@ export const usePlayerStore = defineStore('player', () => {
   const vizMode = ref('ribbon')
   const vizIntensity = ref(0.65)
   const isStopped = ref(false)
+
+  // Equalizer state
+  const eqEnabled = ref(false)
+  const eqBands = ref(new Array(EQ_BAND_COUNT).fill(0))
+  const eqPreset = ref('flat')
 
   // Computed
   const currentFile = computed(() => {
@@ -198,6 +204,32 @@ export const usePlayerStore = defineStore('player', () => {
     isStopped.value = value
   }
 
+  // --- Equalizer actions ---
+  function setEqEnabled(value) {
+    eqEnabled.value = value
+  }
+
+  function setEqBand(index, valueDb) {
+    if (index < 0 || index >= eqBands.value.length) return
+    eqBands.value[index] = valueDb
+    eqPreset.value = 'custom'
+  }
+
+  function applyEqPreset(name) {
+    const preset = EQ_PRESETS[name]
+    if (!preset) return
+    eqBands.value = [...preset]
+    eqPreset.value = name
+  }
+
+  function setEqState({ enabled, bands, preset }) {
+    if (typeof enabled === 'boolean') eqEnabled.value = enabled
+    if (Array.isArray(bands) && bands.length === eqBands.value.length) {
+      eqBands.value = bands.map((v) => Number(v) || 0)
+    }
+    if (typeof preset === 'string') eqPreset.value = preset
+  }
+
   // Store parsed metadata for a track and return the metadata for a file.
   function setTrackMeta(key, meta) {
     trackMeta.value[key] = meta
@@ -231,6 +263,9 @@ export const usePlayerStore = defineStore('player', () => {
     vizIntensity,
     isStopped,
     trackMeta,
+    eqEnabled,
+    eqBands,
+    eqPreset,
 
     // Computed
     currentFile,
@@ -258,6 +293,10 @@ export const usePlayerStore = defineStore('player', () => {
     setVizMode,
     setVizIntensity,
     setStopped,
+    setEqEnabled,
+    setEqBand,
+    applyEqPreset,
+    setEqState,
     setTrackMeta,
     getMeta,
     setError,

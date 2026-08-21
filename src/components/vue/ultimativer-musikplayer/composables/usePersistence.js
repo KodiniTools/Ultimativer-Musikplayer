@@ -37,6 +37,9 @@ export function usePersistence(store) {
       shufflePlaylist: store.shufflePlaylist,
       vizMode: store.vizMode,
       vizIntensity: store.vizIntensity,
+      eqEnabled: store.eqEnabled,
+      eqBands: [...store.eqBands],
+      eqPreset: store.eqPreset,
     })
   }
 
@@ -52,9 +55,13 @@ export function usePersistence(store) {
         store.shufflePlaylist,
         store.vizMode,
         store.vizIntensity,
+        store.eqEnabled,
+        store.eqPreset,
       ],
       persistSettings
     )
+    // EQ band values change individually — watch deeply.
+    watch(() => store.eqBands, persistSettings, { deep: true })
   }
 
   async function restore() {
@@ -66,6 +73,11 @@ export function usePersistence(store) {
         store.shufflePlaylist = settings.shufflePlaylist
       if (typeof settings.vizMode === 'string') store.setVizMode(settings.vizMode)
       if (typeof settings.vizIntensity === 'number') store.setVizIntensity(settings.vizIntensity)
+      store.setEqState({
+        enabled: settings.eqEnabled,
+        bands: settings.eqBands,
+        preset: settings.eqPreset,
+      })
     }
 
     let files

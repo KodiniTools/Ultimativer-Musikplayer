@@ -105,6 +105,23 @@ export default {
       restored: 'Playlist wiederhergestellt ({count} Titel).',
     },
   },
+  equalizer: {
+    title: 'Equalizer',
+    enable: 'Equalizer an/aus',
+    preset: 'Voreinstellung',
+    reset: 'Zurücksetzen',
+    presets: {
+      flat: 'Neutral',
+      rock: 'Rock',
+      pop: 'Pop',
+      jazz: 'Jazz',
+      classical: 'Klassik',
+      bass: 'Bass-Boost',
+      treble: 'Höhen-Boost',
+      vocal: 'Gesang',
+      custom: 'Benutzerdefiniert',
+    },
+  },
   shortcuts: {
     title: 'Tastaturkürzel',
     playPause: 'Wiedergabe / Pause',

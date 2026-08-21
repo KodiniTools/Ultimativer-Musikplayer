@@ -12,6 +12,8 @@
           <div class="viz-controls-bar">
             <VisualizerControls />
           </div>
+
+          <EqualizerControls class="eq-bar" />
         </div>
       </section>
 
@@ -79,6 +81,7 @@
   import ToolCards from './ToolCards.vue'
   import ToastContainer from './ToastContainer.vue'
   import ShortcutsHelp from './ShortcutsHelp.vue'
+  import EqualizerControls from './EqualizerControls.vue'
 
   const { t } = useI18n()
   const store = usePlayerStore()
@@ -244,6 +247,10 @@
 </script>
 
 <style scoped>
+  .eq-bar {
+    margin-top: 12px;
+  }
+
   .shortcuts-fab {
     position: fixed;
     left: 16px;
