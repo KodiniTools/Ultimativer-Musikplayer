@@ -4,19 +4,33 @@ set -euo pipefail
 # ========================================================================
 #  Ultimativer Musikplayer – Deployment
 #
-#  Baut das Astro-/Vue-Projekt und lädt das Ergebnis direkt in den
-#  Server-Ordner /var/www/kodinitools.com/ultimativer-musikplayer.
+#  Baut das Astro-/Vue-Projekt und legt das Ergebnis im Server-Ordner
+#  /var/www/kodinitools.com/ultimativer-musikplayer ab.
 #
-#  Nutzung (im Repo-Root, auf dem main-Branch):
-#      ./deploy.sh
+#  Es gibt zwei Betriebsarten:
 #
-#  Konfiguration lässt sich per Umgebungsvariable überschreiben, z. B.:
-#      SERVER="root@example.com" ./deploy.sh
+#  1) LOKAL (das Skript läuft direkt auf dem Server):
+#         ./deploy.sh --local
+#     Voraussetzung: Node.js/npm und das Repo sind auf dem Server vorhanden.
+#     Der Build wird lokal in den Zielordner kopiert (kein SSH nötig).
+#
+#  2) REMOTE (das Skript läuft auf dem Entwicklungs-Rechner, Standard):
+#         ./deploy.sh
+#     Baut lokal und überträgt das Ergebnis per rsync/scp via SSH zum Server.
+#
+#  Konfiguration per Umgebungsvariable, z. B.:
+#         SERVER="root@example.com" REMOTE_PATH="/pfad" ./deploy.sh
 # ========================================================================
 
 # --- Konfiguration --------------------------------------------------------
 SERVER="${SERVER:-root@145.223.81.100}"
 REMOTE_PATH="${REMOTE_PATH:-/var/www/kodinitools.com/ultimativer-musikplayer}"
+
+# Modus bestimmen: --local (Argument) oder LOCAL=1 (Umgebung) => lokaler Deploy.
+LOCAL_DEPLOY="${LOCAL:-0}"
+if [ "${1:-}" = "--local" ]; then
+  LOCAL_DEPLOY=1
+fi
 
 # In das Verzeichnis dieses Skripts wechseln (Repo-Root), plattformunabhängig.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -30,7 +44,13 @@ BUILD_DIR="dist/ultimativer-musikplayer"
 echo "================================================"
 echo " Ultimativer Musikplayer – Deployment"
 echo "================================================"
-echo " Ziel:  ${SERVER}:${REMOTE_PATH}"
+if [ "$LOCAL_DEPLOY" = "1" ]; then
+  echo " Modus: LOKAL"
+  echo " Ziel:  ${REMOTE_PATH}"
+else
+  echo " Modus: REMOTE (SSH)"
+  echo " Ziel:  ${SERVER}:${REMOTE_PATH}"
+fi
 echo ""
 
 # --- Schritt 1: Dependencies -------------------------------------------------
@@ -50,22 +70,35 @@ if [ ! -d "$BUILD_DIR" ]; then
 fi
 echo "      Build erfolgreich erstellt."
 
-# --- Schritt 3: Server vorbereiten ------------------------------------------
-echo "[3/4] Bereite Server-Verzeichnis vor..."
-ssh "$SERVER" "mkdir -p '$REMOTE_PATH'"
+# --- Schritt 3: Zielverzeichnis vorbereiten ---------------------------------
+echo "[3/4] Bereite Zielverzeichnis vor..."
+if [ "$LOCAL_DEPLOY" = "1" ]; then
+  mkdir -p "$REMOTE_PATH"
+else
+  ssh "$SERVER" "mkdir -p '$REMOTE_PATH'"
+fi
 
 # --- Schritt 4: Übertragung -------------------------------------------------
-# Bevorzugt rsync (überträgt nur Änderungen und entfernt veraltete Dateien,
-# damit keine alten HTML-/Asset-Reste zurückbleiben). Fällt auf scp zurück,
-# falls rsync nicht verfügbar ist.
-echo "[4/4] Übertrage Dateien zum Server..."
-if command -v rsync >/dev/null 2>&1; then
-  rsync -az --delete "$BUILD_DIR/" "${SERVER}:${REMOTE_PATH}/"
+# rsync --delete überträgt nur Änderungen und entfernt veraltete Dateien,
+# damit keine alten HTML-/Asset-Reste zurückbleiben (wichtig für die
+# fingerprinted _astro-Dateien mit immutable-Cache).
+echo "[4/4] Übertrage Dateien..."
+if [ "$LOCAL_DEPLOY" = "1" ]; then
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a --delete "$BUILD_DIR/" "$REMOTE_PATH/"
+  else
+    echo "      rsync nicht gefunden – verwende cp (ohne Bereinigung alter Dateien)."
+    rm -rf "${REMOTE_PATH:?}/"* "${REMOTE_PATH:?}/".[!.]* 2>/dev/null || true
+    cp -a "$BUILD_DIR/." "$REMOTE_PATH/"
+  fi
 else
-  echo "      rsync nicht gefunden – verwende scp (ohne Bereinigung alter Dateien)."
-  # Alten Inhalt leeren, um veraltete Dateien zu entfernen, dann kopieren.
-  ssh "$SERVER" "rm -rf '${REMOTE_PATH:?}/'* '${REMOTE_PATH:?}/'.[!.]* 2>/dev/null || true"
-  scp -r "$BUILD_DIR/"* "${SERVER}:${REMOTE_PATH}/"
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -az --delete "$BUILD_DIR/" "${SERVER}:${REMOTE_PATH}/"
+  else
+    echo "      rsync nicht gefunden – verwende scp (ohne Bereinigung alter Dateien)."
+    ssh "$SERVER" "rm -rf '${REMOTE_PATH:?}/'* '${REMOTE_PATH:?}/'.[!.]* 2>/dev/null || true"
+    scp -r "$BUILD_DIR/"* "${SERVER}:${REMOTE_PATH}/"
+  fi
 fi
 
 echo ""
