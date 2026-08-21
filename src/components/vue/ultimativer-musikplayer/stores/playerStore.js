@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useToastStore } from './toastStore'
+import { fileKey } from '../utils/audioMetadata'
 
 export const usePlayerStore = defineStore('player', () => {
   // State
@@ -14,6 +15,9 @@ export const usePlayerStore = defineStore('player', () => {
   const currentTime = ref(0)
   const duration = ref(0)
 
+  // Parsed track metadata (title/artist/album/cover), keyed by fileKey.
+  const trackMeta = ref({})
+
   // Visualizer state
   const vizMode = ref('ribbon')
   const vizIntensity = ref(0.65)
@@ -22,6 +26,11 @@ export const usePlayerStore = defineStore('player', () => {
   // Computed
   const currentFile = computed(() => {
     return audioFiles.value[currentAudioIndex.value] || null
+  })
+
+  const currentMeta = computed(() => {
+    const file = currentFile.value
+    return file ? trackMeta.value[fileKey(file)] || null : null
   })
 
   const playlistCount = computed(() => audioFiles.value.length)
@@ -170,6 +179,15 @@ export const usePlayerStore = defineStore('player', () => {
     isStopped.value = value
   }
 
+  // Store parsed metadata for a track and return the metadata for a file.
+  function setTrackMeta(key, meta) {
+    trackMeta.value[key] = meta
+  }
+
+  function getMeta(file) {
+    return file ? trackMeta.value[fileKey(file)] || null : null
+  }
+
   // Surface an error as a toast. `dismissKey` gives the message a stable
   // identity so the user can choose "don't show again" for it.
   function setError(message, opts = {}) {
@@ -193,9 +211,11 @@ export const usePlayerStore = defineStore('player', () => {
     vizMode,
     vizIntensity,
     isStopped,
+    trackMeta,
 
     // Computed
     currentFile,
+    currentMeta,
     playlistCount,
     progress,
     remainingTime,
@@ -218,6 +238,8 @@ export const usePlayerStore = defineStore('player', () => {
     setVizMode,
     setVizIntensity,
     setStopped,
+    setTrackMeta,
+    getMeta,
     setError,
   }
 })

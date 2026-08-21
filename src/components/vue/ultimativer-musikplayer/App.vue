@@ -67,6 +67,7 @@
   import { usePersistence } from './composables/usePersistence'
   import { useMediaSession } from './composables/useMediaSession'
   import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts'
+  import { useMetadata } from './composables/useMetadata'
   import { getSharedFiles, clearSharedFiles } from './utils/sharedFileRepository'
 
   import AppHeader from './AppHeader.vue'
@@ -96,6 +97,9 @@
 
   // Keyboard shortcuts help overlay
   const helpVisible = ref(false)
+
+  // Parse ID3/FLAC metadata (title/artist/album/cover) for each track
+  useMetadata(store)
 
   // Persist playlist + settings across reloads
   const persistence = usePersistence(store)

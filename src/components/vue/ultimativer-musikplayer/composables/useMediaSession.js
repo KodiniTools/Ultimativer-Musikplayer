@@ -44,7 +44,7 @@ export function useMediaSession(store, handlers) {
       ms.metadata = null
       return
     }
-    const meta = file.metadata || {}
+    const meta = store.currentMeta || {}
     const title = meta.title || file.name.replace(/\.[^.]+$/, '')
     const artwork = meta.coverUrl
       ? [{ src: meta.coverUrl, sizes: '512x512', type: meta.coverType || 'image/jpeg' }]
@@ -65,6 +65,6 @@ export function useMediaSession(store, handlers) {
   setActions()
 
   watch(() => store.currentFile, updateMetadata, { immediate: true })
-  watch(() => store.currentFile?.metadata, updateMetadata)
+  watch(() => store.currentMeta, updateMetadata)
   watch(() => store.isPlaying, updatePlaybackState, { immediate: true })
 }

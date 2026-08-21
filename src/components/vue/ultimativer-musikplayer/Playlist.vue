@@ -22,7 +22,14 @@
         :class="{ active: index === store.currentAudioIndex }"
         @click="handleTrackClick(index)"
       >
-        <span class="track-name">{{ file.name }}</span>
+        <span class="track-thumb" :class="{ 'track-thumb--cover': metaFor(file)?.coverUrl }">
+          <img v-if="metaFor(file)?.coverUrl" :src="metaFor(file).coverUrl" alt="" />
+          <i v-else class="fas fa-music"></i>
+        </span>
+        <span class="track-info">
+          <span class="track-name">{{ metaFor(file)?.title || file.name }}</span>
+          <span v-if="metaFor(file)?.artist" class="track-artist">{{ metaFor(file).artist }}</span>
+        </span>
         <button
           class="delete-track-btn"
           :aria-label="`${t('player.delete.track')}: ${file.name}`"
@@ -50,6 +57,8 @@
   const store = usePlayerStore()
   const toast = useToastStore()
 
+  const metaFor = (file) => store.getMeta(file)
+
   const emit = defineEmits(['trackSelected', 'trackDeleted', 'playlistCleared'])
 
   const handleClearPlaylist = () => {
@@ -72,3 +81,50 @@
     toast.info(t('toast.playlist.trackRemoved'), { dismissKey: 'playlist.trackRemoved' })
   }
 </script>
+
+<style scoped>
+  .track-thumb {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
+    color: #f5f4d6;
+    font-size: 0.85rem;
+    overflow: hidden;
+  }
+
+  .track-thumb--cover {
+    background: none;
+  }
+
+  .track-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .track-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .track-info .track-name {
+    flex-grow: 0;
+  }
+
+  .track-artist {
+    font-size: 0.75rem;
+    font-weight: 400;
+    opacity: 0.65;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

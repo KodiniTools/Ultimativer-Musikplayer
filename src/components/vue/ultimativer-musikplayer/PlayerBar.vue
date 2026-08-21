@@ -8,8 +8,15 @@
     <div class="player-bar__inner">
       <!-- Track info -->
       <div class="player-bar__track">
-        <div class="player-bar__thumb" :class="{ 'player-bar__thumb--spinning': store.isPlaying }">
-          <i class="fas fa-music"></i>
+        <div
+          class="player-bar__thumb"
+          :class="{
+            'player-bar__thumb--spinning': store.isPlaying && !coverUrl,
+            'player-bar__thumb--cover': coverUrl,
+          }"
+        >
+          <img v-if="coverUrl" :src="coverUrl" alt="" class="player-bar__cover" />
+          <i v-else class="fas fa-music"></i>
         </div>
         <div class="player-bar__meta">
           <div class="player-bar__title">{{ trackTitle }}</div>
@@ -89,16 +96,21 @@
 
   const hasTrack = computed(() => store.audioFiles.length > 0 && !!store.currentFile)
 
-  const trackTitle = computed(() =>
-    store.currentFile ? store.currentFile.name : t('player.nofile')
-  )
+  const coverUrl = computed(() => store.currentMeta?.coverUrl || '')
+
+  const trackTitle = computed(() => {
+    if (!store.currentFile) return t('player.nofile')
+    return store.currentMeta?.title || store.currentFile.name
+  })
 
   const subtitle = computed(() => {
     if (!hasTrack.value) return t('player.ready')
-    return t('player.trackOf', {
+    const artist = store.currentMeta?.artist
+    const position = t('player.trackOf', {
       index: store.currentAudioIndex + 1,
       total: store.audioFiles.length,
     })
+    return artist ? `${artist} · ${position}` : position
   })
 
   const togglePlay = () => {
