@@ -84,6 +84,23 @@ export default {
     empty: 'Keine gemeinsam genutzten Dateien gefunden.',
     error: 'Fehler beim Laden der gemeinsam genutzten Dateien.'
   },
+  toast: {
+    dismiss: 'Schließen',
+    dontShowAgain: 'Nicht mehr anzeigen',
+    audio: {
+      notReady: 'Audio-Element nicht bereit. Bitte Seite neu laden.',
+      trackNotFound: 'Titel nicht gefunden.',
+      noFile: 'Keine Audiodatei geladen. Bitte zuerst eine Datei auswählen.',
+      playbackFailed: 'Wiedergabe fehlgeschlagen. Format wird möglicherweise nicht unterstützt.',
+      seekFailed: 'Sprung zur Position fehlgeschlagen.'
+    },
+    playlist: {
+      filesAdded: '{count} Titel zur Playlist hinzugefügt.',
+      noAudio: 'Keine gültigen Audiodateien gefunden.',
+      trackRemoved: 'Titel aus der Playlist entfernt.',
+      cleared: 'Playlist geleert.'
+    }
+  },
   content: {
     title: '🎵 Professioneller Audio-Player mit Visualisierung',
     subtitle: 'Erleben Sie Musik auf eine völlig neue Art mit unserem kostenlosen Musikplayer. Ausgestattet mit fortschrittlicher Audio-Visualisierung, umfassenden Playlist-Funktionen und modernem, responsivem Design.',

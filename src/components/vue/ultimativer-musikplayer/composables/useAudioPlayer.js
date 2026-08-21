@@ -1,4 +1,7 @@
 import { ref, onBeforeUnmount } from 'vue'
+import i18n from '../i18n'
+
+const t = (key, params) => i18n.global.t(key, params)
 
 export function useAudioPlayer(store) {
   const audioElement = ref(null)
@@ -32,13 +35,13 @@ export function useAudioPlayer(store) {
   // Load audio file
   const loadAudioFile = (index) => {
     if (!audioElement.value) {
-      store.setError('Audio-Element nicht bereit. Bitte Seite neu laden.')
+      store.setError(t('toast.audio.notReady'), { dismissKey: 'audio.notReady' })
       return
     }
 
     const file = store.audioFiles[index]
     if (!file) {
-      store.setError('Titel nicht gefunden.')
+      store.setError(t('toast.audio.trackNotFound'), { dismissKey: 'audio.trackNotFound' })
       return
     }
     
@@ -60,7 +63,7 @@ export function useAudioPlayer(store) {
     if (!audioElement.value) return
     
     if (!audioElement.value.src) {
-      store.setError('Keine Audiodatei geladen. Bitte zuerst eine Datei auswählen.')
+      store.setError(t('toast.audio.noFile'), { dismissKey: 'audio.noFile' })
       return
     }
     
@@ -77,7 +80,7 @@ export function useAudioPlayer(store) {
       store.setPlaying(true)
       store.setStopped(false)
     } catch {
-      store.setError('Wiedergabe fehlgeschlagen. Format wird möglicherweise nicht unterstützt.')
+      store.setError(t('toast.audio.playbackFailed'), { dismissKey: 'audio.playbackFailed' })
       store.setPlaying(false)
     }
   }
@@ -124,7 +127,7 @@ export function useAudioPlayer(store) {
       const targetTime = Math.max(0, Math.min((percentage / 100) * store.duration, store.duration))
       audioElement.value.currentTime = targetTime
     } catch {
-      store.setError('Sprung zur Position fehlgeschlagen.')
+      store.setError(t('toast.audio.seekFailed'), { dismissKey: 'audio.seekFailed' })
     }
   }
   

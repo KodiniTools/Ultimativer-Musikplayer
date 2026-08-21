@@ -5,17 +5,6 @@
     <main class="app__main">
       <section class="panel">
         <div class="panel__body">
-          <!-- Shared files banner -->
-          <div v-if="sharedBanner" class="shared-banner" :class="'shared-banner--' + sharedBanner.type">
-            <span class="shared-banner__icon">
-              <template v-if="sharedBanner.type === 'success'">&#10003;</template>
-              <template v-else-if="sharedBanner.type === 'error'">&#10007;</template>
-              <template v-else-if="sharedBanner.type === 'warning'">&#9888;</template>
-              <template v-else>&#8505;</template>
-            </span>
-            <span>{{ sharedBanner.message }}</span>
-          </div>
-
           <AudioUploader @files-loaded="handleFilesLoaded" />
 
           <AudioVisualizer :on-init="visualizer.initCanvas" />
@@ -50,12 +39,7 @@
       />
     </Teleport>
 
-    <Transition name="toast">
-      <div v-if="store.errorMessage" class="error-toast" role="alert">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        {{ store.errorMessage }}
-      </div>
-    </Transition>
+    <ToastContainer />
   </div>
 </template>
 
@@ -63,6 +47,7 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from './stores/playerStore'
+import { useToastStore } from './stores/toastStore'
 import { useAudioPlayer } from './composables/useAudioPlayer'
 import { useVisualizer } from './composables/useVisualizer'
 import { useTheme } from './composables/useTheme'
@@ -76,9 +61,11 @@ import VisualizerControls from './VisualizerControls.vue'
 import PlayerBar from './PlayerBar.vue'
 import Playlist from './Playlist.vue'
 import ToolCards from './ToolCards.vue'
+import ToastContainer from './ToastContainer.vue'
 
 const { t } = useI18n()
 const store = usePlayerStore()
+const toast = useToastStore()
 useTheme()
 useI18nSync()
 
@@ -86,23 +73,26 @@ const audioElementRef = ref(null)
 const audioPlayer = useAudioPlayer(store)
 const visualizer  = useVisualizer(store, audioPlayer.analyser, audioPlayer.dataArray, audioPlayer.timeDomainArray)
 
-// Shared files banner state
-const sharedBanner = ref(null)
+// Shared files loading state
 let sharedHandled = false
 
 async function loadSharedFiles() {
   if (sharedHandled) return
   sharedHandled = true
 
+  let loadingId = null
+
   try {
     const records = await getSharedFiles()
     if (!records?.length) {
-      sharedBanner.value = { type: 'warning', message: t('shared.empty') }
-      setTimeout(() => { sharedBanner.value = null }, 5000)
+      toast.warning(t('shared.empty'), { dismissKey: 'shared.empty' })
       return
     }
 
-    sharedBanner.value = { type: 'info', message: t('shared.loading', { count: records.length }) }
+    loadingId = toast.info(t('shared.loading', { count: records.length }), {
+      duration: 0,
+      dismissKey: 'shared.loading',
+    })
 
     const files = records.map(
       (r) => new File([r.blob], r.name, { type: r.mimeType || r.blob.type }),
@@ -122,13 +112,13 @@ async function loadSharedFiles() {
     }
 
     await clearSharedFiles()
-    sharedBanner.value = { type: 'success', message: t('shared.loaded', { count: files.length }) }
+    toast.remove(loadingId)
+    toast.success(t('shared.loaded', { count: files.length }), { dismissKey: 'shared.loaded' })
   } catch (err) {
     console.error('[Musikplayer] Error loading shared files:', err)
-    sharedBanner.value = { type: 'error', message: t('shared.error') }
+    toast.remove(loadingId)
+    toast.error(t('shared.error'), { dismissKey: 'shared.error' })
   }
-
-  setTimeout(() => { sharedBanner.value = null }, 5000)
 }
 
 onMounted(() => {
@@ -172,82 +162,3 @@ const handleSeek = (percentage) => {
 }
 </script>
 
-<style scoped>
-.error-toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(220, 53, 69, 0.92);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-  max-width: min(420px, 90vw);
-  text-align: center;
-}
-
-.toast-enter-active,
-.toast-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.toast-enter-from,
-.toast-leave-to {
-  opacity: 0;
-  transform: translateX(-50%) translateY(12px);
-}
-
-/* Shared files banner */
-.shared-banner {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  animation: bannerIn 0.3s ease-out;
-}
-
-.shared-banner__icon {
-  flex-shrink: 0;
-  font-size: 1rem;
-}
-
-.shared-banner--success {
-  background: rgba(76, 175, 80, 0.15);
-  border: 1px solid rgba(76, 175, 80, 0.4);
-  color: #66bb6a;
-}
-
-.shared-banner--error {
-  background: rgba(244, 67, 54, 0.15);
-  border: 1px solid rgba(244, 67, 54, 0.4);
-  color: #ef5350;
-}
-
-.shared-banner--warning {
-  background: rgba(255, 193, 7, 0.15);
-  border: 1px solid rgba(255, 193, 7, 0.4);
-  color: #ffca28;
-}
-
-.shared-banner--info {
-  background: rgba(33, 150, 243, 0.15);
-  border: 1px solid rgba(33, 150, 243, 0.4);
-  color: #42a5f5;
-}
-
-@keyframes bannerIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-</style>

@@ -10,7 +10,7 @@
         class="clear-all-btn"
         :title="t('player.clear')"
         aria-label="Playlist löschen"
-        @click="emit('playlistCleared')"
+        @click="handleClearPlaylist"
       >
         <i class="fas fa-trash"></i>
       </button>
@@ -44,11 +44,19 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from './stores/playerStore'
+import { useToastStore } from './stores/toastStore'
 
 const { t } = useI18n()
 const store = usePlayerStore()
+const toast = useToastStore()
 
 const emit = defineEmits(['trackSelected', 'trackDeleted', 'playlistCleared'])
+
+const handleClearPlaylist = () => {
+  if (store.playlistCount === 0) return
+  emit('playlistCleared')
+  toast.info(t('toast.playlist.cleared'), { dismissKey: 'playlist.cleared' })
+}
 
 const handleTrackClick = (index) => {
   if (index === store.currentAudioIndex && store.isPlaying) {
@@ -61,5 +69,6 @@ const handleDeleteTrack = (index) => {
   const wasCurrentTrack = index === store.currentAudioIndex
   store.removeTrack(index)
   emit('trackDeleted', { index, wasCurrentTrack })
+  toast.info(t('toast.playlist.trackRemoved'), { dismissKey: 'playlist.trackRemoved' })
 }
 </script>

@@ -84,6 +84,23 @@ export default {
     empty: 'No shared files found.',
     error: 'Error loading shared files.'
   },
+  toast: {
+    dismiss: 'Dismiss',
+    dontShowAgain: 'Don\'t show again',
+    audio: {
+      notReady: 'Audio element not ready. Please reload the page.',
+      trackNotFound: 'Track not found.',
+      noFile: 'No audio file loaded. Please select a file first.',
+      playbackFailed: 'Playback failed. The format may not be supported.',
+      seekFailed: 'Seeking to position failed.'
+    },
+    playlist: {
+      filesAdded: '{count} track(s) added to the playlist.',
+      noAudio: 'No valid audio files found.',
+      trackRemoved: 'Track removed from the playlist.',
+      cleared: 'Playlist cleared.'
+    }
+  },
   content: {
     title: '🎵 Professional Audio Player with Visualization',
     subtitle: 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
