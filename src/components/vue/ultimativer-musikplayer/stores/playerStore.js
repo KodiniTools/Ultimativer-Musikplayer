@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { useToastStore } from './toastStore'
 
 export const usePlayerStore = defineStore('player', () => {
   // State
@@ -17,10 +18,7 @@ export const usePlayerStore = defineStore('player', () => {
   const vizMode = ref('ribbon')
   const vizIntensity = ref(0.65)
   const isStopped = ref(false)
-  const errorMessage = ref('')
 
-  let errorTimer = null
-  
   // Computed
   const currentFile = computed(() => {
     return audioFiles.value[currentAudioIndex.value] || null
@@ -172,10 +170,13 @@ export const usePlayerStore = defineStore('player', () => {
     isStopped.value = value
   }
 
-  function setError(message, durationMs = 4000) {
-    errorMessage.value = message
-    clearTimeout(errorTimer)
-    errorTimer = setTimeout(() => { errorMessage.value = '' }, durationMs)
+  // Surface an error as a toast. `dismissKey` gives the message a stable
+  // identity so the user can choose "don't show again" for it.
+  function setError(message, opts = {}) {
+    const toast = useToastStore()
+    const toastOpts = { dismissKey: opts.dismissKey }
+    if (opts.duration != null) toastOpts.duration = opts.duration
+    toast.error(message, toastOpts)
   }
 
   return {
@@ -192,7 +193,6 @@ export const usePlayerStore = defineStore('player', () => {
     vizMode,
     vizIntensity,
     isStopped,
-    errorMessage,
 
     // Computed
     currentFile,

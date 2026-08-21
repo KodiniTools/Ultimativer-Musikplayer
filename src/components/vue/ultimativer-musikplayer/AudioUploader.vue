@@ -49,9 +49,11 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from './stores/playerStore'
+import { useToastStore } from './stores/toastStore'
 
 const { t } = useI18n()
 const store = usePlayerStore()
+const toast = useToastStore()
 const fileInputRef = ref(null)
 const folderInputRef = ref(null)
 const isDragging = ref(false)
@@ -62,10 +64,16 @@ const AUDIO_TYPES = /^audio\//
 
 function commitFiles(files) {
   const audioFiles = Array.from(files).filter(f => AUDIO_TYPES.test(f.type) || /\.(mp3|wav|flac|m4a|ogg|aac|webm|opus|aiff?)$/i.test(f.name))
-  if (!audioFiles.length) return
+  if (!audioFiles.length) {
+    toast.warning(t('toast.playlist.noAudio'), { dismissKey: 'playlist.noAudio' })
+    return
+  }
 
   const wasEmpty = store.audioFiles.length === 0
   store.addAudioFiles(audioFiles)
+  toast.success(t('toast.playlist.filesAdded', { count: audioFiles.length }), {
+    dismissKey: 'playlist.filesAdded',
+  })
   if (wasEmpty) emit('filesLoaded', 0)
 }
 
