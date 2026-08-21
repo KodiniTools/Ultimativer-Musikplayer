@@ -63,6 +63,8 @@ export default {
     intensity: 'Intensität',
     playlist: 'Playlist',
     clear: 'Löschen',
+    search: 'Playlist durchsuchen …',
+    noResults: 'Keine Treffer.',
     mute: 'Stumm',
     unmute: 'Ton an',
     loop: {

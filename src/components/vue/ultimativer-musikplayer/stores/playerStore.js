@@ -75,6 +75,25 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
+  // Reorder a track from one position to another, keeping the currently
+  // playing track selected.
+  function moveTrack(from, to) {
+    const len = audioFiles.value.length
+    if (from === to || from < 0 || from >= len || to < 0 || to >= len) return
+
+    const [moved] = audioFiles.value.splice(from, 1)
+    audioFiles.value.splice(to, 0, moved)
+
+    const cur = currentAudioIndex.value
+    if (cur === from) {
+      currentAudioIndex.value = to
+    } else if (from < cur && to >= cur) {
+      currentAudioIndex.value = cur - 1
+    } else if (from > cur && to <= cur) {
+      currentAudioIndex.value = cur + 1
+    }
+  }
+
   function clearPlaylist() {
     audioFiles.value = []
     currentAudioIndex.value = 0
@@ -224,6 +243,7 @@ export const usePlayerStore = defineStore('player', () => {
     setAudioFiles,
     addAudioFiles,
     removeTrack,
+    moveTrack,
     clearPlaylist,
     setCurrentIndex,
     playNext,
