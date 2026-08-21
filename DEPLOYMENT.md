@@ -3,12 +3,14 @@
 ## 📋 Voraussetzungen
 
 ### Lokal (Windows):
+
 - ✅ Node.js 16+ installiert
 - ✅ npm installiert
 - ✅ SSH-Client (Git Bash, PowerShell mit OpenSSH, oder PuTTY)
 - ✅ Projekt in: `C:\Users\User\ultimativermusic-player-vue`
 
 ### Server:
+
 - ✅ SSH-Zugang: `root@145.223.81.100`
 - ✅ Nginx installiert
 - ✅ Zielverzeichnis: `/var/www/kodinitools.com/ultimativermusikplayer`
@@ -22,11 +24,13 @@
 1. **PowerShell als Administrator öffnen**
 
 2. **Ausführungsrichtlinie erlauben (einmalig):**
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 3. **Deployment-Skript ausführen:**
+
 ```powershell
 cd C:\Users\User\ultimativermusic-player-vue
 .\deploy.ps1
@@ -41,6 +45,7 @@ Das war's! Das Skript erledigt alles automatisch. ✨
 1. **Git Bash öffnen**
 
 2. **Deployment-Skript ausführen:**
+
 ```bash
 cd /c/Users/User/ultimativermusic-player-vue
 chmod +x deploy.sh
@@ -72,11 +77,13 @@ Dies erstellt einen `dist` Ordner mit allen optimierten Dateien.
 ### Schritt 2: Dateien auf Server übertragen
 
 **Option A - Mit SCP (Empfohlen):**
+
 ```powershell
 scp -r dist/* root@145.223.81.100:/var/www/kodinitools.com/ultimativermusikplayer/
 ```
 
 **Option B - Mit SFTP:**
+
 ```powershell
 sftp root@145.223.81.100
 cd /var/www/kodinitools.com/ultimativermusikplayer
@@ -85,6 +92,7 @@ exit
 ```
 
 **Option C - Mit WinSCP (GUI):**
+
 1. WinSCP öffnen
 2. Verbinden: `root@145.223.81.100`
 3. Navigiere zu: `/var/www/kodinitools.com/ultimativermusikplayer`
@@ -117,12 +125,13 @@ nano /etc/nginx/sites-available/kodinitools.com
 ```
 
 **Füge diesen Location-Block hinzu:**
+
 ```nginx
 location /ultimativermusikplayer {
     alias /var/www/kodinitools.com/ultimativermusikplayer;
     try_files $uri $uri/ /ultimativermusikplayer/index.html;
     index index.html;
-    
+
     # Caching für Assets
     location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
         expires 1y;
@@ -132,6 +141,7 @@ location /ultimativermusikplayer {
 ```
 
 **B) Nginx neu laden:**
+
 ```bash
 # Konfiguration testen
 nginx -t
@@ -145,6 +155,7 @@ systemctl reload nginx
 ### Schritt 5: Testen
 
 Öffne im Browser:
+
 ```
 https://kodinitools.com/ultimativermusikplayer/
 ```
@@ -158,6 +169,7 @@ https://kodinitools.com/ultimativermusikplayer/
 ### Problem: SSH-Verbindung schlägt fehl
 
 **Lösung:**
+
 ```powershell
 # SSH-Key verwenden
 ssh -i C:\Users\User\.ssh\id_rsa root@145.223.81.100
@@ -171,6 +183,7 @@ ssh-add C:\Users\User\.ssh\id_rsa
 ### Problem: "Permission denied" beim SCP
 
 **Lösung:**
+
 ```bash
 # Auf dem Server
 mkdir -p /var/www/kodinitools.com/ultimativermusikplayer
@@ -182,11 +195,13 @@ chmod 755 /var/www/kodinitools.com/ultimativermusikplayer
 ### Problem: 404 Error nach Deployment
 
 **Ursachen:**
+
 1. Nginx-Konfiguration fehlt
 2. Dateien im falschen Verzeichnis
 3. Berechtigungen falsch
 
 **Lösung:**
+
 ```bash
 # Auf dem Server prüfen
 ls -la /var/www/kodinitools.com/ultimativermusikplayer
@@ -205,9 +220,10 @@ ls -la /var/www/kodinitools.com/ultimativermusikplayer
 
 **Lösung:**
 Bearbeite `vite.config.js`:
+
 ```javascript
 export default defineConfig({
-  base: '/ultimativermusikplayer/',  // Wichtig!
+  base: '/ultimativermusikplayer/', // Wichtig!
   plugins: [vue()],
   // ...
 })
@@ -227,6 +243,7 @@ cd C:\Users\User\ultimativermusic-player-vue
 ```
 
 Das Skript:
+
 1. ✅ Erstellt neuen Build
 2. ✅ Überschreibt alte Dateien
 3. ✅ Behält Server-Konfiguration bei
@@ -267,6 +284,7 @@ location ~* \.(js|css)$ {
 ## 📈 Performance-Optimierung
 
 ### 1. Dateigröße prüfen
+
 ```bash
 cd dist
 du -sh *
@@ -275,11 +293,13 @@ du -sh *
 Große Dateien? → Chunk-Splitting verbessern in `vite.config.js`
 
 ### 2. Lighthouse-Score testen
+
 1. Browser DevTools öffnen (F12)
 2. "Lighthouse" Tab
 3. "Generate report" für Production URL
 
 ### 3. CDN verwenden (Optional)
+
 Für bessere globale Performance externe Assets über CDN laden.
 
 ---
@@ -289,16 +309,19 @@ Für bessere globale Performance externe Assets über CDN laden.
 ### SSH-Key Authentication (Empfohlen)
 
 1. **SSH-Key generieren (falls nicht vorhanden):**
+
 ```powershell
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
 2. **Public Key auf Server kopieren:**
+
 ```powershell
 type C:\Users\User\.ssh\id_rsa.pub | ssh root@145.223.81.100 "cat >> ~/.ssh/authorized_keys"
 ```
 
 3. **Testen:**
+
 ```powershell
 ssh root@145.223.81.100
 ```

@@ -25,25 +25,25 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
+  import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-const tools = [
-  {
-    key: 'converter',
-    url: 'https://kodinitools.com/mp3konverter/',
-    icon: 'fa-solid fa-file-audio'
-  },
-  {
-    key: 'playlist',
-    url: 'https://kodinitools.com/playlistkonverter/',
-    icon: 'fa-solid fa-list-ol'
-  },
-  {
-    key: 'equalizer',
-    url: 'https://kodinitools.com/equaliser19/',
-    icon: 'fa-solid fa-sliders'
-  }
-]
+  const tools = [
+    {
+      key: 'converter',
+      url: 'https://kodinitools.com/mp3konverter/',
+      icon: 'fa-solid fa-file-audio',
+    },
+    {
+      key: 'playlist',
+      url: 'https://kodinitools.com/playlistkonverter/',
+      icon: 'fa-solid fa-list-ol',
+    },
+    {
+      key: 'equalizer',
+      url: 'https://kodinitools.com/equaliser19/',
+      icon: 'fa-solid fa-sliders',
+    },
+  ]
 </script>

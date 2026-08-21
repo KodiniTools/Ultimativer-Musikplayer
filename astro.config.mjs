@@ -6,16 +6,16 @@ export default defineConfig({
   base: '/ultimativer-musikplayer',
   integrations: [
     vue({
-      appEntrypoint: '/src/pages/_app'
-    })
+      appEntrypoint: '/src/pages/_app',
+    }),
   ],
   vite: {
     build: {
       rollupOptions: {
         output: {
-          manualChunks: undefined
-        }
-      }
-    }
-  }
+          manualChunks: undefined,
+        },
+      },
+    },
+  },
 })

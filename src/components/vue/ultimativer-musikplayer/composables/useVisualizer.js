@@ -1,50 +1,58 @@
 import { ref, watch, onBeforeUnmount } from 'vue'
-import { drawBars }        from './visualizers/bars.js'
-import { drawLiquid }      from './visualizers/waves.js'
-import { drawPlasma }      from './visualizers/nebula.js'
+import { drawBars } from './visualizers/bars.js'
+import { drawLiquid } from './visualizers/waves.js'
+import { drawPlasma } from './visualizers/nebula.js'
 import { drawArcSpectrum } from './visualizers/spectrum.js'
-import { drawDNA }         from './visualizers/dna.js'
-import { drawTunnel }      from './visualizers/tunnel.js'
-import { drawEqualizer }   from './visualizers/equalizer.js'
-import { drawAurora }      from './visualizers/aurora.js'
-import { drawMandala }     from './visualizers/mandala.js'
-import { drawSparks }      from './visualizers/sparks.js'
+import { drawDNA } from './visualizers/dna.js'
+import { drawTunnel } from './visualizers/tunnel.js'
+import { drawEqualizer } from './visualizers/equalizer.js'
+import { drawAurora } from './visualizers/aurora.js'
+import { drawMandala } from './visualizers/mandala.js'
+import { drawSparks } from './visualizers/sparks.js'
 
 const TRAIL = {
-  ribbon: 0, waves: 0, nebula: 0.16, spectrum: 0.12,
-  orbits: 0, starfield: 0.10, grid: 0, aurora: 0.14,
-  kaleidoscope: 0.13, particles: 0.10,
+  ribbon: 0,
+  waves: 0,
+  nebula: 0.16,
+  spectrum: 0.12,
+  orbits: 0,
+  starfield: 0.1,
+  grid: 0,
+  aurora: 0.14,
+  kaleidoscope: 0.13,
+  particles: 0.1,
 }
 
 export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayRef) {
-  const canvas           = ref(null)
-  const ctx              = ref(null)
+  const canvas = ref(null)
+  const ctx = ref(null)
   const animationFrameId = ref(null)
-  const resizeObserver   = ref(null)
+  const resizeObserver = ref(null)
 
   let frameCounter = 0
-  let peakHolds    = new Float32Array(0)
-  let windDown     = 0   // frames to keep animating after playback stops
+  let peakHolds = new Float32Array(0)
+  let windDown = 0 // frames to keep animating after playback stops
 
   // Mutable state passed into draw functions that need it across frames
   const sparksState = { particles: [], lastEnergy: 0 }
 
-  const analyser   = analyserRef
-  const dataArray  = dataArrayRef
+  const analyser = analyserRef
+  const dataArray = dataArrayRef
   const timeDomain = timeDomainArrayRef
 
   // ── Canvas setup ─────────────────────────────────────────────
-  let _cssW = 0, _cssH = 0
+  let _cssW = 0,
+    _cssH = 0
 
   const resizeCanvas = () => {
     if (!canvas.value?.parentElement) return
     const rect = canvas.value.parentElement.getBoundingClientRect()
-    const dpr  = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
     _cssW = rect.width
     _cssH = rect.height
-    canvas.value.width  = Math.floor(rect.width  * dpr)
+    canvas.value.width = Math.floor(rect.width * dpr)
     canvas.value.height = Math.floor(rect.height * dpr)
-    canvas.value.style.width  = `${rect.width}px`
+    canvas.value.style.width = `${rect.width}px`
     canvas.value.style.height = `${rect.height}px`
     if (ctx.value) ctx.value.setTransform(dpr, 0, 0, dpr, 0, 0)
     peakHolds = new Float32Array(0)
@@ -88,16 +96,16 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
     analyser.value.getByteFrequencyData(dataArray.value)
     analyser.value.getByteTimeDomainData(timeDomain.value)
 
-    const w    = _cssW || canvas.value.width
-    const h    = _cssH || canvas.value.height
-    const cx   = w / 2
-    const cy   = h / 2
+    const w = _cssW || canvas.value.width
+    const h = _cssH || canvas.value.height
+    const cx = w / 2
+    const cy = h / 2
     const mode = store.vizMode
-    const vi   = store.vizIntensity
-    const fd   = dataArray.value
-    const td   = timeDomain.value
-    const c    = ctx.value
-    const t    = frameCounter
+    const vi = store.vizIntensity
+    const fd = dataArray.value
+    const td = timeDomain.value
+    const c = ctx.value
+    const t = frameCounter
 
     const trail = TRAIL[mode] ?? 0
     c.globalCompositeOperation = 'source-over'
@@ -105,16 +113,36 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
     c.fillRect(0, 0, w, h)
 
     switch (mode) {
-      case 'ribbon':       drawBars(c, w, h, cx, cy, fd, vi);              break
-      case 'waves':        drawLiquid(c, w, h, cy, fd, td, vi);            break
-      case 'nebula':       drawPlasma(c, w, h, cx, cy, t, fd, vi);         break
-      case 'spectrum':     drawArcSpectrum(c, w, h, cx, cy, t, fd, vi);    break
-      case 'orbits':       drawDNA(c, w, h, cy, t, fd, td, vi);            break
-      case 'starfield':    drawTunnel(c, w, h, cx, cy, t, fd, vi);         break
-      case 'grid':         drawEqualizer(c, w, h, fd, vi, peakHolds);      break
-      case 'aurora':       drawAurora(c, w, h, t, fd, vi);                 break
-      case 'kaleidoscope': drawMandala(c, w, h, cx, cy, t, fd, vi);        break
-      case 'particles':    drawSparks(c, w, h, cx, cy, fd, vi, sparksState); break
+      case 'ribbon':
+        drawBars(c, w, h, cx, cy, fd, vi)
+        break
+      case 'waves':
+        drawLiquid(c, w, h, cy, fd, td, vi)
+        break
+      case 'nebula':
+        drawPlasma(c, w, h, cx, cy, t, fd, vi)
+        break
+      case 'spectrum':
+        drawArcSpectrum(c, w, h, cx, cy, t, fd, vi)
+        break
+      case 'orbits':
+        drawDNA(c, w, h, cy, t, fd, td, vi)
+        break
+      case 'starfield':
+        drawTunnel(c, w, h, cx, cy, t, fd, vi)
+        break
+      case 'grid':
+        drawEqualizer(c, w, h, fd, vi, peakHolds)
+        break
+      case 'aurora':
+        drawAurora(c, w, h, t, fd, vi)
+        break
+      case 'kaleidoscope':
+        drawMandala(c, w, h, cx, cy, t, fd, vi)
+        break
+      case 'particles':
+        drawSparks(c, w, h, cx, cy, fd, vi, sparksState)
+        break
     }
 
     frameCounter++
@@ -136,28 +164,37 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
   const reset = () => {
     stop()
     windDown = 0
-    if (ctx.value && canvas.value) ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+    if (ctx.value && canvas.value)
+      ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
     frameCounter = 0
-    peakHolds    = new Float32Array(0)
-    sparksState.particles  = []
+    peakHolds = new Float32Array(0)
+    sparksState.particles = []
     sparksState.lastEnergy = 0
   }
 
-  watch(() => store.isPlaying, (playing) => {
-    if (playing) {
-      windDown = 0
-      start()
-    } else {
-      // Keep the loop running so the bars can animate their retreat.
-      windDown = 90 // ~1.5s at 60fps
-      start()
+  watch(
+    () => store.isPlaying,
+    (playing) => {
+      if (playing) {
+        windDown = 0
+        start()
+      } else {
+        // Keep the loop running so the bars can animate their retreat.
+        windDown = 90 // ~1.5s at 60fps
+        start()
+      }
     }
-  })
+  )
 
   // Clear the canvas when no track is loaded anymore (e.g. playlist cleared
   // or last track removed) so the visualizer does not stay frozen on the
   // last rendered frame.
-  watch(() => store.audioFiles.length, (len) => { if (len === 0) reset() })
+  watch(
+    () => store.audioFiles.length,
+    (len) => {
+      if (len === 0) reset()
+    }
+  )
 
   onBeforeUnmount(() => {
     stop()

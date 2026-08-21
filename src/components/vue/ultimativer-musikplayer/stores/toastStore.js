@@ -84,7 +84,7 @@ export const useToastStore = defineStore('toast', () => {
         if (prev) clearTimeout(prev)
         timers.set(
           existing.id,
-          setTimeout(() => remove(existing.id), duration),
+          setTimeout(() => remove(existing.id), duration)
         )
       }
       return existing.id
@@ -101,7 +101,7 @@ export const useToastStore = defineStore('toast', () => {
     if (duration > 0) {
       timers.set(
         id,
-        setTimeout(() => remove(id), duration),
+        setTimeout(() => remove(id), duration)
       )
     }
 
@@ -109,8 +109,7 @@ export const useToastStore = defineStore('toast', () => {
   }
 
   const success = (message, opts = {}) => show(message, { ...opts, type: 'success' })
-  const error = (message, opts = {}) =>
-    show(message, { duration: 6000, ...opts, type: 'error' })
+  const error = (message, opts = {}) => show(message, { duration: 6000, ...opts, type: 'error' })
   const warning = (message, opts = {}) => show(message, { ...opts, type: 'warning' })
   const info = (message, opts = {}) => show(message, { ...opts, type: 'info' })
 
@@ -121,9 +120,7 @@ export const useToastStore = defineStore('toast', () => {
     muted.value = new Set(muted.value)
     saveMuted(muted.value)
     // Remove any currently visible toasts that share the key.
-    toasts.value
-      .filter((t) => t.dismissKey === dismissKey)
-      .forEach((t) => remove(t.id))
+    toasts.value.filter((t) => t.dismissKey === dismissKey).forEach((t) => remove(t.id))
   }
 
   /** Clear all "don't show again" preferences (toasts reappear). */
