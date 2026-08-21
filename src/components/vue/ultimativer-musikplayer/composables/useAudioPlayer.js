@@ -1,5 +1,6 @@
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
 import i18n from '../i18n'
+import { EQ_FREQUENCIES } from '../utils/equalizerPresets'
 
 const t = (key, params) => i18n.global.t(key, params)
 
@@ -13,6 +14,34 @@ export function useAudioPlayer(store) {
 
   let lastVolume = 1
   let currentObjectURL = null
+  let eqFilters = []
+
+  // Build the equalizer BiquadFilter chain and return the head/tail nodes.
+  const buildEqChain = () => {
+    eqFilters = EQ_FREQUENCIES.map((freq, i) => {
+      const filter = audioContext.value.createBiquadFilter()
+      if (i === 0) filter.type = 'lowshelf'
+      else if (i === EQ_FREQUENCIES.length - 1) filter.type = 'highshelf'
+      else filter.type = 'peaking'
+      filter.frequency.value = freq
+      filter.Q.value = 1
+      filter.gain.value = 0
+      return filter
+    })
+    for (let i = 0; i < eqFilters.length - 1; i++) {
+      eqFilters[i].connect(eqFilters[i + 1])
+    }
+    return { head: eqFilters[0], tail: eqFilters[eqFilters.length - 1] }
+  }
+
+  // Apply the store's EQ state to the filter gains (0 dB = transparent).
+  const applyEq = () => {
+    if (!eqFilters.length) return
+    eqFilters.forEach((filter, i) => {
+      const gain = store.eqEnabled ? store.eqBands[i] || 0 : 0
+      filter.gain.value = gain
+    })
+  }
 
   // Initialize Audio Context
   const initAudioContext = () => {
@@ -27,10 +56,18 @@ export function useAudioPlayer(store) {
 
     if (audioElement.value && !sourceNode.value) {
       sourceNode.value = audioContext.value.createMediaElementSource(audioElement.value)
-      sourceNode.value.connect(analyser.value)
+      // source -> EQ chain -> analyser -> destination
+      const { head, tail } = buildEqChain()
+      sourceNode.value.connect(head)
+      tail.connect(analyser.value)
       analyser.value.connect(audioContext.value.destination)
+      applyEq()
     }
   }
+
+  // Keep the filter gains in sync with the store.
+  watch(() => store.eqEnabled, applyEq)
+  watch(() => store.eqBands, applyEq, { deep: true })
 
   // Load audio file
   const loadAudioFile = (index) => {

@@ -12,6 +12,8 @@
           <div class="viz-controls-bar">
             <VisualizerControls />
           </div>
+
+          <EqualizerControls class="eq-bar" />
         </div>
       </section>
 
@@ -40,6 +42,18 @@
     </Teleport>
 
     <ToastContainer />
+
+    <button
+      type="button"
+      class="shortcuts-fab"
+      :aria-label="t('shortcuts.title')"
+      :title="t('shortcuts.title') + ' (?)'"
+      @click="helpVisible = true"
+    >
+      <i class="fa-solid fa-keyboard"></i>
+    </button>
+
+    <ShortcutsHelp :visible="helpVisible" @close="helpVisible = false" />
   </div>
 </template>
 
@@ -52,6 +66,10 @@
   import { useVisualizer } from './composables/useVisualizer'
   import { useTheme } from './composables/useTheme'
   import { useI18nSync } from './composables/useI18nSync'
+  import { usePersistence } from './composables/usePersistence'
+  import { useMediaSession } from './composables/useMediaSession'
+  import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts'
+  import { useMetadata } from './composables/useMetadata'
   import { getSharedFiles, clearSharedFiles } from './utils/sharedFileRepository'
 
   import AppHeader from './AppHeader.vue'
@@ -62,6 +80,8 @@
   import Playlist from './Playlist.vue'
   import ToolCards from './ToolCards.vue'
   import ToastContainer from './ToastContainer.vue'
+  import ShortcutsHelp from './ShortcutsHelp.vue'
+  import EqualizerControls from './EqualizerControls.vue'
 
   const { t } = useI18n()
   const store = usePlayerStore()
@@ -77,6 +97,40 @@
     audioPlayer.dataArray,
     audioPlayer.timeDomainArray
   )
+
+  // Keyboard shortcuts help overlay
+  const helpVisible = ref(false)
+
+  // Parse ID3/FLAC metadata (title/artist/album/cover) for each track
+  useMetadata(store)
+
+  // Persist playlist + settings across reloads
+  const persistence = usePersistence(store)
+
+  // OS media-session controls (lock screen, media keys)
+  useMediaSession(store, {
+    play: () => audioPlayer.play(),
+    pause: () => audioPlayer.pause(),
+    stop: () => audioPlayer.stop(),
+    next: () => audioPlayer.playNext(),
+    previous: () => audioPlayer.playPrevious(),
+    seek: (percentage) => audioPlayer.seek(percentage),
+  })
+
+  // Global keyboard shortcuts
+  useKeyboardShortcuts(store, {
+    togglePlay: () => (store.isPlaying ? audioPlayer.pause() : audioPlayer.play()),
+    next: () => audioPlayer.playNext(),
+    previous: () => audioPlayer.playPrevious(),
+    stop: () => audioPlayer.stop(),
+    seekTo: (percentage) => audioPlayer.seek(percentage),
+    setVolume: (v) => audioPlayer.setVolume(v),
+    toggleMute: () => audioPlayer.toggleMute(),
+    toggleLoop: () => store.toggleLoop(),
+    toggleShuffle: () => store.toggleShuffle(),
+    toggleHelp: () => (helpVisible.value = !helpVisible.value),
+    closeHelp: () => (helpVisible.value = false),
+  })
 
   // Shared files loading state
   let sharedHandled = false
@@ -126,13 +180,38 @@
     }
   }
 
-  onMounted(() => {
+  async function restorePlaylist() {
+    const { files, savedIndex } = await persistence.restore()
+    if (!files.length) return
+
+    store.setAudioFiles(files)
+    audioPlayer.setVolume(store.volume)
+    audioPlayer.initAudioContext()
+
+    const index = Math.min(Math.max(savedIndex, 0), files.length - 1)
+    store.setCurrentIndex(index)
+    // Preload the track (browsers block autoplay, so we don't call play()).
+    setTimeout(() => audioPlayer.loadAudioFile(index), 0)
+
+    toast.info(t('toast.playlist.restored', { count: files.length }), {
+      dismissKey: 'playlist.restored',
+    })
+  }
+
+  onMounted(async () => {
     if (audioElementRef.value) {
       audioPlayer.setupAudioElement(audioElementRef.value)
     }
 
     const source = new URLSearchParams(window.location.search).get('source')
-    if (source === 'audionormalizer') loadSharedFiles()
+    if (source === 'audionormalizer') {
+      await loadSharedFiles()
+    } else {
+      await restorePlaylist()
+    }
+
+    // Begin persisting changes only after the initial restore.
+    persistence.startWatching()
   })
 
   const handleFilesLoaded = (index) => {
@@ -166,3 +245,51 @@
     audioPlayer.seek(percentage)
   }
 </script>
+
+<style scoped>
+  .eq-bar {
+    margin-top: 12px;
+  }
+
+  .shortcuts-fab {
+    position: fixed;
+    left: 16px;
+    bottom: 96px;
+    z-index: 9998;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.16));
+    border-radius: 50%;
+    background: var(--bg-panel, rgba(20, 38, 64, 0.9));
+    color: var(--text-primary, #f9f2d5);
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      background 0.15s ease;
+  }
+
+  .shortcuts-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    background: var(--bg-elevated, rgba(20, 38, 64, 0.95));
+  }
+
+  @media (max-width: 600px) {
+    .shortcuts-fab {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shortcuts-fab {
+      transition: none;
+    }
+  }
+</style>
