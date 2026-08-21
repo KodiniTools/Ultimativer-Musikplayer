@@ -1,0 +1,115 @@
+/**
+ * Playlist Repository – persists the user's own playlist across reloads.
+ *
+ * Audio files (Blobs) are stored in IndexedDB; lightweight playback
+ * settings (volume, current index, loop/shuffle, visualizer) live in
+ * localStorage. Everything stays local on the device.
+ */
+
+const DB_NAME = 'kodinitools-musikplayer'
+const STORE_NAME = 'playlist'
+const DB_VERSION = 1
+const SETTINGS_KEY = 'musikplayer.settings'
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION)
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'order' })
+      }
+    }
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+}
+
+/** Replace the persisted playlist with the given File objects (in order). */
+export async function savePlaylist(files) {
+  const db = await openDB()
+  const tx = db.transaction(STORE_NAME, 'readwrite')
+  const store = tx.objectStore(STORE_NAME)
+  store.clear()
+  Array.from(files).forEach((file, index) => {
+    store.put({
+      order: index,
+      name: file.name,
+      mimeType: file.type || '',
+      blob: file,
+    })
+  })
+
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => {
+      db.close()
+      resolve()
+    }
+    tx.onerror = () => {
+      db.close()
+      reject(tx.error)
+    }
+  })
+}
+
+/** Load the persisted playlist as an ordered array of File objects. */
+export async function loadPlaylist() {
+  const db = await openDB()
+  const tx = db.transaction(STORE_NAME, 'readonly')
+  const request = tx.objectStore(STORE_NAME).getAll()
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      db.close()
+      const records = (request.result || []).sort((a, b) => a.order - b.order)
+      const files = records.map((r) => {
+        if (r.blob instanceof File) return r.blob
+        return new File([r.blob], r.name, { type: r.mimeType || r.blob?.type || '' })
+      })
+      resolve(files)
+    }
+    request.onerror = () => {
+      db.close()
+      reject(request.error)
+    }
+  })
+}
+
+/** Remove the entire persisted playlist. */
+export async function clearPersistedPlaylist() {
+  const db = await openDB()
+  const tx = db.transaction(STORE_NAME, 'readwrite')
+  tx.objectStore(STORE_NAME).clear()
+
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => {
+      db.close()
+      resolve()
+    }
+    tx.onerror = () => {
+      db.close()
+      reject(tx.error)
+    }
+  })
+}
+
+/** Persist lightweight playback settings. */
+export function saveSettings(settings) {
+  try {
+    if (typeof localStorage === 'undefined') return
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
+  } catch {
+    /* storage unavailable — ignore */
+  }
+}
+
+/** Load persisted playback settings (or null). */
+export function loadSettings() {
+  try {
+    if (typeof localStorage === 'undefined') return null
+    const raw = localStorage.getItem(SETTINGS_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
