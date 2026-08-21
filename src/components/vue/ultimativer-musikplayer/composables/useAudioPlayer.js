@@ -10,28 +10,28 @@ export function useAudioPlayer(store) {
   const dataArray = ref(null)
   const timeDomainArray = ref(null)
   const sourceNode = ref(null)
-  
+
   let lastVolume = 1
   let currentObjectURL = null
 
   // Initialize Audio Context
   const initAudioContext = () => {
     if (audioContext.value) return
-    
+
     audioContext.value = new (window.AudioContext || window.webkitAudioContext)()
     analyser.value = audioContext.value.createAnalyser()
     analyser.value.fftSize = 512
-    
+
     dataArray.value = new Uint8Array(analyser.value.frequencyBinCount)
     timeDomainArray.value = new Uint8Array(analyser.value.fftSize)
-    
+
     if (audioElement.value && !sourceNode.value) {
       sourceNode.value = audioContext.value.createMediaElementSource(audioElement.value)
       sourceNode.value.connect(analyser.value)
       analyser.value.connect(audioContext.value.destination)
     }
   }
-  
+
   // Load audio file
   const loadAudioFile = (index) => {
     if (!audioElement.value) {
@@ -44,7 +44,7 @@ export function useAudioPlayer(store) {
       store.setError(t('toast.audio.trackNotFound'), { dismissKey: 'audio.trackNotFound' })
       return
     }
-    
+
     if (currentObjectURL) {
       URL.revokeObjectURL(currentObjectURL)
     }
@@ -52,29 +52,29 @@ export function useAudioPlayer(store) {
     currentObjectURL = objectURL
     audioElement.value.src = objectURL
     audioElement.value.load()
-    
+
     if (!audioContext.value) {
       initAudioContext()
     }
   }
-  
+
   // Playback controls
   const play = async () => {
     if (!audioElement.value) return
-    
+
     if (!audioElement.value.src) {
       store.setError(t('toast.audio.noFile'), { dismissKey: 'audio.noFile' })
       return
     }
-    
+
     if (!audioContext.value) {
       initAudioContext()
     }
-    
+
     if (audioContext.value.state === 'suspended') {
       await audioContext.value.resume()
     }
-    
+
     try {
       await audioElement.value.play()
       store.setPlaying(true)
@@ -99,7 +99,7 @@ export function useAudioPlayer(store) {
     store.setPlaying(false)
     store.setStopped(true)
   }
-  
+
   const playNext = () => {
     const shouldPlay = store.playNext()
     if (shouldPlay) {
@@ -109,7 +109,7 @@ export function useAudioPlayer(store) {
       stop()
     }
   }
-  
+
   const playPrevious = () => {
     const shouldPlay = store.playPrevious()
     if (shouldPlay) {
@@ -117,7 +117,7 @@ export function useAudioPlayer(store) {
       play()
     }
   }
-  
+
   const seek = async (percentage) => {
     if (!audioElement.value || !store.duration) return
     try {
@@ -130,12 +130,12 @@ export function useAudioPlayer(store) {
       store.setError(t('toast.audio.seekFailed'), { dismissKey: 'audio.seekFailed' })
     }
   }
-  
+
   const toggleMute = () => {
     if (!audioElement.value) return
-    
+
     store.toggleMute()
-    
+
     if (store.isMuted) {
       lastVolume = audioElement.value.volume
       audioElement.value.volume = 0
@@ -143,32 +143,32 @@ export function useAudioPlayer(store) {
       audioElement.value.volume = lastVolume
     }
   }
-  
+
   const setVolume = (value) => {
     if (!audioElement.value) return
     audioElement.value.volume = value
     store.setVolume(value)
   }
-  
+
   // Event handlers
   const onTimeUpdate = () => {
     if (!audioElement.value) return
     store.setCurrentTime(audioElement.value.currentTime)
   }
-  
+
   const onLoadedMetadata = () => {
     if (!audioElement.value) return
     store.setDuration(audioElement.value.duration)
   }
-  
+
   const onEnded = () => {
     playNext()
   }
-  
+
   // Setup audio element
   const setupAudioElement = (element) => {
     audioElement.value = element
-    
+
     if (element) {
       element.addEventListener('timeupdate', onTimeUpdate)
       element.addEventListener('loadedmetadata', onLoadedMetadata)
@@ -176,7 +176,7 @@ export function useAudioPlayer(store) {
       element.volume = store.volume
     }
   }
-  
+
   // Stop playback and fully unload the media element (frees the source)
   const unloadAudio = () => {
     if (!audioElement.value) return
@@ -216,7 +216,7 @@ export function useAudioPlayer(store) {
     unloadAudio()
     store.clearPlaylist()
   }
-  
+
   // Cleanup
   onBeforeUnmount(() => {
     if (audioElement.value) {
@@ -225,7 +225,7 @@ export function useAudioPlayer(store) {
       audioElement.value.removeEventListener('ended', onEnded)
     }
   })
-  
+
   return {
     audioElement,
     analyser,
@@ -243,6 +243,6 @@ export function useAudioPlayer(store) {
     toggleMute,
     setVolume,
     handleTrackRemoved,
-    clearPlaylist
+    clearPlaylist,
   }
 }

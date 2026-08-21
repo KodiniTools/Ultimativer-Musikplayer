@@ -3,17 +3,20 @@
 ## Installation in 3 Schritten
 
 ### 1. Projekt vorbereiten
+
 ```bash
 cd music-player-vue
 npm install
 ```
 
 ### 2. Entwicklungsserver starten
+
 ```bash
 npm run dev
 ```
 
 ### 3. Im Browser öffnen
+
 Öffnen Sie: `http://localhost:5173`
 
 ## 📝 Wichtige Befehle
@@ -41,6 +44,7 @@ npm run preview
 ## 🎨 Features ausprobieren
 
 ### Playlist-Funktionen
+
 - ✅ Mehrere Dateien auf einmal hochladen
 - ✅ Shuffle aktivieren für zufällige Wiedergabe
 - ✅ Loop aktivieren für Endlos-Wiedergabe
@@ -48,6 +52,7 @@ npm run preview
 - ✅ Playlist leeren (Löschen-Button)
 
 ### Visualizer-Modi
+
 1. **Ribbon**: Dynamisches Band um einen Kreis
 2. **Waves**: Wellenförmige Darstellung
 3. **Nebula**: Partikel-Nebel-Effekt
@@ -57,6 +62,7 @@ npm run preview
 7. **Grid**: Pulsierendes Gitter
 
 ### Intensität anpassen
+
 - Bewegen Sie den Intensitäts-Slider
 - Niedrige Werte = subtile Animation
 - Hohe Werte = intensive Visualisierung
@@ -64,23 +70,29 @@ npm run preview
 ## 🔧 Anpassungen
 
 ### Farben ändern
+
 Bearbeiten Sie `src/assets/styles/main.css`:
+
 ```css
 :root {
-  --primary: #00d4ff;      /* Hauptfarbe */
-  --primary-2: #ff007c;    /* Akzentfarbe 1 */
-  --primary-3: #7c3aed;    /* Akzentfarbe 2 */
+  --primary: #00d4ff; /* Hauptfarbe */
+  --primary-2: #ff007c; /* Akzentfarbe 1 */
+  --primary-3: #7c3aed; /* Akzentfarbe 2 */
 }
 ```
 
 ### Standard-Sprache ändern
+
 Bearbeiten Sie `src/i18n/index.js`:
+
 ```javascript
 const savedLanguage = localStorage.getItem('musicplayer_language') || 'en' // Ändern Sie 'de' zu 'en'
 ```
 
 ### Standard-Theme ändern
+
 Bearbeiten Sie `src/composables/useTheme.js`:
+
 ```javascript
 const saved = localStorage.getItem('theme') || 'dark' // Ändern Sie 'light' zu 'dark'
 ```
@@ -88,6 +100,7 @@ const saved = localStorage.getItem('theme') || 'dark' // Ändern Sie 'light' zu 
 ## 📱 Mobile Nutzung
 
 Die Anwendung ist vollständig responsiv:
+
 - Touch-Bedienung unterstützt
 - Optimiertes Layout für kleine Bildschirme
 - Alle Funktionen verfügbar
@@ -102,12 +115,14 @@ Die Anwendung ist vollständig responsiv:
 ## 🐛 Häufige Probleme
 
 ### "Cannot find module..."
+
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 ### Port bereits belegt
+
 ```bash
 # Vite nutzt standardmäßig Port 5173
 # Ändern Sie den Port in vite.config.js:
@@ -117,6 +132,7 @@ server: {
 ```
 
 ### Styles werden nicht angewendet
+
 ```bash
 # Löschen Sie den Vite Cache
 rm -rf node_modules/.vite
@@ -133,14 +149,18 @@ npm run dev
 ## 💡 Entwicklungs-Tipps
 
 ### Vue DevTools installieren
+
 Installieren Sie die Vue DevTools Browser-Extension für besseres Debugging:
+
 - [Chrome](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
 
 ### Hot Module Replacement (HMR)
+
 Änderungen werden automatisch im Browser aktualisiert - kein Reload nötig!
 
 ### Komponenten testen
+
 1. Öffnen Sie die Vue DevTools
 2. Navigieren Sie zum Components-Tab
 3. Untersuchen Sie Props, Data und Events

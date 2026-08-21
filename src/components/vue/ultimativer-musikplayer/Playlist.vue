@@ -16,15 +16,15 @@
       </button>
     </div>
     <ul class="playlist">
-      <li 
-        v-for="(file, index) in store.audioFiles" 
+      <li
+        v-for="(file, index) in store.audioFiles"
         :key="index"
         :class="{ active: index === store.currentAudioIndex }"
         @click="handleTrackClick(index)"
       >
         <span class="track-name">{{ file.name }}</span>
-        <button 
-          class="delete-track-btn" 
+        <button
+          class="delete-track-btn"
           :aria-label="`${t('player.delete.track')}: ${file.name}`"
           :title="t('player.delete.track')"
           @click.stop="handleDeleteTrack(index)"
@@ -42,33 +42,33 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
-import { usePlayerStore } from './stores/playerStore'
-import { useToastStore } from './stores/toastStore'
+  import { useI18n } from 'vue-i18n'
+  import { usePlayerStore } from './stores/playerStore'
+  import { useToastStore } from './stores/toastStore'
 
-const { t } = useI18n()
-const store = usePlayerStore()
-const toast = useToastStore()
+  const { t } = useI18n()
+  const store = usePlayerStore()
+  const toast = useToastStore()
 
-const emit = defineEmits(['trackSelected', 'trackDeleted', 'playlistCleared'])
+  const emit = defineEmits(['trackSelected', 'trackDeleted', 'playlistCleared'])
 
-const handleClearPlaylist = () => {
-  if (store.playlistCount === 0) return
-  emit('playlistCleared')
-  toast.info(t('toast.playlist.cleared'), { dismissKey: 'playlist.cleared' })
-}
-
-const handleTrackClick = (index) => {
-  if (index === store.currentAudioIndex && store.isPlaying) {
-    return
+  const handleClearPlaylist = () => {
+    if (store.playlistCount === 0) return
+    emit('playlistCleared')
+    toast.info(t('toast.playlist.cleared'), { dismissKey: 'playlist.cleared' })
   }
-  emit('trackSelected', index)
-}
 
-const handleDeleteTrack = (index) => {
-  const wasCurrentTrack = index === store.currentAudioIndex
-  store.removeTrack(index)
-  emit('trackDeleted', { index, wasCurrentTrack })
-  toast.info(t('toast.playlist.trackRemoved'), { dismissKey: 'playlist.trackRemoved' })
-}
+  const handleTrackClick = (index) => {
+    if (index === store.currentAudioIndex && store.isPlaying) {
+      return
+    }
+    emit('trackSelected', index)
+  }
+
+  const handleDeleteTrack = (index) => {
+    const wasCurrentTrack = index === store.currentAudioIndex
+    store.removeTrack(index)
+    emit('trackDeleted', { index, wasCurrentTrack })
+    toast.info(t('toast.playlist.trackRemoved'), { dismissKey: 'playlist.trackRemoved' })
+  }
 </script>

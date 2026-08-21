@@ -1,15 +1,17 @@
 export const getBands = (data) => {
   const n = data.length
-  let lo = 0, mi = 0, hi = 0
+  let lo = 0,
+    mi = 0,
+    hi = 0
   for (let i = 0; i < n; i++) {
-    if      (i < n * 0.25) lo += data[i]
-    else if (i < n * 0.70) mi += data[i]
-    else                   hi += data[i]
+    if (i < n * 0.25) lo += data[i]
+    else if (i < n * 0.7) mi += data[i]
+    else hi += data[i]
   }
   return {
-    low:  lo / (n * 0.25 * 255),
-    mid:  mi / (n * 0.45 * 255),
-    high: hi / (n * 0.30 * 255),
+    low: lo / (n * 0.25 * 255),
+    mid: mi / (n * 0.45 * 255),
+    high: hi / (n * 0.3 * 255),
   }
 }
 
@@ -21,7 +23,9 @@ export const energy = (data) => {
 
 export const glow = (ctx, color, blur) => {
   ctx.shadowColor = color
-  ctx.shadowBlur  = blur
+  ctx.shadowBlur = blur
 }
 
-export const noGlow = (ctx) => { ctx.shadowBlur = 0 }
+export const noGlow = (ctx) => {
+  ctx.shadowBlur = 0
+}

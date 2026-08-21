@@ -5,17 +5,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+  import { ref, onMounted } from 'vue'
 
-const props = defineProps({
-  onInit: { type: Function, default: null },
-})
+  const props = defineProps({
+    onInit: { type: Function, default: null },
+  })
 
-const canvasRef = ref(null)
+  const canvasRef = ref(null)
 
-onMounted(() => {
-  if (canvasRef.value && props.onInit) {
-    props.onInit(canvasRef.value)
-  }
-})
+  onMounted(() => {
+    if (canvasRef.value && props.onInit) {
+      props.onInit(canvasRef.value)
+    }
+  })
 </script>

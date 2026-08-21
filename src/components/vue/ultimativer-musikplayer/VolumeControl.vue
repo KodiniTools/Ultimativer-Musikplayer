@@ -23,13 +23,13 @@
 </template>
 
 <script setup>
-import { usePlayerStore } from './stores/playerStore'
+  import { usePlayerStore } from './stores/playerStore'
 
-const store = usePlayerStore()
+  const store = usePlayerStore()
 
-const emit = defineEmits(['setVolume', 'toggleMute'])
+  const emit = defineEmits(['setVolume', 'toggleMute'])
 
-const handleVolumeChange = (event) => {
-  emit('setVolume', parseFloat(event.target.value))
-}
+  const handleVolumeChange = (event) => {
+    emit('setVolume', parseFloat(event.target.value))
+  }
 </script>

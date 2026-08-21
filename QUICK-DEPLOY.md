@@ -37,6 +37,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 **Das war's!** ✨
 
 Das Skript macht automatisch:
+
 - ✅ Build erstellen (`npm run build`)
 - ✅ Dateien auf Server kopieren
 - ✅ Fertig!
@@ -88,6 +89,7 @@ systemctl reload nginx
 ## ✅ TESTEN
 
 Öffne im Browser:
+
 ```
 https://kodinitools.com/ultimativermusikplayer/
 ```
@@ -110,19 +112,23 @@ Fertig! 🎉
 ## ❓ PROBLEME?
 
 ### "Ausführung von Skripten ist deaktiviert"
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### "SSH Verbindung fehlgeschlagen"
+
 - Überprüfe ob SSH-Key konfiguriert ist
 - Teste Verbindung: `ssh root@145.223.81.100`
 
 ### "404 Not Found" nach Deployment
+
 - Nginx-Konfiguration wurde noch nicht hinzugefügt
 - Siehe Abschnitt "NACH DEM ERSTEN DEPLOYMENT"
 
 ### "Weiße Seite"
+
 - Browser-Konsole öffnen (F12) → Fehler prüfen
 - `vite.config.js` sollte `base: '/ultimativermusikplayer/'` enthalten
 

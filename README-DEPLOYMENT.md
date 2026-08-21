@@ -19,17 +19,20 @@ Dieses Paket enthält alles für das Deployment auf deinen Server:
 ## ⚡ SCHNELLSTART
 
 ### 1️⃣ Entpacke das ZIP nach:
+
 ```
 C:\Users\User\ultimativermusic-player-vue
 ```
 
 ### 2️⃣ PowerShell öffnen (Als Administrator)
+
 ```powershell
 cd C:\Users\User\ultimativermusic-player-vue
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### 3️⃣ Deployment starten
+
 ```powershell
 .\deploy.ps1
 ```
@@ -49,12 +52,15 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ## 📚 Dokumentation
 
 ### Für Eilige:
+
 ➡️ **QUICK-DEPLOY.md** - 3-Schritte Schnellstart
 
 ### Für Detaillierte Infos:
+
 ➡️ **DEPLOYMENT.md** - Vollständige Anleitung mit Troubleshooting
 
 ### Für Entwickler:
+
 ➡️ **README.md** (in music-player-vue/) - Projekt-Dokumentation
 ➡️ **PROJEKT-ÜBERSICHT.md** - Architektur und Features
 
@@ -102,11 +108,13 @@ systemctl reload nginx
 ## ✅ Testen
 
 Nach dem Deployment öffne:
+
 ```
 https://kodinitools.com/ultimativermusikplayer/
 ```
 
 Du solltest sehen:
+
 - ✅ Moderner Musikplayer mit Theme-Switcher
 - ✅ Audio-Upload-Button
 - ✅ Visualizer (schwarzes Quadrat)
@@ -131,19 +139,23 @@ Das Skript überschreibt die alten Dateien automatisch. ✨
 ## ❓ Häufige Probleme
 
 ### "Ausführung von Skripten ist deaktiviert"
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### "SSH Verbindung fehlgeschlagen"
+
 - Prüfe SSH-Zugang: `ssh root@145.223.81.100`
 - Passwort oder SSH-Key korrekt?
 
 ### "404 Not Found" nach Deployment
+
 - Nginx-Konfiguration wurde noch nicht hinzugefügt
 - Siehe "Nach dem ersten Deployment"
 
 ### "Weiße Seite / JavaScript Errors"
+
 - Browser-Konsole öffnen (F12)
 - Fehler prüfen und melden
 
@@ -152,6 +164,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ## 📞 Support
 
 Bei Problemen siehe:
+
 - **DEPLOYMENT.md** → Troubleshooting-Sektion
 - **QUICK-DEPLOY.md** → Häufige Probleme
 

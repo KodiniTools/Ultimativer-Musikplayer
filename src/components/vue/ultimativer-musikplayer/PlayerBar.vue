@@ -8,10 +8,7 @@
     <div class="player-bar__inner">
       <!-- Track info -->
       <div class="player-bar__track">
-        <div
-          class="player-bar__thumb"
-          :class="{ 'player-bar__thumb--spinning': store.isPlaying }"
-        >
+        <div class="player-bar__thumb" :class="{ 'player-bar__thumb--spinning': store.isPlaying }">
           <i class="fas fa-music"></i>
         </div>
         <div class="player-bar__meta">
@@ -31,18 +28,10 @@
         >
           <i class="fas fa-shuffle"></i>
         </button>
-        <button
-          class="pbar-btn"
-          :aria-label="t('player.prev')"
-          @click="emit('playPrevious')"
-        >
+        <button class="pbar-btn" :aria-label="t('player.prev')" @click="emit('playPrevious')">
           <i class="fas fa-backward-step"></i>
         </button>
-        <button
-          class="pbar-btn"
-          :aria-label="t('player.stop')"
-          @click="emit('stop')"
-        >
+        <button class="pbar-btn" :aria-label="t('player.stop')" @click="emit('stop')">
           <i class="fas fa-stop"></i>
         </button>
         <button
@@ -52,11 +41,7 @@
         >
           <i :class="store.isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
         </button>
-        <button
-          class="pbar-btn"
-          :aria-label="t('player.next')"
-          @click="emit('playNext')"
-        >
+        <button class="pbar-btn" :aria-label="t('player.next')" @click="emit('playNext')">
           <i class="fas fa-forward-step"></i>
         </button>
         <button
@@ -72,10 +57,7 @@
 
       <!-- Right: volume -->
       <div class="player-bar__right">
-        <VolumeControl
-          @set-volume="emit('setVolume', $event)"
-          @toggle-mute="emit('toggleMute')"
-        />
+        <VolumeControl @set-volume="emit('setVolume', $event)" @toggle-mute="emit('toggleMute')" />
       </div>
 
       <!-- Progress (full-width row) -->
@@ -85,42 +67,42 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { usePlayerStore } from './stores/playerStore'
-import ProgressBar from './ProgressBar.vue'
-import VolumeControl from './VolumeControl.vue'
+  import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import { usePlayerStore } from './stores/playerStore'
+  import ProgressBar from './ProgressBar.vue'
+  import VolumeControl from './VolumeControl.vue'
 
-const { t } = useI18n()
-const store = usePlayerStore()
+  const { t } = useI18n()
+  const store = usePlayerStore()
 
-const emit = defineEmits([
-  'play',
-  'pause',
-  'stop',
-  'playNext',
-  'playPrevious',
-  'seek',
-  'setVolume',
-  'toggleMute',
-])
+  const emit = defineEmits([
+    'play',
+    'pause',
+    'stop',
+    'playNext',
+    'playPrevious',
+    'seek',
+    'setVolume',
+    'toggleMute',
+  ])
 
-const hasTrack = computed(() => store.audioFiles.length > 0 && !!store.currentFile)
+  const hasTrack = computed(() => store.audioFiles.length > 0 && !!store.currentFile)
 
-const trackTitle = computed(() =>
-  store.currentFile ? store.currentFile.name : t('player.nofile'),
-)
+  const trackTitle = computed(() =>
+    store.currentFile ? store.currentFile.name : t('player.nofile')
+  )
 
-const subtitle = computed(() => {
-  if (!hasTrack.value) return t('player.ready')
-  return t('player.trackOf', {
-    index: store.currentAudioIndex + 1,
-    total: store.audioFiles.length,
+  const subtitle = computed(() => {
+    if (!hasTrack.value) return t('player.ready')
+    return t('player.trackOf', {
+      index: store.currentAudioIndex + 1,
+      total: store.audioFiles.length,
+    })
   })
-})
 
-const togglePlay = () => {
-  if (store.isPlaying) emit('pause')
-  else emit('play')
-}
+  const togglePlay = () => {
+    if (store.isPlaying) emit('pause')
+    else emit('play')
+  }
 </script>

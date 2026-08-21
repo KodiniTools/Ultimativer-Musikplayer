@@ -2,38 +2,38 @@ export default {
   hero: {
     title: 'Ultimate Music Player',
     desc: 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
-    cta: 'Start Music Player'
+    cta: 'Start Music Player',
   },
   features: {
     title: 'Key Features',
     viz: {
       title: 'Audio Visualization',
-      desc: '10 different visualizer modes: Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope and Particles. Adjust the intensity in real time.'
+      desc: '10 different visualizer modes: Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope and Particles. Adjust the intensity in real time.',
     },
     eq: {
       title: 'Equalizer & Controls',
-      desc: 'Full control over volume, playback, forward/rewind and mute. Loop and shuffle modes for varied listening.'
+      desc: 'Full control over volume, playback, forward/rewind and mute. Loop and shuffle modes for varied listening.',
     },
     playlist: {
       title: 'Playlist Management',
-      desc: 'Load as many tracks as you want. Shuffle, loop, delete tracks and direct track selection. Supported formats: MP3, WAV, FLAC, M4A, OGG.'
+      desc: 'Load as many tracks as you want. Shuffle, loop, delete tracks and direct track selection. Supported formats: MP3, WAV, FLAC, M4A, OGG.',
     },
     responsive: {
       title: 'Responsive Design',
-      desc: 'Perfectly optimized for desktop, tablet and smartphone. All functions are optimized for touch operation.'
+      desc: 'Perfectly optimized for desktop, tablet and smartphone. All functions are optimized for touch operation.',
     },
     theme: {
       title: 'Dark & Light Theme',
-      desc: 'Choose between an elegant dark and a light design – customizable to your preferences.'
+      desc: 'Choose between an elegant dark and a light design – customizable to your preferences.',
     },
     free: {
       title: 'Free & Private',
-      desc: 'No registration, no ads, no hidden costs. Your audio files remain local on your device.'
-    }
+      desc: 'No registration, no ads, no hidden costs. Your audio files remain local on your device.',
+    },
   },
   cta: {
     text: 'Ready to experience music in a new way?',
-    button: 'Try it now'
+    button: 'Try it now',
   },
   nav: {
     title: 'Ultimate Music Player',
@@ -41,14 +41,14 @@ export default {
     modern: 'Modern Player',
     normalizer: 'Audio Normalizer',
     converter: 'Image Converter',
-    current: 'Ultimate Player'
+    current: 'Ultimate Player',
   },
   upload: {
     text: 'Select Audio',
     files: 'Select Files',
     folder: 'Select Folder',
     dropHint: 'Drop files or a folder here',
-    pasteHint: 'Or paste audio files with Ctrl+V'
+    pasteHint: 'Or paste audio files with Ctrl+V',
   },
   player: {
     nofile: 'No file selected',
@@ -67,94 +67,104 @@ export default {
     unmute: 'Unmute',
     loop: {
       on: 'Loop: On',
-      off: 'Loop: Off'
+      off: 'Loop: Off',
     },
     shuffle: {
       on: 'Shuffle: On',
-      off: 'Shuffle: Off'
+      off: 'Shuffle: Off',
     },
     delete: {
-      track: 'Delete track'
+      track: 'Delete track',
     },
-    formats: 'Supported formats: <strong>MP3</strong>, <strong>WAV</strong>, <strong>FLAC</strong>, <strong>M4A</strong>, <strong>OGG</strong>'
+    formats:
+      'Supported formats: <strong>MP3</strong>, <strong>WAV</strong>, <strong>FLAC</strong>, <strong>M4A</strong>, <strong>OGG</strong>',
   },
   shared: {
     loading: 'Loading {count} normalised file(s) …',
     loaded: '{count} normalised file(s) loaded successfully.',
     empty: 'No shared files found.',
-    error: 'Error loading shared files.'
+    error: 'Error loading shared files.',
   },
   toast: {
     dismiss: 'Dismiss',
-    dontShowAgain: 'Don\'t show again',
+    dontShowAgain: "Don't show again",
     audio: {
       notReady: 'Audio element not ready. Please reload the page.',
       trackNotFound: 'Track not found.',
       noFile: 'No audio file loaded. Please select a file first.',
       playbackFailed: 'Playback failed. The format may not be supported.',
-      seekFailed: 'Seeking to position failed.'
+      seekFailed: 'Seeking to position failed.',
     },
     playlist: {
       filesAdded: '{count} track(s) added to the playlist.',
       noAudio: 'No valid audio files found.',
       trackRemoved: 'Track removed from the playlist.',
-      cleared: 'Playlist cleared.'
-    }
+      cleared: 'Playlist cleared.',
+    },
   },
   content: {
     title: '🎵 Professional Audio Player with Visualization',
-    subtitle: 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
+    subtitle:
+      'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
     features: {
       title: '✨ Key Features',
-      visualization: '<strong>Audio Visualization:</strong> 10 different visualizer modes (Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope, Particles)',
+      visualization:
+        '<strong>Audio Visualization:</strong> 10 different visualizer modes (Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope, Particles)',
       formats: '<strong>Comprehensive Format Support:</strong> MP3, WAV, FLAC, M4A, OGG and more',
-      playlist: '<strong>Playlist Management:</strong> Drag & Drop, Shuffle, Loop, Forward/Back navigation',
+      playlist:
+        '<strong>Playlist Management:</strong> Drag & Drop, Shuffle, Loop, Forward/Back navigation',
       responsive: '<strong>Responsive Design:</strong> Perfect on desktop, tablet and smartphone',
       theme: '<strong>Dark/Light Theme:</strong> Customizable to your preferences',
-      free: '<strong>Free & Open Source:</strong> No registration required'
-    }
+      free: '<strong>Free & Open Source:</strong> No registration required',
+    },
   },
   tools: {
     title: 'More Audio Tools',
     cta: 'Try it now',
     converter: {
       name: 'MP3 Converter',
-      desc: 'Convert audio files to MP3 format quickly and easily.'
+      desc: 'Convert audio files to MP3 format quickly and easily.',
     },
     playlist: {
       name: 'Playlist Converter',
-      desc: 'Convert playlists between different formats and platforms.'
+      desc: 'Convert playlists between different formats and platforms.',
     },
     equalizer: {
       name: 'Equalizer',
-      desc: 'Fine-tune audio frequencies with a professional 19-band equalizer.'
-    }
+      desc: 'Fine-tune audio frequencies with a professional 19-band equalizer.',
+    },
   },
   faq: {
     title: '❓ Frequently Asked Questions (FAQ)',
     formats: {
       question: 'Which audio formats are supported?',
-      answer: 'Our player supports all common audio formats: MP3, WAV, FLAC, M4A, OGG, AAC and WebM. Support depends on your browser, but modern browsers support almost all formats.'
+      answer:
+        'Our player supports all common audio formats: MP3, WAV, FLAC, M4A, OGG, AAC and WebM. Support depends on your browser, but modern browsers support almost all formats.',
     },
     free: {
       question: 'Is the music player free?',
-      answer: 'Yes, the player is completely free and open source. There are no hidden costs, no registration required and no advertising.'
+      answer:
+        'Yes, the player is completely free and open source. There are no hidden costs, no registration required and no advertising.',
     },
     visualization: {
       question: 'How does audio visualization work?',
-      answer: 'The visualization analyzes the frequencies of your music in real time and creates dynamic visual effects. You can choose between 10 different modes and adjust the intensity.'
+      answer:
+        'The visualization analyzes the frequencies of your music in real time and creates dynamic visual effects. You can choose between 10 different modes and adjust the intensity.',
     },
     mobile: {
       question: 'Does the player work on mobile devices?',
-      answer: 'Yes, the player is fully responsive and works perfectly on smartphones and tablets. All functions are optimized for touch operation.'
+      answer:
+        'Yes, the player is fully responsive and works perfectly on smartphones and tablets. All functions are optimized for touch operation.',
     },
     privacy: {
       question: 'Are my files stored anywhere?',
-      answer: 'No, all your audio files remain local on your device. No files are uploaded to our servers. The player fully respects your privacy.'
+      answer:
+        'No, all your audio files remain local on your device. No files are uploaded to our servers. The player fully respects your privacy.',
     },
     upload_limit: {
       question: 'Is there a limit to the number of music files?',
-      answer: 'No, there is no fixed limit. You can add as many tracks as you like. However, with very large playlists, performance may depend on the capabilities of your device.'
-    }
-  }
+      answer:
+        'No, there is no fixed limit. You can add as many tracks as you like. However, with very large playlists, performance may depend on the capabilities of your device.',
+    },
+  },
 }
