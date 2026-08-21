@@ -1,11 +1,17 @@
 <template>
   <div
     class="uploader"
-    :class="{ 'uploader--dragging': isDragging }"
+    :class="{ 'uploader--dragging': isDragging, 'uploader--hover': isHovering }"
+    :style="pointerStyle"
     @dragover.prevent="isDragging = true"
     @dragleave.prevent="isDragging = false"
     @drop.prevent="handleDrop"
+    @pointermove="handlePointerMove"
+    @pointerenter="isHovering = true"
+    @pointerleave="isHovering = false"
   >
+    <span class="uploader__spotlight" aria-hidden="true"></span>
+
     <div class="uploader__drop-area">
       <i class="fa-solid fa-music uploader__icon"></i>
       <p class="uploader__hint">{{ t('upload.dropHint') }}</p>
@@ -46,7 +52,7 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { usePlayerStore } from './stores/playerStore'
   import { useToastStore } from './stores/toastStore'
@@ -57,6 +63,24 @@
   const fileInputRef = ref(null)
   const folderInputRef = ref(null)
   const isDragging = ref(false)
+
+  // Cursor-following spotlight: track the pointer position inside the
+  // drop area and expose it to CSS as custom properties.
+  const isHovering = ref(false)
+  const pointerX = ref(50)
+  const pointerY = ref(50)
+
+  const pointerStyle = computed(() => ({
+    '--pointer-x': `${pointerX.value}%`,
+    '--pointer-y': `${pointerY.value}%`,
+  }))
+
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    if (!rect.width || !rect.height) return
+    pointerX.value = ((event.clientX - rect.left) / rect.width) * 100
+    pointerY.value = ((event.clientY - rect.top) / rect.height) * 100
+  }
 
   const emit = defineEmits(['filesLoaded'])
 
@@ -182,21 +206,68 @@
   }
 
   .uploader {
+    /* Accent + spotlight colors, adjustable per theme below. */
+    --up-accent: #7c6af7;
+    --up-spot: rgba(124, 106, 247, 0.16);
+
+    position: relative;
+    overflow: hidden;
     border: 2px dashed var(--color-border, #444);
     border-radius: 12px;
     padding: 1.5rem 1rem;
     text-align: center;
     transition:
-      border-color 0.2s,
-      background 0.2s;
+      border-color 0.25s ease,
+      background 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  /* Stronger glow on the dark background for good visibility. */
+  html[data-theme='dark'] .uploader {
+    --up-spot: rgba(124, 106, 247, 0.3);
+  }
+
+  /* Cursor-following spotlight. Its center tracks the pointer via the
+     --pointer-x / --pointer-y custom properties set inline. */
+  .uploader__spotlight {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(
+      240px circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
+      var(--up-spot),
+      transparent 72%
+    );
+  }
+
+  .uploader--hover .uploader__spotlight,
+  .uploader--dragging .uploader__spotlight {
+    opacity: 1;
+  }
+
+  .uploader--hover {
+    border-color: var(--up-accent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--up-accent) 30%, transparent),
+      0 0 26px color-mix(in srgb, var(--up-accent) 22%, transparent);
   }
 
   .uploader--dragging {
-    border-color: var(--color-accent, #7c6af7);
-    background: color-mix(in srgb, var(--color-accent, #7c6af7) 8%, transparent);
+    border-color: var(--up-accent);
+    border-style: solid;
+    background: color-mix(in srgb, var(--up-accent) 8%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--up-accent) 45%, transparent),
+      0 0 30px color-mix(in srgb, var(--up-accent) 30%, transparent);
   }
 
   .uploader__drop-area {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -206,6 +277,29 @@
   .uploader__icon {
     font-size: 2rem;
     opacity: 0.5;
+    transition:
+      transform 0.25s ease,
+      opacity 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .uploader--hover .uploader__icon,
+  .uploader--dragging .uploader__icon {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.08);
+    color: var(--up-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .uploader,
+    .uploader__spotlight,
+    .uploader__icon {
+      transition: none;
+    }
+    .uploader--hover .uploader__icon,
+    .uploader--dragging .uploader__icon {
+      transform: none;
+    }
   }
 
   .uploader__hint {
