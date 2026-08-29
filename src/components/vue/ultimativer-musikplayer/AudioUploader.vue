@@ -13,12 +13,21 @@
     <span class="uploader__spotlight" aria-hidden="true"></span>
 
     <div class="uploader__drop-area">
-      <i class="fa-solid fa-music uploader__icon"></i>
-      <p class="uploader__hint">{{ t('upload.dropHint') }}</p>
-      <p class="uploader__hint uploader__hint--paste">{{ t('upload.pasteHint') }}</p>
+      <span class="uploader__badge" aria-hidden="true">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+      </span>
+
+      <div class="uploader__text">
+        <p class="uploader__title">{{ t('upload.dropHint') }}</p>
+        <p class="uploader__hint">{{ t('upload.pasteHint') }}</p>
+      </div>
 
       <div class="uploader__buttons">
-        <button type="button" class="uploader__btn" @click="fileInputRef.click()">
+        <button
+          type="button"
+          class="uploader__btn uploader__btn--primary"
+          @click="fileInputRef.click()"
+        >
           <i class="fa-solid fa-file-audio"></i>
           {{ t('upload.files') }}
         </button>
@@ -206,16 +215,22 @@
   }
 
   .uploader {
-    /* Accent + spotlight colors, adjustable per theme below. */
-    --up-accent: #7c6af7;
-    --up-spot: rgba(124, 106, 247, 0.16);
+    /* Brand accent + spotlight colors, adjustable per theme below. */
+    --up-accent: var(--accent, #014f99);
+    --up-spot: rgba(1, 79, 153, 0.14);
+
+    /* Keep the drop area no wider than the visualizer container. */
+    max-width: min(600px, 100%);
+    margin: 0 auto 20px;
 
     position: relative;
     overflow: hidden;
-    border: 2px dashed var(--color-border, #444);
-    border-radius: 12px;
-    padding: 1.5rem 1rem;
+    border: 2px dashed var(--border-accent, rgba(1, 79, 153, 0.35));
+    border-radius: 18px;
+    padding: 1.75rem 1.5rem;
     text-align: center;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.06));
+    box-shadow: var(--shadow-3d-sm);
     transition:
       border-color 0.25s ease,
       background 0.25s ease,
@@ -224,7 +239,8 @@
 
   /* Stronger glow on the dark background for good visibility. */
   html[data-theme='dark'] .uploader {
-    --up-spot: rgba(124, 106, 247, 0.3);
+    --up-accent: var(--primary, #c9984d);
+    --up-spot: rgba(201, 152, 77, 0.22);
   }
 
   /* Cursor-following spotlight. Its center tracks the pointer via the
@@ -271,46 +287,74 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
-  .uploader__icon {
-    font-size: 2rem;
-    opacity: 0.5;
+  /* Rounded brand badge replacing the old music-note icon. */
+  .uploader__badge {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    color: #f5f4d6;
+    font-size: 1.35rem;
+    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
+    box-shadow:
+      var(--shadow-3d-sm),
+      0 0 16px rgba(1, 79, 153, 0.25);
     transition:
       transform 0.25s ease,
-      opacity 0.25s ease,
-      color 0.25s ease;
+      box-shadow 0.25s ease;
   }
 
-  .uploader--hover .uploader__icon,
-  .uploader--dragging .uploader__icon {
-    opacity: 1;
-    transform: translateY(-2px) scale(1.08);
-    color: var(--up-accent);
+  html[data-theme='dark'] .uploader__badge {
+    background: linear-gradient(135deg, var(--primary, #c9984d), var(--accent, #014f99));
+    box-shadow:
+      var(--shadow-3d-sm),
+      0 0 16px rgba(201, 152, 77, 0.3);
+  }
+
+  .uploader--hover .uploader__badge,
+  .uploader--dragging .uploader__badge {
+    transform: translateY(-3px) scale(1.06);
+    box-shadow:
+      var(--shadow-3d-md),
+      0 0 22px rgba(1, 79, 153, 0.35);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .uploader,
     .uploader__spotlight,
-    .uploader__icon {
+    .uploader__badge {
       transition: none;
     }
-    .uploader--hover .uploader__icon,
-    .uploader--dragging .uploader__icon {
+    .uploader--hover .uploader__badge,
+    .uploader--dragging .uploader__badge {
       transform: none;
     }
   }
 
-  .uploader__hint {
-    margin: 0;
-    font-size: 0.85rem;
-    opacity: 0.6;
+  .uploader__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
-  .uploader__hint--paste {
-    font-size: 0.75rem;
-    opacity: 0.4;
+  /* High-contrast heading in both light and dark themes. */
+  .uploader__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary, #003971);
+    letter-spacing: -0.01em;
+  }
+
+  .uploader__hint {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted, #5c88b0);
   }
 
   .uploader__buttons {
@@ -318,27 +362,81 @@
     gap: 0.75rem;
     flex-wrap: wrap;
     justify-content: center;
+    margin-top: 0.25rem;
   }
 
   .uploader__btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1.1rem;
-    border-radius: 8px;
-    border: 2px solid var(--color-accent, #7c6af7);
+    gap: 0.45rem;
+    padding: 0.55rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid var(--up-accent);
     background: transparent;
-    color: var(--color-accent, #7c6af7);
+    color: var(--up-accent);
+    font-family: inherit;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition:
-      background 0.15s,
-      color 0.15s;
+      background 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
   .uploader__btn:hover {
-    background: var(--color-accent, #7c6af7);
-    color: #fff;
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--up-accent) 12%, transparent);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--up-accent) 25%, transparent);
+  }
+
+  /* Primary action: filled brand gradient. */
+  .uploader__btn--primary {
+    border-color: transparent;
+    color: #f5f4d6;
+    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
+    box-shadow:
+      var(--shadow-3d-sm),
+      0 0 16px rgba(1, 79, 153, 0.25);
+  }
+
+  html[data-theme='dark'] .uploader__btn--primary {
+    background: linear-gradient(135deg, var(--primary, #c9984d), var(--accent, #014f99));
+    box-shadow:
+      var(--shadow-3d-sm),
+      0 0 16px rgba(201, 152, 77, 0.3);
+  }
+
+  .uploader__btn--primary:hover {
+    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
+    box-shadow:
+      var(--shadow-3d-md),
+      0 0 24px rgba(1, 79, 153, 0.4);
+  }
+
+  html[data-theme='dark'] .uploader__btn--primary:hover {
+    background: linear-gradient(135deg, var(--primary, #c9984d), var(--accent, #014f99));
+    box-shadow:
+      var(--shadow-3d-md),
+      0 0 24px rgba(201, 152, 77, 0.4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .uploader__btn:hover {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .uploader__buttons {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .uploader__btn {
+      justify-content: center;
+    }
   }
 </style>
