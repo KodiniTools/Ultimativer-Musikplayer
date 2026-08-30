@@ -1336,6 +1336,12 @@ h1 {
   opacity: 1;
 }
 
+/* Im Dark Mode nutzt der aktive Track die kontrastreiche, einheitliche
+   Textfarbe statt der kontrastarmen Akzentfarbe. */
+html[data-theme='dark'] .playlist li.active {
+  color: var(--text-primary);
+}
+
 .track-name {
   flex-grow: 1;
   white-space: nowrap;
