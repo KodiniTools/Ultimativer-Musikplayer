@@ -52,12 +52,6 @@ export const useToastStore = defineStore('toast', () => {
     toasts.value = toasts.value.filter((t) => t.id !== id)
   }
 
-  function clearAll() {
-    timers.forEach((timer) => clearTimeout(timer))
-    timers.clear()
-    toasts.value = []
-  }
-
   /**
    * Show a toast.
    * @param {string} message
@@ -140,7 +134,6 @@ export const useToastStore = defineStore('toast', () => {
     warning,
     info,
     remove,
-    clearAll,
     // "Don't show again"
     isMuted,
     dismissForever,

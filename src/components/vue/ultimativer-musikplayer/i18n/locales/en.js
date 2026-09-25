@@ -37,14 +37,9 @@ export default {
   },
   nav: {
     title: 'Ultimate Music Player',
-    playlist: 'Playlist Generator',
-    modern: 'Modern Player',
-    normalizer: 'Audio Normalizer',
-    converter: 'Image Converter',
     current: 'Ultimate Player',
   },
   upload: {
-    text: 'Select Audio',
     files: 'Select Files',
     folder: 'Select Folder',
     dropHint: 'Drop files or a folder here',
@@ -59,14 +54,10 @@ export default {
     stop: 'Stop',
     prev: 'Previous track',
     next: 'Next track',
-    mode: 'Mode',
-    intensity: 'Intensity',
     playlist: 'Playlist',
     clear: 'Clear',
     search: 'Search playlist …',
     noResults: 'No matches.',
-    mute: 'Mute',
-    unmute: 'Unmute',
     loop: {
       on: 'Loop: On',
       off: 'Loop: Off',
@@ -133,22 +124,6 @@ export default {
     loop: 'Toggle loop',
     shuffle: 'Toggle shuffle',
     help: 'Show this help',
-  },
-  content: {
-    title: '🎵 Professional Audio Player with Visualization',
-    subtitle:
-      'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
-    features: {
-      title: '✨ Key Features',
-      visualization:
-        '<strong>Audio Visualization:</strong> 10 different visualizer modes (Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope, Particles)',
-      formats: '<strong>Comprehensive Format Support:</strong> MP3, WAV, FLAC, M4A, OGG and more',
-      playlist:
-        '<strong>Playlist Management:</strong> Drag & Drop, Shuffle, Loop, Forward/Back navigation',
-      responsive: '<strong>Responsive Design:</strong> Perfect on desktop, tablet and smartphone',
-      theme: '<strong>Dark/Light Theme:</strong> Customizable to your preferences',
-      free: '<strong>Free & Open Source:</strong> No registration required',
-    },
   },
   tools: {
     title: 'More Audio Tools',

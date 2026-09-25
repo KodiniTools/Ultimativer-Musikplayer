@@ -1,5 +1,8 @@
 import { glow, noGlow } from './utils.js'
 
+// Classic LED colors: green up to 60 %, yellow up to 82 %, red above.
+const segmentHue = (ratio) => (ratio < 0.6 ? 130 : ratio < 0.82 ? 55 : 0)
+
 export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, peakHolds) => {
   const data = dataArray
   if (!data) return
@@ -24,7 +27,7 @@ export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, peakHolds) => 
     for (let s = 0; s < lit; s++) {
       const sy = baseY - (s + 1) * segH
       const ratio = s / segCnt
-      const hue = ratio < 0.6 ? 130 : ratio < 0.82 ? 55 : 0
+      const hue = segmentHue(ratio)
       ctx.fillStyle = `hsla(${hue},90%,52%,${0.6 + ratio * 0.4})`
       ctx.fillRect(x, sy, barW, segNet)
     }
@@ -35,8 +38,7 @@ export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, peakHolds) => 
     const ps = Math.floor(peakHolds[i])
     if (ps > 1) {
       const py = baseY - (ps + 1) * segH
-      const pr = ps / segCnt
-      const phue = pr < 0.6 ? 130 : pr < 0.82 ? 55 : 0
+      const phue = segmentHue(ps / segCnt)
       ctx.save()
       glow(ctx, `hsl(${phue},90%,65%)`, 6)
       ctx.fillStyle = `hsl(${phue},90%,76%)`

@@ -35,7 +35,7 @@
         @stop="audioPlayer.stop"
         @play-next="audioPlayer.playNext"
         @play-previous="audioPlayer.playPrevious"
-        @seek="handleSeek"
+        @seek="audioPlayer.seek"
         @set-volume="audioPlayer.setVolume"
         @toggle-mute="audioPlayer.toggleMute"
       />
@@ -132,6 +132,20 @@
     closeHelp: () => (helpVisible.value = false),
   })
 
+  // Attach the <audio> element (if not done yet) and create the audio graph.
+  function ensureAudioReady() {
+    if (audioElementRef.value && !audioPlayer.audioElement.value) {
+      audioPlayer.setupAudioElement(audioElementRef.value)
+    }
+    audioPlayer.initAudioContext()
+  }
+
+  // Select a track and load it on the next tick (without starting playback).
+  function preloadTrack(index) {
+    store.setCurrentIndex(index)
+    setTimeout(() => audioPlayer.loadAudioFile(index), 0)
+  }
+
   // Shared files loading state
   let sharedHandled = false
 
@@ -160,14 +174,10 @@
       const wasEmpty = store.audioFiles.length === 0
       store.addAudioFiles(files)
 
-      if (audioElementRef.value && !audioPlayer.audioElement.value) {
-        audioPlayer.setupAudioElement(audioElementRef.value)
-      }
-      audioPlayer.initAudioContext()
+      ensureAudioReady()
 
       if (wasEmpty && store.audioFiles.length > 0) {
-        store.setCurrentIndex(0)
-        setTimeout(() => audioPlayer.loadAudioFile(0), 0)
+        preloadTrack(0)
       }
 
       await clearSharedFiles()
@@ -186,12 +196,10 @@
 
     store.setAudioFiles(files)
     audioPlayer.setVolume(store.volume)
-    audioPlayer.initAudioContext()
+    ensureAudioReady()
 
-    const index = Math.min(Math.max(savedIndex, 0), files.length - 1)
-    store.setCurrentIndex(index)
     // Preload the track (browsers block autoplay, so we don't call play()).
-    setTimeout(() => audioPlayer.loadAudioFile(index), 0)
+    preloadTrack(Math.min(Math.max(savedIndex, 0), files.length - 1))
 
     toast.info(t('toast.playlist.restored', { count: files.length }), {
       dismissKey: 'playlist.restored',
@@ -215,13 +223,9 @@
   })
 
   const handleFilesLoaded = (index) => {
-    if (audioElementRef.value && !audioPlayer.audioElement.value) {
-      audioPlayer.setupAudioElement(audioElementRef.value)
-    }
-    audioPlayer.initAudioContext()
+    ensureAudioReady()
     if (store.audioFiles.length > 0) {
-      store.setCurrentIndex(index)
-      setTimeout(() => audioPlayer.loadAudioFile(index), 0)
+      preloadTrack(index)
     }
   }
 
@@ -239,10 +243,6 @@
 
   const handlePlaylistCleared = () => {
     audioPlayer.clearPlaylist()
-  }
-
-  const handleSeek = (percentage) => {
-    audioPlayer.seek(percentage)
   }
 </script>
 

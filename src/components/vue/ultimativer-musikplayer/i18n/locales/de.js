@@ -37,14 +37,9 @@ export default {
   },
   nav: {
     title: 'Ultimativer Musikplayer',
-    playlist: 'Playlist-Generator',
-    modern: 'Moderner Player',
-    normalizer: 'Audio-Normalizer',
-    converter: 'Bildkonverter',
     current: 'Ultimativer Player',
   },
   upload: {
-    text: 'Audio auswählen',
     files: 'Dateien auswählen',
     folder: 'Ordner auswählen',
     dropHint: 'Dateien oder Ordner hier ablegen',
@@ -59,14 +54,10 @@ export default {
     stop: 'Stopp',
     prev: 'Vorheriger Titel',
     next: 'Nächster Titel',
-    mode: 'Modus',
-    intensity: 'Intensität',
     playlist: 'Playlist',
     clear: 'Löschen',
     search: 'Playlist durchsuchen …',
     noResults: 'Keine Treffer.',
-    mute: 'Stumm',
-    unmute: 'Ton an',
     loop: {
       on: 'Loop: An',
       off: 'Loop: Aus',
@@ -133,22 +124,6 @@ export default {
     loop: 'Wiederholung an/aus',
     shuffle: 'Zufallswiedergabe an/aus',
     help: 'Diese Hilfe anzeigen',
-  },
-  content: {
-    title: '🎵 Professioneller Audio-Player mit Visualisierung',
-    subtitle:
-      'Erleben Sie Musik auf eine völlig neue Art mit unserem kostenlosen Musikplayer. Ausgestattet mit fortschrittlicher Audio-Visualisierung, umfassenden Playlist-Funktionen und modernem, responsivem Design.',
-    features: {
-      title: '✨ Hauptfunktionen',
-      visualization:
-        '<strong>Audio-Visualisierung:</strong> 10 verschiedene Visualizer-Modi (Ribbon, Waves, Nebula, Spectrum, Orbits, Starfield, Grid, Aurora, Kaleidoscope, Particles)',
-      formats: '<strong>Umfassendes Format-Support:</strong> MP3, WAV, FLAC, M4A, OGG und weitere',
-      playlist:
-        '<strong>Playlist-Management:</strong> Drag & Drop, Shuffle, Loop, Vor/Zurück Navigation',
-      responsive: '<strong>Responsive Design:</strong> Perfekt auf Desktop, Tablet und Smartphone',
-      theme: '<strong>Dark/Light Theme:</strong> Anpassbar an Ihre Präferenzen',
-      free: '<strong>Kostenlos & Open Source:</strong> Keine Registrierung erforderlich',
-    },
   },
   tools: {
     title: 'Weitere Audio-Tools',

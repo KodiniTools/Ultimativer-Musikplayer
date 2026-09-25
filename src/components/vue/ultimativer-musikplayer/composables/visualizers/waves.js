@@ -1,15 +1,8 @@
-import { getBands, glow, noGlow } from './utils.js'
+import { getBands, glow, noGlow, smoothCurve } from './utils.js'
 
 const bezier = (ctx, arr) => {
   ctx.moveTo(arr[0].x, arr[0].y)
-  for (let i = 1; i < arr.length - 1; i++) {
-    ctx.quadraticCurveTo(
-      arr[i].x,
-      arr[i].y,
-      (arr[i].x + arr[i + 1].x) / 2,
-      (arr[i].y + arr[i + 1].y) / 2
-    )
-  }
+  smoothCurve(ctx, arr)
 }
 
 export const drawLiquid = (ctx, w, h, cy, dataArray, timeDomainArray, vizIntensity) => {

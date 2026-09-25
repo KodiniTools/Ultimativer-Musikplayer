@@ -1,4 +1,4 @@
-import { getBands, glow, noGlow } from './utils.js'
+import { getBands, glow, noGlow, smoothCurve } from './utils.js'
 
 const PALETTE = [
   [130, 85, 50],
@@ -12,17 +12,6 @@ const PALETTE = [
   [185, 75, 52],
   [110, 88, 46],
 ]
-
-const bezierPts = (ctx, arr) => {
-  for (let i = 0; i < arr.length - 1; i++) {
-    ctx.quadraticCurveTo(
-      arr[i].x,
-      arr[i].y,
-      (arr[i].x + arr[i + 1].x) / 2,
-      (arr[i].y + arr[i + 1].y) / 2
-    )
-  }
-}
 
 export const drawAurora = (ctx, w, h, t, dataArray, vizIntensity) => {
   const data = dataArray
@@ -55,7 +44,7 @@ export const drawAurora = (ctx, w, h, t, dataArray, vizIntensity) => {
 
     ctx.beginPath()
     ctx.moveTo(0, h)
-    bezierPts(ctx, pts)
+    smoothCurve(ctx, pts, 0)
     ctx.lineTo(w, h)
     ctx.closePath()
     ctx.fillStyle = gr
@@ -67,7 +56,7 @@ export const drawAurora = (ctx, w, h, t, dataArray, vizIntensity) => {
     ctx.lineWidth = 1 + vizIntensity * 1.4
     ctx.beginPath()
     ctx.moveTo(pts[0].x, pts[0].y)
-    bezierPts(ctx, pts)
+    smoothCurve(ctx, pts, 0)
     ctx.stroke()
     noGlow(ctx)
     ctx.restore()

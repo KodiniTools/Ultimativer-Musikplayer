@@ -1,4 +1,4 @@
-import { getBands, glow, noGlow } from './utils.js'
+import { getBands, glow, noGlow, smoothCurve } from './utils.js'
 
 const strand = (ctx, w, pts, h1, h2, vizIntensity) => {
   ctx.save()
@@ -12,14 +12,7 @@ const strand = (ctx, w, pts, h1, h2, vizIntensity) => {
   ctx.lineJoin = 'round'
   ctx.beginPath()
   ctx.moveTo(pts[0].x, pts[0].y)
-  for (let i = 1; i < pts.length - 1; i++) {
-    ctx.quadraticCurveTo(
-      pts[i].x,
-      pts[i].y,
-      (pts[i].x + pts[i + 1].x) / 2,
-      (pts[i].y + pts[i + 1].y) / 2
-    )
-  }
+  smoothCurve(ctx, pts)
   ctx.stroke()
   noGlow(ctx)
   ctx.restore()

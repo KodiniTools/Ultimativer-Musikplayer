@@ -10,14 +10,6 @@ export function useTheme() {
     updateThemeColor()
   }
 
-  const toggleTheme = () => {
-    const newTheme = theme.value === 'dark' ? 'light' : 'dark'
-    theme.value = newTheme
-    document.documentElement.setAttribute('data-theme', newTheme)
-    localStorage.setItem('theme', newTheme)
-    updateThemeColor()
-  }
-
   const updateThemeColor = () => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]')
     if (metaThemeColor) {
@@ -43,8 +35,5 @@ export function useTheme() {
     window.removeEventListener('theme-changed', onThemeChanged)
   })
 
-  return {
-    theme,
-    toggleTheme,
-  }
+  return { theme }
 }

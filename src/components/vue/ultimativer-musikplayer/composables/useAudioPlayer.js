@@ -115,7 +115,6 @@ export function useAudioPlayer(store) {
     try {
       await audioElement.value.play()
       store.setPlaying(true)
-      store.setStopped(false)
     } catch {
       store.setError(t('toast.audio.playbackFailed'), { dismissKey: 'audio.playbackFailed' })
       store.setPlaying(false)
@@ -126,7 +125,6 @@ export function useAudioPlayer(store) {
     if (!audioElement.value) return
     audioElement.value.pause()
     store.setPlaying(false)
-    store.setStopped(false)
   }
 
   const stop = () => {
@@ -134,7 +132,6 @@ export function useAudioPlayer(store) {
     audioElement.value.pause()
     audioElement.value.currentTime = 0
     store.setPlaying(false)
-    store.setStopped(true)
   }
 
   const playNext = () => {
@@ -225,7 +222,6 @@ export function useAudioPlayer(store) {
       currentObjectURL = null
     }
     store.setPlaying(false)
-    store.setStopped(false)
     store.setCurrentTime(0)
     store.setDuration(0)
   }
