@@ -13,7 +13,7 @@ import type { APIRoute } from 'astro'
 // changefreq/priority als Hinweis für Suchmaschinen.
 const pages = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
-  { path: '/app', changefreq: 'monthly', priority: '0.8' },
+  { path: '/app/', changefreq: 'monthly', priority: '0.8' },
 ]
 
 export const GET: APIRoute = ({ site }) => {
