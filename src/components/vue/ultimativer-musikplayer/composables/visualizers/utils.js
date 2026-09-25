@@ -29,3 +29,19 @@ export const glow = (ctx, color, blur) => {
 export const noGlow = (ctx) => {
   ctx.shadowBlur = 0
 }
+
+/**
+ * Smooth path through `pts` using quadratic curves to the midpoints between
+ * consecutive points, starting at index `from`. The caller is responsible
+ * for the initial moveTo.
+ */
+export const smoothCurve = (ctx, pts, from = 1) => {
+  for (let i = from; i < pts.length - 1; i++) {
+    ctx.quadraticCurveTo(
+      pts[i].x,
+      pts[i].y,
+      (pts[i].x + pts[i + 1].x) / 2,
+      (pts[i].y + pts[i + 1].y) / 2
+    )
+  }
+}

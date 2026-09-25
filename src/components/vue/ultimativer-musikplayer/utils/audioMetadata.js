@@ -41,6 +41,18 @@ function decodeText(bytes, encoding) {
   }
 }
 
+// Text frame payload: 1 encoding byte followed by the (possibly
+// null-terminated) string.
+function decodeTextFrame(data) {
+  return decodeText(data.subarray(1), data[0]).replace(/\0+$/, '')
+}
+
+// Frame IDs per ID3 version: v2.2 uses 3-char IDs, v2.3/v2.4 use 4-char IDs.
+const FRAME_IDS = {
+  2: { title: 'TT2', artist: 'TP1', album: 'TAL', picture: 'PIC' },
+  default: { title: 'TIT2', artist: 'TPE1', album: 'TALB', picture: 'APIC' },
+}
+
 function synchsafe(view, offset) {
   return (
     (view.getUint8(offset) << 21) |
@@ -67,6 +79,7 @@ async function parseId3(file) {
   const idLen = version === 2 ? 3 : 4
   const sizeLen = version === 2 ? 3 : 4
   const flagsLen = version === 2 ? 0 : 2
+  const ids = version === 2 ? FRAME_IDS[2] : FRAME_IDS.default
 
   let offset = 0
   while (offset + idLen + sizeLen + flagsLen <= body.length) {
@@ -90,18 +103,13 @@ async function parseId3(file) {
     if (frameSize <= 0 || dataStart + frameSize > body.length) break
     const data = body.subarray(dataStart, dataStart + frameSize)
 
-    const titleIds = version === 2 ? ['TT2'] : ['TIT2']
-    const artistIds = version === 2 ? ['TP1'] : ['TPE1']
-    const albumIds = version === 2 ? ['TAL'] : ['TALB']
-    const picIds = version === 2 ? ['PIC'] : ['APIC']
-
-    if (titleIds.includes(frameId)) {
-      meta.title = decodeText(data.subarray(1), data[0]).replace(/\0+$/, '')
-    } else if (artistIds.includes(frameId)) {
-      meta.artist = decodeText(data.subarray(1), data[0]).replace(/\0+$/, '')
-    } else if (albumIds.includes(frameId)) {
-      meta.album = decodeText(data.subarray(1), data[0]).replace(/\0+$/, '')
-    } else if (picIds.includes(frameId) && !meta.coverBlob) {
+    if (frameId === ids.title) {
+      meta.title = decodeTextFrame(data)
+    } else if (frameId === ids.artist) {
+      meta.artist = decodeTextFrame(data)
+    } else if (frameId === ids.album) {
+      meta.album = decodeTextFrame(data)
+    } else if (frameId === ids.picture && !meta.coverBlob) {
       const pic = parseApic(data, version)
       if (pic) {
         meta.coverBlob = pic.blob

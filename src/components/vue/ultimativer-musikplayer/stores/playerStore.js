@@ -22,7 +22,6 @@ export const usePlayerStore = defineStore('player', () => {
   // Visualizer state
   const vizMode = ref('ribbon')
   const vizIntensity = ref(0.65)
-  const isStopped = ref(false)
 
   // Equalizer state
   const eqEnabled = ref(false)
@@ -34,10 +33,7 @@ export const usePlayerStore = defineStore('player', () => {
     return audioFiles.value[currentAudioIndex.value] || null
   })
 
-  const currentMeta = computed(() => {
-    const file = currentFile.value
-    return file ? trackMeta.value[fileKey(file)] || null : null
-  })
+  const currentMeta = computed(() => getMeta(currentFile.value))
 
   const playlistCount = computed(() => audioFiles.value.length)
 
@@ -200,10 +196,6 @@ export const usePlayerStore = defineStore('player', () => {
     vizIntensity.value = intensity
   }
 
-  function setStopped(value) {
-    isStopped.value = value
-  }
-
   // --- Equalizer actions ---
   function setEqEnabled(value) {
     eqEnabled.value = value
@@ -230,11 +222,12 @@ export const usePlayerStore = defineStore('player', () => {
     if (typeof preset === 'string') eqPreset.value = preset
   }
 
-  // Store parsed metadata for a track and return the metadata for a file.
+  // Store parsed metadata for a track.
   function setTrackMeta(key, meta) {
     trackMeta.value[key] = meta
   }
 
+  // Parsed metadata for a file (or null if not parsed yet).
   function getMeta(file) {
     return file ? trackMeta.value[fileKey(file)] || null : null
   }
@@ -261,7 +254,6 @@ export const usePlayerStore = defineStore('player', () => {
     duration,
     vizMode,
     vizIntensity,
-    isStopped,
     trackMeta,
     eqEnabled,
     eqBands,
@@ -292,7 +284,6 @@ export const usePlayerStore = defineStore('player', () => {
     setPlaying,
     setVizMode,
     setVizIntensity,
-    setStopped,
     setEqEnabled,
     setEqBand,
     applyEqPreset,

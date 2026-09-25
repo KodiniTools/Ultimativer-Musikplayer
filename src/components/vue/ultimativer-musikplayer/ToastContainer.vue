@@ -11,8 +11,10 @@
         >
           <span class="toast__icon" aria-hidden="true">
             <i v-if="toast.type === 'success'" class="fa-solid fa-circle-check"></i>
-            <i v-else-if="toast.type === 'error'" class="fa-solid fa-triangle-exclamation"></i>
-            <i v-else-if="toast.type === 'warning'" class="fa-solid fa-triangle-exclamation"></i>
+            <i
+              v-else-if="toast.type === 'error' || toast.type === 'warning'"
+              class="fa-solid fa-triangle-exclamation"
+            ></i>
             <i v-else class="fa-solid fa-circle-info"></i>
           </span>
 

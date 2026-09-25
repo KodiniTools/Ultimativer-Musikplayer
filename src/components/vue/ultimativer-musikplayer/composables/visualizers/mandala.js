@@ -1,4 +1,4 @@
-import { getBands, glow, noGlow } from './utils.js'
+import { getBands, glow, noGlow, smoothCurve } from './utils.js'
 
 export const drawMandala = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   const data = dataArray
@@ -30,14 +30,7 @@ export const drawMandala = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
     glow(ctx, `hsl(${hBase},85%,65%)`, 7 + vizIntensity * 10)
     ctx.beginPath()
     ctx.moveTo(pts[0].x, pts[0].y)
-    for (let i = 1; i < pts.length - 1; i++) {
-      ctx.quadraticCurveTo(
-        pts[i].x,
-        pts[i].y,
-        (pts[i].x + pts[i + 1].x) / 2,
-        (pts[i].y + pts[i + 1].y) / 2
-      )
-    }
+    smoothCurve(ctx, pts)
     ctx.closePath()
 
     const al = 0.1 + vizIntensity * 0.13 + bands.mid * 0.1
