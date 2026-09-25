@@ -1,363 +1,69 @@
-# 🚀 Deployment-Anleitung für Vue.js Musikplayer
+# Deployment – Ultimativer Musikplayer
 
-## 📋 Voraussetzungen
+Die App ist ein statischer Astro-Build (Landingpage + Vue-Island für den Player).
+Es läuft kein Backend.
 
-### Lokal (Windows):
+| | |
+|---|---|
+| Live-URL | `https://kodinitools.com/ultimativer-musikplayer/` |
+| Server-Ordner | `/var/www/kodinitools.com/ultimativer-musikplayer` |
+| Build-Ordner | `dist/ultimativer-musikplayer/` |
+| Deploy-Skript | `deploy.sh` (einziges Deploy-Skript) |
+| nginx-Konfiguration | `nginx.conf` |
 
-- ✅ Node.js 16+ installiert
-- ✅ npm installiert
-- ✅ SSH-Client (Git Bash, PowerShell mit OpenSSH, oder PuTTY)
-- ✅ Projekt in: `C:\Users\User\ultimativermusic-player-vue`
+> Der frühere Pfad `/ultimativermusikplayer/` (ohne Bindestrich) wird nur noch
+> per 301 auf `/ultimativer-musikplayer/` umgeleitet. Nichts mehr dorthin deployen
+> und nicht mehr darauf verlinken.
 
-### Server:
+## Deployen
 
-- ✅ SSH-Zugang: `root@145.223.81.100`
-- ✅ Nginx installiert
-- ✅ Zielverzeichnis: `/var/www/kodinitools.com/ultimativermusikplayer`
-
----
-
-## 🎯 Schnell-Deployment (Automatisch)
-
-### Option 1: PowerShell (Windows - Empfohlen)
-
-1. **PowerShell als Administrator öffnen**
-
-2. **Ausführungsrichtlinie erlauben (einmalig):**
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-3. **Deployment-Skript ausführen:**
-
-```powershell
-cd C:\Users\User\ultimativermusic-player-vue
-.\deploy.ps1
-```
-
-Das war's! Das Skript erledigt alles automatisch. ✨
-
----
-
-### Option 2: Git Bash / WSL (Alternative)
-
-1. **Git Bash öffnen**
-
-2. **Deployment-Skript ausführen:**
+Voraussetzungen: Node.js/npm, `ssh` und idealerweise `rsync`.
+Unter Windows `deploy.sh` in **Git Bash** oder **WSL** ausführen.
 
 ```bash
-cd /c/Users/User/ultimativermusic-player-vue
-chmod +x deploy.sh
+# Vom Entwicklungsrechner (Build lokal, Übertragung per SSH)
 ./deploy.sh
+
+# Direkt auf dem Server (Repo liegt dort)
+./deploy.sh --local
+
+# Anderer Server oder Zielordner
+SERVER="root@example.com" REMOTE_PATH="/pfad" ./deploy.sh
 ```
 
----
+Das Skript führt `npm run build` aus und synchronisiert `dist/ultimativer-musikplayer/`
+mit `rsync --delete` in den Server-Ordner. Ohne `rsync` wird der Ordner geleert und
+per `scp`/`cp` neu befüllt.
 
-## 📝 Manuelles Deployment (Schritt für Schritt)
+## nginx
 
-Falls du die Schritte manuell ausführen möchtest:
+Der Inhalt von `nginx.conf` gehört in den `server { … }`-Block von `kodinitools.com`.
+Er enthält:
 
-### Schritt 1: Projekt vorbereiten
+- die 301-Weiterleitung vom alten Pfad `/ultimativermusikplayer` auf den neuen,
+- einen Cache-Block für die fingerprinted Assets unter `/_astro/`,
+- die Haupt-Location mit SSI (Navigation, Footer, Cookie-Banner).
 
-```powershell
-cd C:\Users\User\ultimativermusic-player-vue
-
-# Dependencies installieren (falls nötig)
-npm install
-
-# Production Build erstellen
-npm run build
-```
-
-Dies erstellt einen `dist` Ordner mit allen optimierten Dateien.
-
----
-
-### Schritt 2: Dateien auf Server übertragen
-
-**Option A - Mit SCP (Empfohlen):**
-
-```powershell
-scp -r dist/* root@145.223.81.100:/var/www/kodinitools.com/ultimativermusikplayer/
-```
-
-**Option B - Mit SFTP:**
-
-```powershell
-sftp root@145.223.81.100
-cd /var/www/kodinitools.com/ultimativermusikplayer
-put -r dist/*
-exit
-```
-
-**Option C - Mit WinSCP (GUI):**
-
-1. WinSCP öffnen
-2. Verbinden: `root@145.223.81.100`
-3. Navigiere zu: `/var/www/kodinitools.com/ultimativermusikplayer`
-4. Ziehe `dist/*` Dateien rüber
-
----
-
-### Schritt 3: Server-Berechtigungen setzen
+Im Server-Block darf **kein** alter Block `location /ultimativermusikplayer { alias … }`
+mehr stehen. Er würde mit der Weiterleitung kollidieren.
 
 ```bash
-# Auf dem Server ausführen
-ssh root@145.223.81.100
-
-cd /var/www/kodinitools.com/ultimativermusikplayer
-
-# Berechtigungen setzen
-chown -R www-data:www-data .
-chmod -R 755 .
+nginx -t && systemctl reload nginx
 ```
 
----
-
-### Schritt 4: Nginx konfigurieren
-
-**A) Bestehende Konfiguration erweitern:**
+## Prüfen
 
 ```bash
-# Auf dem Server
-nano /etc/nginx/sites-available/kodinitools.com
+# Neue URL muss 200 liefern
+curl -sI https://kodinitools.com/ultimativer-musikplayer/ | head -1
+
+# Alte URL: genau ein 301 auf den neuen Pfad, danach 200
+curl -sIL --max-redirs 10 https://kodinitools.com/ultimativermusikplayer/ | grep -iE "^HTTP|^location"
+
+# Sitemap
+curl -s https://kodinitools.com/ultimativer-musikplayer/sitemap.xml
 ```
 
-**Füge diesen Location-Block hinzu:**
-
-```nginx
-location /ultimativermusikplayer {
-    alias /var/www/kodinitools.com/ultimativermusikplayer;
-    try_files $uri $uri/ /ultimativermusikplayer/index.html;
-    index index.html;
-
-    # Caching für Assets
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-}
-```
-
-**B) Nginx neu laden:**
-
-```bash
-# Konfiguration testen
-nginx -t
-
-# Nginx neu laden
-systemctl reload nginx
-```
-
----
-
-### Schritt 5: Testen
-
-Öffne im Browser:
-
-```
-https://kodinitools.com/ultimativermusikplayer/
-```
-
-✅ Die Anwendung sollte jetzt laufen!
-
----
-
-## 🔧 Troubleshooting
-
-### Problem: SSH-Verbindung schlägt fehl
-
-**Lösung:**
-
-```powershell
-# SSH-Key verwenden
-ssh -i C:\Users\User\.ssh\id_rsa root@145.223.81.100
-
-# Oder SSH-Agent nutzen
-ssh-add C:\Users\User\.ssh\id_rsa
-```
-
----
-
-### Problem: "Permission denied" beim SCP
-
-**Lösung:**
-
-```bash
-# Auf dem Server
-mkdir -p /var/www/kodinitools.com/ultimativermusikplayer
-chmod 755 /var/www/kodinitools.com/ultimativermusikplayer
-```
-
----
-
-### Problem: 404 Error nach Deployment
-
-**Ursachen:**
-
-1. Nginx-Konfiguration fehlt
-2. Dateien im falschen Verzeichnis
-3. Berechtigungen falsch
-
-**Lösung:**
-
-```bash
-# Auf dem Server prüfen
-ls -la /var/www/kodinitools.com/ultimativermusikplayer
-
-# Sollte zeigen:
-# index.html
-# assets/
-# favicon.ico
-```
-
----
-
-### Problem: Weiße Seite / JavaScript Errors
-
-**Ursache:** Base-Path in Vite nicht gesetzt
-
-**Lösung:**
-Bearbeite `vite.config.js`:
-
-```javascript
-export default defineConfig({
-  base: '/ultimativermusikplayer/', // Wichtig!
-  plugins: [vue()],
-  // ...
-})
-```
-
-Dann neu bauen und deployen.
-
----
-
-## 🔄 Updates deployen
-
-Für spätere Updates einfach das Deployment-Skript erneut ausführen:
-
-```powershell
-cd C:\Users\User\ultimativermusic-player-vue
-.\deploy.ps1
-```
-
-Das Skript:
-
-1. ✅ Erstellt neuen Build
-2. ✅ Überschreibt alte Dateien
-3. ✅ Behält Server-Konfiguration bei
-
----
-
-## 📊 Erweiterte Konfiguration
-
-### HTTPS erzwingen (falls nicht vorhanden)
-
-```nginx
-server {
-    listen 80;
-    server_name kodinitools.com;
-    return 301 https://$server_name$request_uri;
-}
-```
-
-### GZIP Kompression aktivieren
-
-```nginx
-gzip on;
-gzip_types text/plain text/css application/json application/javascript;
-gzip_min_length 1024;
-```
-
-### Cache-Headers für bessere Performance
-
-```nginx
-location ~* \.(js|css)$ {
-    expires 1y;
-    add_header Cache-Control "public, immutable";
-}
-```
-
----
-
-## 📈 Performance-Optimierung
-
-### 1. Dateigröße prüfen
-
-```bash
-cd dist
-du -sh *
-```
-
-Große Dateien? → Chunk-Splitting verbessern in `vite.config.js`
-
-### 2. Lighthouse-Score testen
-
-1. Browser DevTools öffnen (F12)
-2. "Lighthouse" Tab
-3. "Generate report" für Production URL
-
-### 3. CDN verwenden (Optional)
-
-Für bessere globale Performance externe Assets über CDN laden.
-
----
-
-## 🔐 Sicherheit
-
-### SSH-Key Authentication (Empfohlen)
-
-1. **SSH-Key generieren (falls nicht vorhanden):**
-
-```powershell
-ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-```
-
-2. **Public Key auf Server kopieren:**
-
-```powershell
-type C:\Users\User\.ssh\id_rsa.pub | ssh root@145.223.81.100 "cat >> ~/.ssh/authorized_keys"
-```
-
-3. **Testen:**
-
-```powershell
-ssh root@145.223.81.100
-```
-
-Sollte jetzt ohne Passwort funktionieren! ✅
-
----
-
-## 📞 Support Checkliste
-
-Bei Problemen folgende Infos sammeln:
-
-- [ ] Browser-Konsole (F12) → Fehler?
-- [ ] Nginx Error Log: `tail -f /var/log/nginx/error.log`
-- [ ] Dateien vorhanden? `ls -la /var/www/kodinitools.com/ultimativermusikplayer`
-- [ ] Nginx-Konfiguration: `nginx -t`
-- [ ] Server-Logs: `journalctl -u nginx -n 50`
-
----
-
-## ✅ Checkliste nach Deployment
-
-- [ ] Seite lädt unter `https://kodinitools.com/ultimativermusikplayer/`
-- [ ] Keine JavaScript-Fehler in Konsole
-- [ ] Audio-Upload funktioniert
-- [ ] Player-Controls funktionieren
-- [ ] Theme-Wechsel funktioniert
-- [ ] Sprach-Wechsel funktioniert
-- [ ] Visualizer startet beim Abspielen
-- [ ] Mobile Version funktioniert
-
----
-
-## 🎉 Fertig!
-
-Deine Vue.js Anwendung ist jetzt live unter:
-**https://kodinitools.com/ultimativermusikplayer/**
-
-Bei Fragen oder Problemen: Melde dich! 🚀
+Wenn die Weiterleitung korrekt funktioniert, kann ein alter Ordner
+`/var/www/kodinitools.com/ultimativermusikplayer` auf dem Server gelöscht werden.
+nginx liefert daraus ohnehin nichts mehr aus.
