@@ -3,7 +3,12 @@ import { glow, noGlow } from './utils.js'
 // Classic LED colors: green up to 60 %, yellow up to 82 %, red above.
 const segmentHue = (ratio) => (ratio < 0.6 ? 130 : ratio < 0.82 ? 55 : 0)
 
-export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, peakHolds) => {
+/**
+ * LED-style equalizer with peak-hold indicators.
+ * `state.peaks` holds the peak segment per bar across frames; it is
+ * (re)allocated here whenever the bar count changes (e.g. on resize).
+ */
+export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, state) => {
   const data = dataArray
   if (!data) return
   const bars = Math.min(60, Math.floor(w / 9))
@@ -15,7 +20,8 @@ export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, peakHolds) => 
   const segNet = segH - segGap
   const baseY = h * 0.91
 
-  if (peakHolds.length !== bars) peakHolds.fill(0, 0, bars)
+  if (state.peaks.length !== bars) state.peaks = new Float32Array(bars)
+  const peakHolds = state.peaks
   ctx.globalCompositeOperation = 'source-over'
 
   for (let i = 0; i < bars; i++) {
@@ -32,8 +38,8 @@ export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, peakHolds) => 
       ctx.fillRect(x, sy, barW, segNet)
     }
 
-    if (lit > peakHolds[i]) peakHolds[i] = lit
-    else peakHolds[i] = Math.max(0, peakHolds[i] - 0.8)
+    // Peak jumps up with the bar, then falls slowly but never below it.
+    peakHolds[i] = Math.max(lit, peakHolds[i] - 0.8)
 
     const ps = Math.floor(peakHolds[i])
     if (ps > 1) {
