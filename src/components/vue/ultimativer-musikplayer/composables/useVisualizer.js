@@ -30,11 +30,11 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
   const resizeObserver = ref(null)
 
   let frameCounter = 0
-  let peakHolds = new Float32Array(0)
   let windDown = 0 // frames to keep animating after playback stops
 
   // Mutable state passed into draw functions that need it across frames
   const sparksState = { particles: [], lastEnergy: 0 }
+  const equalizerState = { peaks: new Float32Array(0) }
 
   const analyser = analyserRef
   const dataArray = dataArrayRef
@@ -55,7 +55,7 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
     canvas.value.style.width = `${rect.width}px`
     canvas.value.style.height = `${rect.height}px`
     if (ctx.value) ctx.value.setTransform(dpr, 0, 0, dpr, 0, 0)
-    peakHolds = new Float32Array(0)
+    equalizerState.peaks = new Float32Array(0)
   }
 
   const initCanvas = (el) => {
@@ -132,7 +132,7 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
         drawTunnel(c, w, h, cx, cy, t, fd, vi)
         break
       case 'grid':
-        drawEqualizer(c, w, h, fd, vi, peakHolds)
+        drawEqualizer(c, w, h, fd, vi, equalizerState)
         break
       case 'aurora':
         drawAurora(c, w, h, t, fd, vi)
@@ -167,7 +167,7 @@ export function useVisualizer(store, analyserRef, dataArrayRef, timeDomainArrayR
     if (ctx.value && canvas.value)
       ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
     frameCounter = 0
-    peakHolds = new Float32Array(0)
+    equalizerState.peaks = new Float32Array(0)
     sparksState.particles = []
     sparksState.lastEnergy = 0
   }
