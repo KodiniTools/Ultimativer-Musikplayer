@@ -2,16 +2,12 @@
   <div
     class="uploader"
     :class="{ 'uploader--dragging': isDragging, 'uploader--hover': isHovering }"
-    :style="pointerStyle"
     @dragover.prevent="isDragging = true"
     @dragleave.prevent="isDragging = false"
     @drop.prevent="handleDrop"
-    @pointermove="handlePointerMove"
     @pointerenter="isHovering = true"
     @pointerleave="isHovering = false"
   >
-    <span class="uploader__spotlight" aria-hidden="true"></span>
-
     <div class="uploader__drop-area">
       <span class="uploader__badge" aria-hidden="true">
         <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -61,7 +57,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted, onUnmounted } from 'vue'
+  import { ref, onMounted, onUnmounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { usePlayerStore } from './stores/playerStore'
   import { useToastStore } from './stores/toastStore'
@@ -73,23 +69,8 @@
   const folderInputRef = ref(null)
   const isDragging = ref(false)
 
-  // Cursor-following spotlight: track the pointer position inside the
-  // drop area and expose it to CSS as custom properties.
+  // Hover färbt nur den Rahmen der Dropzone (kein Spotlight, kein Glow).
   const isHovering = ref(false)
-  const pointerX = ref(50)
-  const pointerY = ref(50)
-
-  const pointerStyle = computed(() => ({
-    '--pointer-x': `${pointerX.value}%`,
-    '--pointer-y': `${pointerY.value}%`,
-  }))
-
-  const handlePointerMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect()
-    if (!rect.width || !rect.height) return
-    pointerX.value = ((event.clientX - rect.left) / rect.width) * 100
-    pointerY.value = ((event.clientY - rect.top) / rect.height) * 100
-  }
 
   const emit = defineEmits(['filesLoaded'])
 
@@ -214,229 +195,129 @@
     display: none;
   }
 
+  /* Dropzone: Eingabefläche mit gestricheltem Rahmen, beim Ziehen ausgewählt */
   .uploader {
-    /* Brand accent + spotlight colors, adjustable per theme below. */
-    --up-accent: var(--accent, #014f99);
-    --up-spot: rgba(1, 79, 153, 0.14);
-
-    /* Keep the drop area no wider than the visualizer container. */
     max-width: min(600px, 100%);
-    margin: 0 auto 20px;
-
-    position: relative;
-    overflow: hidden;
-    border: 2px dashed var(--border-accent, rgba(1, 79, 153, 0.35));
-    border-radius: 18px;
-    padding: 1.75rem 1.5rem;
+    margin: 0 auto var(--ds-space-4);
+    padding: var(--ds-space-6);
+    border: var(--ds-border-width) dashed var(--ds-border-strong);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-surface-2);
     text-align: center;
-    background: var(--glass-bg, rgba(255, 255, 255, 0.06));
-    box-shadow: var(--shadow-3d-sm);
     transition:
-      border-color 0.25s ease,
-      background 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-
-  /* Stronger glow on the dark background for good visibility. */
-  html[data-theme='dark'] .uploader {
-    --up-accent: var(--primary, #c9984d);
-    --up-spot: rgba(201, 152, 77, 0.22);
-  }
-
-  /* Cursor-following spotlight. Its center tracks the pointer via the
-     --pointer-x / --pointer-y custom properties set inline. */
-  .uploader__spotlight {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    background: radial-gradient(
-      240px circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
-      var(--up-spot),
-      transparent 72%
-    );
-  }
-
-  .uploader--hover .uploader__spotlight,
-  .uploader--dragging .uploader__spotlight {
-    opacity: 1;
+      background-color var(--ds-duration) var(--ds-ease),
+      border-color var(--ds-duration) var(--ds-ease);
   }
 
   .uploader--hover {
-    border-color: var(--up-accent);
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--up-accent) 30%, transparent),
-      0 0 26px color-mix(in srgb, var(--up-accent) 22%, transparent);
+    border-color: var(--ds-accent);
   }
 
   .uploader--dragging {
-    border-color: var(--up-accent);
     border-style: solid;
-    background: color-mix(in srgb, var(--up-accent) 8%, transparent);
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--up-accent) 45%, transparent),
-      0 0 30px color-mix(in srgb, var(--up-accent) 30%, transparent);
+    border-color: var(--ds-accent);
+    background: var(--ds-accent-soft);
   }
 
   .uploader__drop-area {
-    position: relative;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: var(--ds-space-3);
   }
 
-  /* Rounded brand badge replacing the old music-note icon. */
   .uploader__badge {
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    color: #f5f4d6;
-    font-size: 1.35rem;
-    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
-    box-shadow:
-      var(--shadow-3d-sm),
-      0 0 16px rgba(1, 79, 153, 0.25);
-    transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-
-  html[data-theme='dark'] .uploader__badge {
-    background: linear-gradient(135deg, var(--primary, #c9984d), var(--accent, #014f99));
-    box-shadow:
-      var(--shadow-3d-sm),
-      0 0 16px rgba(201, 152, 77, 0.3);
+    color: var(--ds-text-2);
+    font-size: var(--ds-text-3xl);
+    line-height: 1;
+    transition: color var(--ds-duration) var(--ds-ease);
   }
 
   .uploader--hover .uploader__badge,
   .uploader--dragging .uploader__badge {
-    transform: translateY(-3px) scale(1.06);
-    box-shadow:
-      var(--shadow-3d-md),
-      0 0 22px rgba(1, 79, 153, 0.35);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .uploader,
-    .uploader__spotlight,
-    .uploader__badge {
-      transition: none;
-    }
-    .uploader--hover .uploader__badge,
-    .uploader--dragging .uploader__badge {
-      transform: none;
-    }
+    color: var(--ds-text);
   }
 
   .uploader__text {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--ds-space-1);
   }
 
-  /* High-contrast heading in both light and dark themes. */
+  /* panel-title */
   .uploader__title {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary, #003971);
-    letter-spacing: -0.01em;
+    font-size: var(--ds-text-lg);
+    font-weight: var(--ds-weight-semibold);
+    color: var(--ds-text);
   }
 
+  /* caption */
   .uploader__hint {
     margin: 0;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-muted, #5c88b0);
+    font-size: var(--ds-text-sm);
+    color: var(--ds-text-2);
   }
 
   .uploader__buttons {
     display: flex;
-    gap: 0.75rem;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 0.25rem;
+    gap: var(--ds-space-2);
+    margin-top: var(--ds-space-1);
   }
 
+  /* Button secondary: Fläche 2, kräftiger Rahmen; Hover nur Farbe */
   .uploader__btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.55rem 1.2rem;
-    border-radius: 12px;
-    border: 2px solid var(--up-accent);
-    background: transparent;
-    color: var(--up-accent);
-    font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 600;
+    justify-content: center;
+    gap: var(--ds-space-2);
+    height: var(--ds-control-md);
+    padding: 0 var(--ds-space-4);
+    border: var(--ds-border-width) solid var(--ds-border-strong);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-surface-1);
+    color: var(--ds-text);
+    font-size: var(--ds-text-md);
+    font-weight: var(--ds-weight-medium);
+    line-height: 1;
     cursor: pointer;
     transition:
-      background 0.2s ease,
-      color 0.2s ease,
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
+      background-color var(--ds-duration) var(--ds-ease),
+      border-color var(--ds-duration) var(--ds-ease);
   }
 
   .uploader__btn:hover {
-    transform: translateY(-2px);
-    background: color-mix(in srgb, var(--up-accent) 12%, transparent);
-    box-shadow: 0 0 18px color-mix(in srgb, var(--up-accent) 25%, transparent);
+    background: var(--ds-surface-3);
   }
 
-  /* Primary action: filled brand gradient. */
+  .uploader__btn i {
+    color: var(--ds-text-2);
+    font-size: var(--ds-icon-sm);
+  }
+
+  /* Hauptaktion des Uploaders: kräftiger Text, aber keine zweite Goldfläche
+     (Gold füllt in dieser Ansicht nur der Wiedergabe-Button). */
   .uploader__btn--primary {
-    border-color: transparent;
-    color: #f5f4d6;
-    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
-    box-shadow:
-      var(--shadow-3d-sm),
-      0 0 16px rgba(1, 79, 153, 0.25);
+    font-weight: var(--ds-weight-semibold);
   }
 
-  html[data-theme='dark'] .uploader__btn--primary {
-    background: linear-gradient(135deg, var(--primary, #c9984d), var(--accent, #014f99));
-    box-shadow:
-      var(--shadow-3d-sm),
-      0 0 16px rgba(201, 152, 77, 0.3);
-  }
-
-  .uploader__btn--primary:hover {
-    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
-    box-shadow:
-      var(--shadow-3d-md),
-      0 0 24px rgba(1, 79, 153, 0.4);
-  }
-
-  html[data-theme='dark'] .uploader__btn--primary:hover {
-    background: linear-gradient(135deg, var(--primary, #c9984d), var(--accent, #014f99));
-    box-shadow:
-      var(--shadow-3d-md),
-      0 0 24px rgba(201, 152, 77, 0.4);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .uploader__btn:hover {
-      transform: none;
-    }
+  .uploader__btn--primary i {
+    color: var(--ds-text);
   }
 
   @media (max-width: 480px) {
+    .uploader {
+      padding: var(--ds-space-4);
+    }
+
     .uploader__buttons {
       flex-direction: column;
       align-items: stretch;
       width: 100%;
-    }
-
-    .uploader__btn {
-      justify-content: center;
     }
   }
 </style>

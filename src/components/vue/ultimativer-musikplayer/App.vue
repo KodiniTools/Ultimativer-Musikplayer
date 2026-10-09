@@ -64,8 +64,7 @@
   import { useToastStore } from './stores/toastStore'
   import { useAudioPlayer } from './composables/useAudioPlayer'
   import { useVisualizer } from './composables/useVisualizer'
-  import { useTheme } from './composables/useTheme'
-  import { useI18nSync } from './composables/useI18nSync'
+  import { useSettingsSync } from './composables/useSettingsSync'
   import { usePersistence } from './composables/usePersistence'
   import { useMediaSession } from './composables/useMediaSession'
   import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts'
@@ -86,8 +85,7 @@
   const { t } = useI18n()
   const store = usePlayerStore()
   const toast = useToastStore()
-  useTheme()
-  useI18nSync()
+  useSettingsSync()
 
   const audioElementRef = ref(null)
   const audioPlayer = useAudioPlayer(store)
@@ -248,48 +246,44 @@
 
 <style scoped>
   .eq-bar {
-    margin-top: 12px;
+    margin-top: var(--ds-space-3);
   }
 
+  /* Freistehender Icon-Button über der Player-Leiste: schwebt, daher Overlay-Schatten */
   .shortcuts-fab {
     position: fixed;
-    left: 16px;
+    left: var(--ds-space-4);
     bottom: 96px;
-    z-index: 9998;
-    width: 42px;
-    height: 42px;
+    z-index: var(--ds-z-player);
+    width: var(--ds-control-lg);
+    height: var(--ds-control-lg);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.16));
-    border-radius: 50%;
-    background: var(--bg-panel, rgba(20, 38, 64, 0.9));
-    color: var(--text-primary, #f9f2d5);
-    font-size: 1rem;
+    border: var(--ds-border-width) solid var(--ds-border-strong);
+    border-radius: var(--ds-radius-full);
+    background: var(--ds-surface-1);
+    color: var(--ds-text-2);
+    font-size: var(--ds-icon-sm);
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(6px);
+    box-shadow: var(--ds-shadow-overlay);
     transition:
-      transform 0.15s ease,
-      box-shadow 0.15s ease,
-      background 0.15s ease;
+      background-color var(--ds-duration) var(--ds-ease),
+      color var(--ds-duration) var(--ds-ease);
   }
 
   .shortcuts-fab:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-    background: var(--bg-elevated, rgba(20, 38, 64, 0.95));
+    background: var(--ds-surface-3);
+    color: var(--ds-text);
+  }
+
+  .shortcuts-fab:focus-visible {
+    box-shadow: var(--ds-focus-ring);
   }
 
   @media (max-width: 600px) {
     .shortcuts-fab {
       display: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .shortcuts-fab {
-      transition: none;
     }
   }
 </style>

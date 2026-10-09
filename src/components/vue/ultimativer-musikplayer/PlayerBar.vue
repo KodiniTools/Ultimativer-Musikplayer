@@ -1,6 +1,6 @@
 <template>
   <div
-    class="player-bar"
+    class="player-bar ds-app"
     :class="{ 'player-bar--active': hasTrack }"
     role="region"
     :aria-label="t('nav.current')"

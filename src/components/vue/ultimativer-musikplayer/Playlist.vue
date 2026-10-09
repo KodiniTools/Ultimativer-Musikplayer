@@ -162,82 +162,91 @@
 <style scoped>
   .playlist-search {
     position: relative;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+    padding: var(--ds-space-3) var(--ds-space-5);
+    border-bottom: var(--ds-border-width) solid var(--ds-border);
   }
 
   .playlist-search__icon {
     position: absolute;
-    left: 26px;
+    left: calc(var(--ds-space-5) + var(--ds-space-3));
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.8rem;
-    opacity: 0.5;
+    color: var(--ds-text-3);
+    font-size: var(--ds-text-sm);
     pointer-events: none;
   }
 
+  /* TextField: Höhe lg, Fläche 2, Fokus färbt den Rahmen */
   .playlist-search__input {
     width: 100%;
-    padding: 8px 12px 8px 32px;
-    border-radius: 8px;
-    border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.16));
-    background: var(--bg-surface, rgba(255, 255, 255, 0.06));
-    color: var(--text-primary, inherit);
-    font-size: 0.85rem;
+    height: var(--ds-control-lg);
+    padding: 0 var(--ds-space-3) 0 var(--ds-space-8);
+    border: var(--ds-border-width) solid var(--ds-border-strong);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-surface-2);
+    color: var(--ds-text);
+    font-size: var(--ds-text-md);
     outline: none;
     transition:
-      border-color 0.15s ease,
-      box-shadow 0.15s ease;
+      border-color var(--ds-duration) var(--ds-ease),
+      box-shadow var(--ds-duration) var(--ds-ease);
   }
 
-  .playlist-search__input:focus {
-    border-color: var(--accent, #7c6af7);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent, #7c6af7) 25%, transparent);
+  .playlist-search__input::placeholder {
+    color: var(--ds-text-3);
+  }
+
+  .playlist-search__input:focus-visible {
+    border-color: var(--ds-accent);
+    box-shadow: var(--ds-focus-ring);
   }
 
   .playlist-empty {
-    padding: 20px;
+    padding: var(--ds-space-5);
+    color: var(--ds-text-2);
+    font-size: var(--ds-text-sm);
     text-align: center;
-    font-size: 0.85rem;
-    opacity: 0.6;
     cursor: default;
+  }
+
+  .playlist .playlist-empty:hover {
+    background: transparent;
   }
 
   .drag-handle {
     flex-shrink: 0;
-    font-size: 0.8rem;
-    opacity: 0.35;
+    margin-right: calc(-1 * var(--ds-space-1));
+    color: var(--ds-text-3);
+    font-size: var(--ds-text-sm);
     cursor: grab;
-    margin-right: -4px;
+    transition: color var(--ds-duration) var(--ds-ease);
   }
 
   .playlist li:hover .drag-handle {
-    opacity: 0.6;
+    color: var(--ds-text-2);
   }
 
   .playlist li.is-dragging {
-    opacity: 0.4;
+    opacity: 0.45;
   }
 
   .playlist li.is-drop-target {
-    box-shadow: inset 0 2px 0 var(--accent, #7c6af7);
+    border-top-color: var(--ds-accent);
   }
 
+  /* Thumbnail: radius sm, Fläche 2 */
   .track-thumb {
     flex-shrink: 0;
-    width: 38px;
-    height: 38px;
+    width: var(--ds-control-md);
+    height: var(--ds-control-md);
     display: grid;
     place-items: center;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--accent, #014f99), var(--primary-dark, #003971));
-    color: #f5f4d6;
-    font-size: 0.85rem;
+    border: var(--ds-border-width) solid var(--ds-border);
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-surface-2);
+    color: var(--ds-text-2);
+    font-size: var(--ds-text-sm);
     overflow: hidden;
-  }
-
-  .track-thumb--cover {
-    background: none;
   }
 
   .track-thumb img {
@@ -252,7 +261,6 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
   }
 
   .track-info .track-name {
@@ -260,11 +268,21 @@
   }
 
   .track-artist {
-    font-size: 0.75rem;
-    font-weight: 400;
-    opacity: 0.65;
+    color: var(--ds-text-2);
+    font-size: var(--ds-text-sm);
+    font-weight: var(--ds-weight-regular);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  @media (max-width: 768px) {
+    .playlist-search {
+      padding-inline: var(--ds-space-4);
+    }
+
+    .playlist-search__icon {
+      left: calc(var(--ds-space-4) + var(--ds-space-3));
+    }
   }
 </style>

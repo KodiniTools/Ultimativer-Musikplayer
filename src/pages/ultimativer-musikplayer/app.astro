@@ -12,7 +12,21 @@ import '../../assets/styles/main.css'
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#F5F4D6" />
+  <meta name="theme-color" content="#f6f5f1" />
+  <!-- Theme vor dem ersten Paint setzen (Tokens: Dark auf :root, Light über
+       data-theme), damit Light-Nutzer keinen dunklen Flash sehen. Danach
+       übernehmen SSI-Navigation bzw. der Settings-Store der App. -->
+  <script is:inline>
+    try {
+      var storedTheme = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'
+      document.documentElement.setAttribute('data-theme', storedTheme)
+      document.documentElement.classList.toggle('dark', storedTheme === 'dark')
+      var themeMeta = document.querySelector('meta[name="theme-color"]')
+      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#0a1324' : '#f6f5f1')
+    } catch {
+      document.documentElement.setAttribute('data-theme', 'light')
+    }
+  </script>
 
   <title>Ultimativer Musikplayer - KodiniTools</title>
   <meta name="description" content="Kostenloser Online-Musikplayer mit Audio-Visualisierung. Unterstützt MP3, WAV, FLAC, M4A, OGG." />
@@ -27,6 +41,12 @@ import '../../assets/styles/main.css'
   <link rel="stylesheet" href="/fontawesome/css/solid.min.css" />
 </head>
 <body>
+  <script is:inline>
+    document.body.classList.toggle(
+      'light-theme',
+      document.documentElement.getAttribute('data-theme') !== 'dark'
+    )
+  </script>
   <!--#include virtual="/partials/nav.html" -->
 
   <App client:only="vue" />
