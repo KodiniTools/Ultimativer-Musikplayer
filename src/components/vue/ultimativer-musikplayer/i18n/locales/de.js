@@ -142,7 +142,7 @@ export default {
     },
   },
   faq: {
-    title: '❓ Häufig gestellte Fragen (FAQ)',
+    title: 'Häufig gestellte Fragen (FAQ)',
     formats: {
       question: 'Welche Audio-Formate werden unterstützt?',
       answer:

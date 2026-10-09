@@ -3,7 +3,7 @@
     <Transition name="shortcuts">
       <div
         v-if="visible"
-        class="shortcuts-overlay"
+        class="shortcuts-overlay ds-app"
         role="dialog"
         aria-modal="true"
         :aria-label="t('shortcuts.title')"
@@ -63,76 +63,91 @@
 </script>
 
 <style scoped>
+  /* Backdrop: Schwarz 50 %, kein Blur */
   .shortcuts-overlay {
     position: fixed;
     inset: 0;
-    z-index: 10001;
+    z-index: var(--ds-z-backdrop);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: var(--ds-space-5);
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
   }
 
+  /* Dialog size="lg": 720 px, hier auf 480 px begrenzt */
   .shortcuts-modal {
-    width: min(460px, 100%);
+    position: relative;
+    z-index: var(--ds-z-dialog);
+    width: min(480px, 100%);
     max-height: 85vh;
     overflow-y: auto;
-    border-radius: 16px;
-    background: var(--bg-panel, #14263f);
-    border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.14));
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-    color: var(--text-primary, #f9f2d5);
+    border: var(--ds-border-width) solid var(--ds-border);
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-surface-1);
+    color: var(--ds-text);
+    box-shadow: var(--ds-shadow-overlay);
   }
 
   .shortcuts-modal__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border-primary, rgba(255, 255, 255, 0.12));
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-4) var(--ds-space-5);
+    border-bottom: var(--ds-border-width) solid var(--ds-border);
   }
 
+  /* panel-title */
   .shortcuts-modal__title {
-    margin: 0;
-    font-size: 1.1rem;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--ds-space-2);
+    margin: 0;
+    font-size: var(--ds-text-lg);
+    font-weight: var(--ds-weight-semibold);
   }
 
+  .shortcuts-modal__title i {
+    color: var(--ds-text-2);
+    font-size: var(--ds-icon-sm);
+  }
+
+  /* IconButton ghost, Größe sm */
   .shortcuts-modal__close {
-    width: 32px;
-    height: 32px;
+    width: var(--ds-control-sm);
+    height: var(--ds-control-sm);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 8px;
-    background: color-mix(in srgb, currentColor 12%, transparent);
-    color: inherit;
+    border-radius: var(--ds-radius-sm);
+    background: transparent;
+    color: var(--ds-text-2);
     cursor: pointer;
-    transition: background 0.15s;
+    transition:
+      background-color var(--ds-duration) var(--ds-ease),
+      color var(--ds-duration) var(--ds-ease);
   }
 
   .shortcuts-modal__close:hover {
-    background: color-mix(in srgb, currentColor 22%, transparent);
+    background: var(--ds-surface-3);
+    color: var(--ds-text);
   }
 
   .shortcuts-list {
     list-style: none;
     margin: 0;
-    padding: 8px 20px 20px;
+    padding: var(--ds-space-2) var(--ds-space-5) var(--ds-space-5);
   }
 
   .shortcuts-list__row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-2) 0;
+    border-bottom: var(--ds-border-width) solid var(--ds-border);
   }
 
   .shortcuts-list__row:last-child {
@@ -140,36 +155,38 @@
   }
 
   .shortcuts-list__label {
-    font-size: 0.9rem;
+    font-size: var(--ds-text-md);
   }
 
   .shortcuts-list__keys {
     display: inline-flex;
-    gap: 6px;
+    gap: var(--ds-space-1);
     flex-shrink: 0;
   }
 
+  /* Kbd: Tastenkappe mit 2-px-Unterkante */
   kbd {
     min-width: 24px;
-    padding: 3px 8px;
-    text-align: center;
+    padding: 2px var(--ds-space-2);
+    border: var(--ds-border-width) solid var(--ds-border-strong);
+    border-bottom-width: 2px;
+    border-radius: var(--ds-radius-sm);
+    background: var(--ds-surface-2);
+    color: var(--ds-text);
     font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border-radius: 6px;
-    background: color-mix(in srgb, currentColor 14%, transparent);
-    border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
-    box-shadow: 0 1px 0 color-mix(in srgb, currentColor 18%, transparent);
+    font-size: var(--ds-text-xs);
+    font-weight: var(--ds-weight-semibold);
+    text-align: center;
   }
 
+  /* Fade plus 8 px Hub von unten in --ds-duration-slow */
   .shortcuts-enter-active,
-  .shortcuts-leave-active {
-    transition: opacity 0.2s ease;
-  }
-
+  .shortcuts-leave-active,
   .shortcuts-enter-active .shortcuts-modal,
   .shortcuts-leave-active .shortcuts-modal {
-    transition: transform 0.2s ease;
+    transition:
+      opacity var(--ds-duration-slow) var(--ds-ease),
+      transform var(--ds-duration-slow) var(--ds-ease);
   }
 
   .shortcuts-enter-from,
@@ -179,15 +196,6 @@
 
   .shortcuts-enter-from .shortcuts-modal,
   .shortcuts-leave-to .shortcuts-modal {
-    transform: scale(0.95) translateY(10px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .shortcuts-enter-active,
-    .shortcuts-leave-active,
-    .shortcuts-enter-active .shortcuts-modal,
-    .shortcuts-leave-active .shortcuts-modal {
-      transition: none;
-    }
+    transform: translateY(8px);
   }
 </style>

@@ -14,7 +14,21 @@ const t = de
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#F5F4D6" />
+  <meta name="theme-color" content="#f6f5f1" />
+  <!-- Theme vor dem ersten Paint setzen (Tokens: Dark auf :root, Light über
+       data-theme), damit Light-Nutzer keinen dunklen Flash sehen. Danach
+       übernehmen SSI-Navigation bzw. der Settings-Store der App. -->
+  <script is:inline>
+    try {
+      var storedTheme = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'
+      document.documentElement.setAttribute('data-theme', storedTheme)
+      document.documentElement.classList.toggle('dark', storedTheme === 'dark')
+      var themeMeta = document.querySelector('meta[name="theme-color"]')
+      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#0a1324' : '#f6f5f1')
+    } catch {
+      document.documentElement.setAttribute('data-theme', 'light')
+    }
+  </script>
 
   <title>Ultimativer Musikplayer – Kostenloser Online-Audioplayer | KodiniTools</title>
   <meta name="description" content="Kostenloser Online-Musikplayer mit 7 Audio-Visualisierungsmodi, Playlist-Management und Equalizer. Unterstützt MP3, WAV, FLAC, M4A, OGG. Keine Registrierung nötig." />
@@ -36,189 +50,157 @@ const t = de
   <link rel="stylesheet" href="/fontawesome/css/solid.min.css" />
 
   <style>
-    /* Landing-Page-spezifische Styles */
+    /* Landing-Page: Karten auf Fläche 1 mit Rahmen, Hover nur Rahmenfarbe;
+       Gold füllt nur die Hauptaktion. Tokens: src/design-system/tokens-v2.css */
     .landing {
       max-width: 960px;
       margin: 0 auto;
-      padding: clamp(20px, 4vw, 40px);
+      padding: var(--ds-space-8) var(--ds-space-4) var(--ds-space-12);
       display: grid;
-      gap: 32px;
+      gap: var(--ds-space-8);
     }
 
     .hero {
+      padding: var(--ds-space-12) var(--ds-space-6);
+      background: var(--ds-surface-1);
+      border: var(--ds-border-width) solid var(--ds-border);
+      border-radius: var(--ds-radius-lg);
       text-align: center;
-      padding: 48px 28px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      box-shadow: var(--shadow-3d-lg);
     }
 
+    /* hero: 32 px, größer gibt es nichts */
     .hero h1 {
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      margin-bottom: 16px;
-      -webkit-text-fill-color: unset;
-      background: none;
-      color: var(--heading-primary);
+      margin-bottom: var(--ds-space-4);
+      font-size: var(--ds-text-3xl);
     }
 
     .hero p {
-      font-size: 1rem;
-      color: var(--text-secondary);
       max-width: 640px;
-      margin: 0 auto 28px;
-      line-height: 1.7;
+      margin: 0 auto var(--ds-space-6);
+      color: var(--ds-text-2);
+      font-size: var(--ds-text-lg);
     }
 
+    /* Button primary, Größe lg */
     .cta-button {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 14px 32px;
-      background: linear-gradient(135deg, var(--accent), var(--primary-dark, #003971));
-      color: #F5F4D6;
+      gap: var(--ds-space-2);
+      height: var(--ds-control-lg);
+      padding: 0 var(--ds-space-5);
+      border: var(--ds-border-width) solid var(--ds-accent);
+      border-radius: var(--ds-radius-md);
+      background: var(--ds-accent);
+      color: var(--ds-on-accent);
+      font-size: var(--ds-text-md);
+      font-weight: var(--ds-weight-semibold);
+      line-height: 1;
       text-decoration: none;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 1rem;
-      box-shadow: var(--shadow-3d-md), var(--glow-accent);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition:
+        background-color var(--ds-duration) var(--ds-ease),
+        border-color var(--ds-duration) var(--ds-ease);
     }
 
     .cta-button:hover {
-      transform: translateY(-4px) translateZ(10px);
-      box-shadow: var(--shadow-3d-lg), var(--glow-accent);
+      border-color: var(--ds-accent-hover);
+      background: var(--ds-accent-hover);
+    }
+
+    /* Wiederholung am Seitenende: Button secondary, damit Gold einmal bleibt */
+    .cta-button--secondary {
+      border-color: var(--ds-border-strong);
+      background: var(--ds-surface-2);
+      color: var(--ds-text);
+    }
+
+    .cta-button--secondary:hover {
+      border-color: var(--ds-border-strong);
+      background: var(--ds-surface-3);
+    }
+
+    .cta-text {
+      margin-bottom: var(--ds-space-5);
     }
 
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
+      gap: var(--ds-space-3);
     }
 
     .feature-card {
-      padding: 24px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid var(--glass-border);
-      border-radius: 18px;
-      box-shadow: var(--shadow-3d-sm);
-      transition: all 0.3s ease;
+      padding: var(--ds-space-5);
+      background: var(--ds-surface-1);
+      border: var(--ds-border-width) solid var(--ds-border);
+      border-radius: var(--ds-radius-md);
+      transition: border-color var(--ds-duration) var(--ds-ease);
     }
 
     .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-3d-md);
+      border-color: var(--ds-border-strong);
     }
 
     .feature-card i {
-      font-size: 1.6rem;
-      margin-bottom: 12px;
-      display: block;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      display: grid;
+      place-items: center;
+      width: var(--ds-space-10);
+      height: var(--ds-space-10);
+      margin-bottom: var(--ds-space-3);
+      border: var(--ds-border-width) solid var(--ds-border);
+      border-radius: var(--ds-radius-md);
+      background: var(--ds-surface-2);
+      color: var(--ds-text-2);
+      font-size: var(--ds-icon-md);
     }
 
     .feature-card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--heading-primary);
+      margin-bottom: var(--ds-space-1);
+      color: var(--ds-text);
+      font-size: var(--ds-text-lg);
+      font-weight: var(--ds-weight-semibold);
     }
 
     .feature-card p {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
+      color: var(--ds-text-2);
+      font-size: var(--ds-text-md);
     }
 
+    /* section-title: 20, fett */
     .section-title {
-      font-size: 1.2rem;
-      font-weight: 700;
+      margin-bottom: var(--ds-space-5);
+      color: var(--ds-text);
+      font-size: var(--ds-text-xl);
+      font-weight: var(--ds-weight-bold);
+      line-height: var(--ds-leading-tight);
       text-align: center;
-      margin-bottom: 24px;
-      background: linear-gradient(135deg, var(--heading-gradient-start), var(--heading-gradient-end));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* FAQ auf Landing Page */
-    .landing .faq-item {
-      margin-bottom: 16px;
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      overflow: hidden;
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-3d-sm);
-    }
-
-    .landing .faq-question {
-      width: 100%;
-      padding: 14px 18px;
-      background: transparent;
-      border: none;
-      text-align: left;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      font-family: inherit;
-    }
-
-    .landing .faq-answer {
-      padding: 0 18px;
-      max-height: 0;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .landing .faq-answer.open {
-      padding: 14px 18px;
-      max-height: 400px;
-    }
-
-    .landing .faq-answer p {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    .landing .faq-icon {
-      color: var(--primary);
-      transition: transform 0.3s ease;
-    }
-
-    .landing .faq-icon.open {
-      transform: rotate(180deg);
     }
 
     @media (max-width: 480px) {
+      .landing {
+        padding: var(--ds-space-4) var(--ds-space-2) var(--ds-space-8);
+        gap: var(--ds-space-6);
+      }
+
       .hero {
-        padding: 32px 18px;
+        padding: var(--ds-space-8) var(--ds-space-4);
       }
+
       .hero h1 {
-        font-size: 1.2rem;
-      }
-      .cta-button {
-        padding: 12px 24px;
-        font-size: 0.9rem;
+        font-size: var(--ds-text-2xl);
       }
     }
   </style>
 </head>
 <body>
+  <script is:inline>
+    document.body.classList.toggle(
+      'light-theme',
+      document.documentElement.getAttribute('data-theme') !== 'dark'
+    )
+  </script>
   <!--#include virtual="/partials/nav.html" -->
 
-  <main class="landing">
+  <main class="landing ds-app">
     <!-- Hero Section -->
     <section class="hero">
       <h1 data-i18n="hero.title">{t.hero.title}</h1>
@@ -337,9 +319,9 @@ const t = de
     </section>
 
     <!-- CTA Bottom -->
-    <section class="hero" style="padding: 32px 28px;">
-      <p style="margin-bottom: 20px;" data-i18n="cta.text">{t.cta.text}</p>
-      <a href="/ultimativer-musikplayer/app/" class="cta-button">
+    <section class="hero">
+      <p class="cta-text" data-i18n="cta.text">{t.cta.text}</p>
+      <a href="/ultimativer-musikplayer/app/" class="cta-button cta-button--secondary">
         <i class="fa-solid fa-headphones"></i>
         <span data-i18n="cta.button">{t.cta.button}</span>
       </a>
@@ -348,6 +330,11 @@ const t = de
 
   <!--#include virtual="/partials/footer.html" -->
   <!--#include virtual="/partials/cookie-banner.html" -->
+
+  <script>
+    import { initStaticPartialSync } from '../../components/vue/ultimativer-musikplayer/utils/ssiNav.js'
+    initStaticPartialSync()
+  </script>
 
   <script define:vars={{ translations: { de, en } }}>
     (function () {
