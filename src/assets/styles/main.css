@@ -96,17 +96,52 @@ textarea {
   gap: var(--ds-space-4);
 }
 
+/* Rücklink links, Titel mittig, rechte Spalte hält die Mitte */
 .app__header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: center;
+  gap: var(--ds-space-3);
   padding: var(--ds-space-4) var(--ds-space-5);
   background: var(--ds-surface-1);
   border: var(--ds-border-width) solid var(--ds-border);
   border-radius: var(--ds-radius-lg);
 }
 
+/* Button secondary als Link zur Landing-Page */
+.app__home {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  height: var(--ds-control-md);
+  min-width: var(--ds-control-md);
+  padding: 0 var(--ds-space-3);
+  border: var(--ds-border-width) solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+  font-size: var(--ds-text-md);
+  font-weight: var(--ds-weight-medium);
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background-color var(--ds-duration) var(--ds-ease),
+    border-color var(--ds-duration) var(--ds-ease);
+}
+
+.app__home:hover {
+  background: var(--ds-surface-3);
+}
+
+.app__home i {
+  color: var(--ds-text-2);
+  font-size: var(--ds-icon-sm);
+}
+
 .brand {
+  grid-column: 2;
   display: flex;
   align-items: center;
   gap: var(--ds-space-3);
@@ -1069,6 +1104,15 @@ body
 
   .app__header {
     padding: var(--ds-space-3) var(--ds-space-4);
+  }
+
+  /* Unter sm nur das Icon, das Label trägt aria-label */
+  .app__home {
+    padding: 0;
+  }
+
+  .app__home-label {
+    display: none;
   }
 
   .panel__body {
