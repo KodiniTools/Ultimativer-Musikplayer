@@ -38,6 +38,8 @@ export default {
   nav: {
     title: 'Ultimate Music Player',
     current: 'Ultimate Player',
+    home: 'Home',
+    homeAria: 'Back to the music player home page',
   },
   upload: {
     files: 'Select Files',
