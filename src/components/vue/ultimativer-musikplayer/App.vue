@@ -69,7 +69,12 @@
   import { useMediaSession } from './composables/useMediaSession'
   import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts'
   import { useMetadata } from './composables/useMetadata'
-  import { getSharedFiles, clearSharedFiles, getSharedSource } from './utils/sharedFileRepository'
+  import {
+    getSharedFiles,
+    clearSharedFiles,
+    getSharedSource,
+    withoutSourceParam,
+  } from './utils/sharedFileRepository'
 
   import AppHeader from './AppHeader.vue'
   import AudioUploader from './AudioUploader.vue'
@@ -185,6 +190,10 @@
         preloadTrack(0)
       }
 
+      // Keep the handed-over playlist across reloads (the watcher only
+      // reacts to later changes).
+      persistence.persistPlaylist()
+
       await clearSharedFiles()
       toast.remove(loadingId)
       toast.success(t(`${keys}.loaded`, { count: files.length }), {
@@ -221,6 +230,9 @@
     const source = getSharedSource(window.location.search)
     if (source) {
       await loadSharedFiles(source)
+      // Drop ?source= so a reload restores the saved playlist instead of
+      // reporting an empty share store.
+      history.replaceState(history.state, '', withoutSourceParam(window.location.href))
     } else {
       await restorePlaylist()
     }
