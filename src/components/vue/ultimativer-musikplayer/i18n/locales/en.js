@@ -79,6 +79,10 @@ export default {
     loaded: '{count} normalised file(s) loaded successfully.',
     empty: 'No shared files found.',
     error: 'Error loading shared files.',
+    playlist: {
+      loading: 'Loading playlist from the Playlist Converter …',
+      loaded: 'Playlist from the Playlist Converter loaded successfully.',
+    },
   },
   toast: {
     dismiss: 'Dismiss',

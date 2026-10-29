@@ -79,6 +79,10 @@ export default {
     loaded: '{count} normalisierte Dateien erfolgreich geladen.',
     empty: 'Keine gemeinsam genutzten Dateien gefunden.',
     error: 'Fehler beim Laden der gemeinsam genutzten Dateien.',
+    playlist: {
+      loading: 'Playlist aus dem Playliste-Konverter wird geladen …',
+      loaded: 'Playlist aus dem Playliste-Konverter erfolgreich geladen.',
+    },
   },
   toast: {
     dismiss: 'Schließen',
