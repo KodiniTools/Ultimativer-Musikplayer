@@ -93,5 +93,5 @@ export function usePersistence(store) {
     return { files, savedIndex }
   }
 
-  return { restore, startWatching }
+  return { restore, startWatching, persistPlaylist: persistPlaylistSoon }
 }

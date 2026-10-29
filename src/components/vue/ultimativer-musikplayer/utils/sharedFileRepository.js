@@ -25,6 +25,18 @@ export function getSharedSource(search) {
   return SHARED_SOURCES.includes(source) ? source : null
 }
 
+/**
+ * Return the URL without its `source` parameter (other params and hash stay),
+ * so a reload restores the saved playlist instead of reading the store again.
+ * @param {string} href location.href
+ * @returns {string}
+ */
+export function withoutSourceParam(href) {
+  const url = new URL(href)
+  url.searchParams.delete('source')
+  return url.pathname + url.search + url.hash
+}
+
 const openStore = () =>
   openDB(DB_NAME, DB_VERSION, STORE_NAME, { keyPath: 'id', autoIncrement: true })
 
