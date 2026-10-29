@@ -69,7 +69,7 @@
   import { useMediaSession } from './composables/useMediaSession'
   import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts'
   import { useMetadata } from './composables/useMetadata'
-  import { getSharedFiles, clearSharedFiles } from './utils/sharedFileRepository'
+  import { getSharedFiles, clearSharedFiles, getSharedSource } from './utils/sharedFileRepository'
 
   import AppHeader from './AppHeader.vue'
   import AudioUploader from './AudioUploader.vue'
@@ -147,11 +147,18 @@
   // Shared files loading state
   let sharedHandled = false
 
-  async function loadSharedFiles() {
+  // Toast texts per sending tool (normalised files vs. converted playlist).
+  const SHARED_MESSAGE_KEYS = {
+    audionormalizer: 'shared',
+    playlistkonverter: 'shared.playlist',
+  }
+
+  async function loadSharedFiles(source) {
     if (sharedHandled) return
     sharedHandled = true
 
     let loadingId = null
+    const keys = SHARED_MESSAGE_KEYS[source] ?? SHARED_MESSAGE_KEYS.audionormalizer
 
     try {
       const records = await getSharedFiles()
@@ -160,9 +167,9 @@
         return
       }
 
-      loadingId = toast.info(t('shared.loading', { count: records.length }), {
+      loadingId = toast.info(t(`${keys}.loading`, { count: records.length }), {
         duration: 0,
-        dismissKey: 'shared.loading',
+        dismissKey: `${keys}.loading`,
       })
 
       const files = records.map(
@@ -180,7 +187,9 @@
 
       await clearSharedFiles()
       toast.remove(loadingId)
-      toast.success(t('shared.loaded', { count: files.length }), { dismissKey: 'shared.loaded' })
+      toast.success(t(`${keys}.loaded`, { count: files.length }), {
+        dismissKey: `${keys}.loaded`,
+      })
     } catch (err) {
       console.error('[Musikplayer] Error loading shared files:', err)
       toast.remove(loadingId)
@@ -209,9 +218,9 @@
       audioPlayer.setupAudioElement(audioElementRef.value)
     }
 
-    const source = new URLSearchParams(window.location.search).get('source')
-    if (source === 'audionormalizer') {
-      await loadSharedFiles()
+    const source = getSharedSource(window.location.search)
+    if (source) {
+      await loadSharedFiles(source)
     } else {
       await restorePlaylist()
     }
