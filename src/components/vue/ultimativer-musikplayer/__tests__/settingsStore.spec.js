@@ -56,6 +56,25 @@ describe('settingsStore', () => {
     expect(readStoredLocale()).toBe('de')
   })
 
+  it('?lang=en hat Vorrang und setzt Sprache, Titel, Canonical und hreflang', () => {
+    localStorage.setItem('locale', 'de')
+    window.history.replaceState(null, '', '/ultimativer-musikplayer/app/?lang=en')
+    try {
+      store = useSettingsStore()
+      expect(store.locale).toBe('en')
+      expect(localStorage.getItem('locale')).toBe('en')
+      expect(i18n.global.locale.value).toBe('en')
+      expect(document.documentElement.lang).toBe('en')
+      expect(document.title).toBe('Ultimate Music Player - KodiniTools')
+      expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toBe(
+        'https://kodinitools.com/ultimativer-musikplayer/app/?lang=en'
+      )
+      expect(document.querySelectorAll('link[rel="alternate"][hreflang]')).toHaveLength(3)
+    } finally {
+      window.history.replaceState(null, '', '/')
+    }
+  })
+
   it('toggleTheme schaltet Tokens, Body-Klasse, html.dark, Meta und speichert', async () => {
     store = useSettingsStore()
     store.toggleTheme()
