@@ -8,6 +8,20 @@ import '../../assets/styles/main.css'
 import de from '../../components/vue/ultimativer-musikplayer/i18n/locales/de.js'
 import en from '../../components/vue/ultimativer-musikplayer/i18n/locales/en.js'
 const t = de
+// Titel/Beschreibung je Sprache; Deutsch steht zusätzlich statisch im <head>.
+const pageMeta = {
+  url: 'https://kodinitools.com/ultimativer-musikplayer/',
+  de: {
+    title: 'Ultimativer Musikplayer – Kostenloser Online-Audioplayer | KodiniTools',
+    description:
+      'Kostenloser Online-Musikplayer mit 7 Audio-Visualisierungsmodi, Playlist-Management und Equalizer. Unterstützt MP3, WAV, FLAC, M4A, OGG. Keine Registrierung nötig.',
+  },
+  en: {
+    title: 'Ultimate Music Player – Free Online Audio Player | KodiniTools',
+    description:
+      'Free online music player with 7 audio visualization modes, playlist management and equalizer. Supports MP3, WAV, FLAC, M4A, OGG. No sign-up required.',
+  },
+}
 ---
 
 <html lang="de">
@@ -35,6 +49,9 @@ const t = de
   <meta name="keywords" content="Musikplayer, Audio Visualizer, Online Player, MP3 Player, kostenlos, Equalizer, Playlist" />
 
   <link rel="canonical" href="https://kodinitools.com/ultimativer-musikplayer/" />
+  <link rel="alternate" hreflang="de" href="https://kodinitools.com/ultimativer-musikplayer/" />
+  <link rel="alternate" hreflang="en" href="https://kodinitools.com/ultimativer-musikplayer/?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://kodinitools.com/ultimativer-musikplayer/" />
 
   <!-- Sitemap -->
   <link rel="sitemap" type="application/xml" href="/ultimativer-musikplayer/sitemap.xml" />
@@ -336,7 +353,7 @@ const t = de
     initStaticPartialSync()
   </script>
 
-  <script define:vars={{ translations: { de, en } }}>
+  <script define:vars={{ translations: { de, en }, pageMeta }}>
     (function () {
       function get(obj, path) {
         return path.split('.').reduce(function (o, k) { return o && o[k] }, obj)
@@ -350,10 +367,42 @@ const t = de
           var val = get(strings, key)
           if (val) elements[i].textContent = val
         }
-        document.documentElement.lang = lang
+        applyHead(lang)
       }
 
-      var saved = localStorage.getItem('locale') || 'de'
+      // Titel, Beschreibung, Canonical (EN = ?lang=en) und Sprache des Dokuments.
+      function applyHead(lang) {
+        var meta = pageMeta[lang] || pageMeta.de
+        var url = lang === 'en' ? pageMeta.url + '?lang=en' : pageMeta.url
+        document.documentElement.lang = lang === 'en' ? 'en' : 'de'
+        document.title = meta.title
+        var set = function (selector, attr, value) {
+          var el = document.querySelector(selector)
+          if (el) el.setAttribute(attr, value)
+        }
+        set('meta[name="description"]', 'content', meta.description)
+        set('link[rel="canonical"]', 'href', url)
+        set('meta[property="og:url"]', 'content', url)
+      }
+
+      function readStored() {
+        try {
+          return localStorage.getItem('locale')
+        } catch {
+          return null
+        }
+      }
+
+      // ?lang=de|en (hreflang-Ziel) hat Vorrang vor der gespeicherten Sprache.
+      var fromUrl = new URLSearchParams(location.search).get('lang')
+      var stored = readStored()
+      var saved =
+        fromUrl === 'de' || fromUrl === 'en' ? fromUrl : stored === 'en' ? 'en' : 'de'
+      try {
+        localStorage.setItem('locale', saved)
+      } catch {
+        // Speicher gesperrt: Sprache gilt nur für diesen Aufruf.
+      }
       if (saved !== 'de') applyLang(saved)
 
       document.addEventListener('click', function (e) {

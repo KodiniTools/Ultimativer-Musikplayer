@@ -3,6 +3,8 @@ import { ref, watch } from 'vue'
 import i18n from '../i18n'
 import { themeColorsV2 } from '../../../../design-system/tokens-v2'
 import { syncNavLangButtons, syncNavThemeIcons, translateSsiNav } from '../utils/ssiNav'
+import { resolveInitialLocale } from '../utils/localeSeo'
+import { applyAppHead } from '../utils/appSeo'
 
 const THEMES = ['light', 'dark']
 const LOCALES = ['de', 'en']
@@ -29,10 +31,9 @@ export function readStoredTheme() {
   return THEMES.includes(stored) ? stored : 'light'
 }
 
-/** Gespeicherte Sprache oder 'de'. */
+/** Startsprache: ?lang=de|en (hreflang-Ziel), dann gespeicherte Sprache, sonst 'de'. */
 export function readStoredLocale() {
-  const stored = readStorage('locale')
-  return LOCALES.includes(stored) ? stored : 'de'
+  return resolveInitialLocale(globalThis.location?.search ?? '', readStorage('locale'))
 }
 
 /**
@@ -77,13 +78,17 @@ export const useSettingsStore = defineStore('settings', () => {
     { immediate: true }
   )
 
-  watch(locale, (newLocale) => {
-    writeStorage('locale', newLocale)
-    document.documentElement.setAttribute('lang', newLocale)
-    i18n.global.locale.value = newLocale
-    syncNavLangButtons(newLocale)
-    translateSsiNav(newLocale)
-  })
+  watch(
+    locale,
+    (newLocale) => {
+      writeStorage('locale', newLocale)
+      applyAppHead(newLocale)
+      i18n.global.locale.value = newLocale
+      syncNavLangButtons(newLocale)
+      translateSsiNav(newLocale)
+    },
+    { immediate: true }
+  )
 
   function setTheme(newTheme) {
     if (THEMES.includes(newTheme)) theme.value = newTheme
