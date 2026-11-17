@@ -3,7 +3,7 @@ import { test } from 'vitest'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { escapeHtml, localizeHtml } from '../utils/localizeHtml.js'
-import { pageMeta } from '../config/pageMeta.js'
+import { EN_PAGES, appMeta, pageMeta } from '../config/pageMeta.js'
 
 // Prüft die englische Sprachfassung, die der Build als dist/ultimativer-musikplayer/index.en.html schreibt
 // (nginx liefert sie für ?lang=en aus), gegen den Quelltext der Landingpage (index.astro).
@@ -96,4 +96,49 @@ test('maskiert Sonderzeichen und bricht bei fehlenden oder doppelten Pflicht-Tag
     /description/
   )
   assert.throws(() => localizeHtml('<html lang="de"><title>x</title>', head), /head/)
+})
+
+// App-Seite: der Build schreibt dist/ultimativer-musikplayer/app/index.en.html.
+const appHtml = readFileSync(
+  new URL('../pages/ultimativer-musikplayer/app.astro', import.meta.url),
+  'utf8'
+)
+const APP_EN_URL = `${appMeta.url}?lang=en`
+const appEn = localizeHtml(appHtml, { lang: 'en', ...appMeta.en, canonical: APP_EN_URL })
+
+test('App-Seite: englische Fassung mit eigenem Titel, Description und Canonical', () => {
+  assert.equal(lang(appEn), 'en')
+  assert.equal(title(appEn), appMeta.en.title)
+  assert.equal(meta(appEn, 'description'), appMeta.en.description)
+  assert.equal(canonical(appEn), APP_EN_URL)
+  assert.notEqual(appMeta.en.title, EN.title)
+})
+
+test('App-Seite: hreflang zeigt auf die App-Seite, Body bleibt unverändert', () => {
+  assert.deepEqual(
+    hreflangs(appEn).map((link) => pick(link, /\shref="([^"]*)"/i)),
+    [appMeta.url, APP_EN_URL, appMeta.url]
+  )
+  assert.equal(appEn.slice(appEn.search(/<\/head>/i)), appHtml.slice(appHtml.search(/<\/head>/i)))
+})
+
+test('App-Seite: deutscher Head der Quelldatei stimmt mit den Metadaten überein', () => {
+  assert.equal(lang(appHtml), 'de')
+  assert.equal(title(appHtml), appMeta.de.title)
+  assert.equal(meta(appHtml, 'description'), appMeta.de.description)
+  assert.equal(canonical(appHtml), appMeta.url)
+})
+
+test('der Build schreibt je deutsche Seite genau eine englische Fassung daneben', () => {
+  assert.deepEqual(
+    EN_PAGES.map(({ source, file }) => [source, file]),
+    [
+      ['ultimativer-musikplayer/index.html', 'ultimativer-musikplayer/index.en.html'],
+      ['ultimativer-musikplayer/app/index.html', 'ultimativer-musikplayer/app/index.en.html'],
+    ]
+  )
+  assert.deepEqual(
+    EN_PAGES.map(({ meta: pageData }) => pageData.url),
+    [pageMeta.url, appMeta.url]
+  )
 })
