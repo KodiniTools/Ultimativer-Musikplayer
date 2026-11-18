@@ -1,4 +1,4 @@
-import { getBands, glow, noGlow, smoothCurve } from './utils.js'
+import { BRIGHT_HUE, getBands, glow, goldHue, noGlow, smoothCurve } from './utils.js'
 
 const strand = (ctx, w, pts, h1, h2, vizIntensity) => {
   ctx.save()
@@ -45,7 +45,7 @@ export const drawDNA = (ctx, w, h, cy, t, dataArray, timeDomainArray, vizIntensi
   const ri = Math.max(1, Math.floor(steps / 18))
   for (let i = 0; i < pts1.length; i += ri) {
     const v = data[Math.floor((i / pts1.length) * data.length)] / 255
-    ctx.strokeStyle = `hsla(${180 + v * 80},75%,70%,${0.1 + v * 0.28})`
+    ctx.strokeStyle = `hsla(${goldHue(v)},75%,70%,${0.1 + v * 0.28})`
     ctx.lineWidth = 1 + v * 1.5 * vizIntensity
     ctx.beginPath()
     ctx.moveTo(pts1[i].x, pts1[i].y)
@@ -53,7 +53,7 @@ export const drawDNA = (ctx, w, h, cy, t, dataArray, timeDomainArray, vizIntensi
     ctx.stroke()
   }
 
-  strand(ctx, w, pts1, 200, 225, vizIntensity)
-  strand(ctx, w, pts2, 280, 300, vizIntensity)
+  strand(ctx, w, pts1, 42, BRIGHT_HUE, vizIntensity)
+  strand(ctx, w, pts2, 32, 40, vizIntensity)
   ctx.restore()
 }

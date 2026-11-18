@@ -1,4 +1,4 @@
-import { getBands, glow, noGlow, smoothCurve } from './utils.js'
+import { BRIGHT_HUE, getBands, glow, goldHue, noGlow, smoothCurve } from './utils.js'
 
 export const drawMandala = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   const data = dataArray
@@ -14,7 +14,7 @@ export const drawMandala = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
     const lR = maxR * (0.3 + layer * 0.32)
     const iR = lR * 0.28
     const rot = t * 0.0018 * (layer % 2 === 0 ? 1 : -1.4)
-    const hBase = (layer * 130 + t * 0.35) % 360
+    const hBase = goldHue(0.25 + layer * 0.3 + Math.sin(t * 0.004 + layer) * 0.1)
     const res = 256
     const pts = []
 
@@ -36,11 +36,11 @@ export const drawMandala = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
     const al = 0.1 + vizIntensity * 0.13 + bands.mid * 0.1
     const fg = ctx.createRadialGradient(0, 0, iR * 0.4, 0, 0, lR)
     fg.addColorStop(0, `hsla(${hBase},     85%,65%,${al * 0.55})`)
-    fg.addColorStop(0.5, `hsla(${hBase + 40},80%,60%,${al})`)
-    fg.addColorStop(1, `hsla(${hBase + 80},75%,55%,${al * 0.3})`)
+    fg.addColorStop(0.5, `hsla(${hBase + 4},80%,60%,${al})`)
+    fg.addColorStop(1, `hsla(${hBase - 6},75%,45%,${al * 0.3})`)
     ctx.fillStyle = fg
     ctx.fill()
-    ctx.strokeStyle = `hsla(${hBase + 20},85%,70%,${0.28 + bands.high * 0.3})`
+    ctx.strokeStyle = `hsla(${hBase + 4},85%,72%,${0.28 + bands.high * 0.3})`
     ctx.lineWidth = 0.7 + vizIntensity * 1.1
     ctx.stroke()
     noGlow(ctx)
@@ -48,7 +48,7 @@ export const drawMandala = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   }
 
   const cr = Math.min(cx, cy) * 0.055 * (1 + bands.low * 1.6)
-  const ch2 = (t * 0.55) % 360
+  const ch2 = BRIGHT_HUE
   const cg2 = ctx.createRadialGradient(0, 0, 0, 0, 0, cr)
   cg2.addColorStop(0, `hsla(${ch2},90%,88%,${0.35 + bands.low * 0.45})`)
   cg2.addColorStop(1, `hsla(${ch2},85%,60%,0)`)

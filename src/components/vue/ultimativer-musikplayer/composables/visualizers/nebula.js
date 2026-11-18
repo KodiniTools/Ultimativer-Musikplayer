@@ -1,4 +1,4 @@
-import { getBands, energy } from './utils.js'
+import { BRIGHT_HUE, energy, getBands, goldHue } from './utils.js'
 
 export const drawPlasma = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   const data = dataArray
@@ -17,13 +17,13 @@ export const drawPlasma = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
     const bi = Math.floor((i / count) * data.length)
     const v = data[bi] / 255
     const br = maxR * (0.18 + v * 0.5 * vizIntensity)
-    const hue = (i / count) * 300 + t * 0.4
+    const hue = goldHue(i / count) + Math.sin(t * 0.004 + i) * 3
     const al = 0.04 + v * (0.07 + 0.09 * vizIntensity)
 
     const bg = ctx.createRadialGradient(bx, by, 0, bx, by, br)
     bg.addColorStop(0, `hsla(${hue},90%,72%,${al * 2.2})`)
-    bg.addColorStop(0.5, `hsla(${hue + 25},85%,60%,${al})`)
-    bg.addColorStop(1, `hsla(${hue + 50},80%,50%,0)`)
+    bg.addColorStop(0.5, `hsla(${hue - 4},85%,55%,${al})`)
+    bg.addColorStop(1, `hsla(${hue - 8},80%,40%,0)`)
     ctx.fillStyle = bg
     ctx.beginPath()
     ctx.arc(bx, by, br, 0, Math.PI * 2)
@@ -31,7 +31,7 @@ export const drawPlasma = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   }
 
   const cr = maxR * 0.08 * (0.8 + en * 1.8)
-  const ch = (t * 0.7) % 360
+  const ch = BRIGHT_HUE
   const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, cr)
   cg.addColorStop(0, `hsla(${ch},90%,92%,${0.25 + en * 0.5})`)
   cg.addColorStop(1, `hsla(${ch},85%,62%,0)`)

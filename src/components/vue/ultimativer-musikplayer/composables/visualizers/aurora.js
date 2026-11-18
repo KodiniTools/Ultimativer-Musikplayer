@@ -1,16 +1,17 @@
 import { getBands, glow, noGlow, smoothCurve } from './utils.js'
 
+// Schwarz-Gold: Schleier von Kupfer über Gold bis Hellgelb
 const PALETTE = [
-  [130, 85, 50],
-  [160, 80, 48],
-  [195, 75, 52],
-  [230, 70, 55],
-  [260, 68, 55],
-  [290, 62, 58],
-  [320, 58, 60],
-  [155, 80, 48],
-  [185, 75, 52],
-  [110, 88, 46],
+  [44, 70, 50],
+  [38, 65, 46],
+  [48, 82, 58],
+  [34, 60, 42],
+  [42, 72, 52],
+  [50, 88, 62],
+  [36, 62, 44],
+  [46, 76, 55],
+  [40, 68, 48],
+  [32, 58, 40],
 ]
 
 export const drawAurora = (ctx, w, h, t, dataArray, vizIntensity) => {
@@ -39,7 +40,7 @@ export const drawAurora = (ctx, w, h, t, dataArray, vizIntensity) => {
     const gr = ctx.createLinearGradient(0, baseY - amp * 1.6, 0, baseY + amp * 2.6)
     gr.addColorStop(0, `hsla(${ch},${cs}%,${cl}%,0)`)
     gr.addColorStop(0.32, `hsla(${ch},${cs}%,${cl}%,${al * 1.1})`)
-    gr.addColorStop(0.62, `hsla(${ch + 20},${cs}%,${cl + 8}%,${al * 1.35})`)
+    gr.addColorStop(0.62, `hsla(${ch + 4},${cs}%,${cl + 8}%,${al * 1.35})`)
     gr.addColorStop(1, `hsla(${ch},${cs}%,${cl}%,0)`)
 
     ctx.beginPath()

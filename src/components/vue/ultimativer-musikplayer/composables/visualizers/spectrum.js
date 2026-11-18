@@ -1,4 +1,4 @@
-import { glow, noGlow } from './utils.js'
+import { BRIGHT_HUE, glow, goldHue, noGlow } from './utils.js'
 
 export const drawArcSpectrum = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   const data = dataArray
@@ -19,7 +19,8 @@ export const drawArcSpectrum = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) =
     const v = data[bi] / 255
     const len = v * (outerM - innerR) * (0.45 + vizIntensity * 0.85)
     if (len < 1) continue
-    const hue = (i / bars) * 360
+    // Rundum symmetrisch: Gold oben/unten, Kupfer und Hellgelb an den Seiten
+    const hue = goldHue(0.5 + 0.5 * Math.sin((i / bars) * Math.PI * 2))
     ctx.save()
     glow(ctx, `hsl(${hue},90%,65%)`, 5 + vizIntensity * 10)
     ctx.strokeStyle = `hsla(${hue},90%,65%,${0.55 + v * 0.45})`
@@ -33,8 +34,8 @@ export const drawArcSpectrum = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) =
   }
 
   ctx.save()
-  glow(ctx, `hsl(${(t * 0.4) % 360},80%,70%)`, 10)
-  ctx.strokeStyle = `hsla(${(t * 0.4) % 360},80%,70%,0.5)`
+  glow(ctx, `hsl(${BRIGHT_HUE},80%,70%)`, 10)
+  ctx.strokeStyle = `hsla(${BRIGHT_HUE},90%,77%,0.5)`
   ctx.lineWidth = 1.5
   ctx.beginPath()
   ctx.arc(0, 0, innerR * 0.88, 0, Math.PI * 2)
