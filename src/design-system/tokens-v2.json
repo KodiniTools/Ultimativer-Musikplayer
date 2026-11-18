@@ -6,81 +6,87 @@
     "dark": {
       "surface0": {
         "$type": "color",
-        "$value": "#0a1324",
+        "$value": "#0a0a0a",
         "$description": "Seite",
         "$extensions": { "css": "--ds-surface-0" }
       },
       "surface1": {
         "$type": "color",
-        "$value": "#111d33",
+        "$value": "#131313",
         "$description": "Panel, Kopfzeile, Player, Toast",
         "$extensions": { "css": "--ds-surface-1" }
       },
       "surface2": {
         "$type": "color",
-        "$value": "#182741",
+        "$value": "#1b1b1b",
         "$description": "Eingaben, Dropzone, Chips, aktives Segment, Sekundär-Button",
         "$extensions": { "css": "--ds-surface-2" }
       },
       "surface3": {
         "$type": "color",
-        "$value": "#1f3050",
+        "$value": "#242424",
         "$description": "Hover auf Flächen und Zeilen",
         "$extensions": { "css": "--ds-surface-3" }
       },
       "border": {
         "$type": "color",
-        "$value": "#223553",
+        "$value": "#262626",
         "$description": "Rahmen, Trennlinien",
         "$extensions": { "css": "--ds-border" }
       },
       "borderStrong": {
         "$type": "color",
-        "$value": "#2f4668",
+        "$value": "#363636",
         "$description": "Rahmen von Feldern und Sekundär-Buttons",
         "$extensions": { "css": "--ds-border-strong" }
       },
       "text": {
         "$type": "color",
-        "$value": "#f2eee2",
+        "$value": "#f5f3ee",
         "$description": "Primärtext",
         "$extensions": { "css": "--ds-text" }
       },
       "text2": {
         "$type": "color",
-        "$value": "#a7b3c4",
+        "$value": "#b3b0a8",
         "$description": "Sekundärtext, Labels, Meta",
         "$extensions": { "css": "--ds-text-2" }
       },
       "text3": {
         "$type": "color",
-        "$value": "#8593a8",
+        "$value": "#918e86",
         "$description": "Tertiärtext, Platzhalter, Icons in Ruhe",
         "$extensions": { "css": "--ds-text-3" }
       },
       "accent": {
         "$type": "color",
-        "$value": "#d4a257",
+        "$value": "#d4a843",
         "$description": "Primäraktion, Fokus, aktive Zustände",
         "$extensions": { "css": "--ds-accent" }
       },
       "accentHover": {
         "$type": "color",
-        "$value": "#e0b06a",
+        "$value": "#e2b955",
         "$description": "Primäraktion :hover",
         "$extensions": { "css": "--ds-accent-hover" }
       },
       "accentSoft": {
         "$type": "color",
-        "$value": "rgba(212, 162, 87, 0.14)",
+        "$value": "rgba(212, 168, 67, 0.14)",
         "$description": "Ausgewählte Zeile, aktive Fläche",
         "$extensions": { "css": "--ds-accent-soft" }
       },
       "onAccent": {
         "$type": "color",
-        "$value": "#0a1324",
+        "$value": "#0a0a0a",
         "$description": "Text und Icons auf Akzent",
         "$extensions": { "css": "--ds-on-accent" }
+      },
+      "accentBright": {
+        "$type": "color",
+        "$value": "#ffe48a",
+        "$description": "Hellgelber Zweitakzent: Fortschritt, Spitzen im Visualizer (nie als Text)",
+        "$extensions": { "css": "--ds-accent-bright" }
       },
       "link": {
         "$type": "color",
@@ -140,45 +146,51 @@
       },
       "text": {
         "$type": "color",
-        "$value": "#14213a",
+        "$value": "#141414",
         "$description": "Primärtext",
         "$extensions": { "css": "--ds-text" }
       },
       "text2": {
         "$type": "color",
-        "$value": "#3f4a60",
+        "$value": "#45443f",
         "$description": "Sekundärtext, Labels, Meta",
         "$extensions": { "css": "--ds-text-2" }
       },
       "text3": {
         "$type": "color",
-        "$value": "#5f6b84",
+        "$value": "#66645d",
         "$description": "Tertiärtext, Platzhalter, Icons in Ruhe",
         "$extensions": { "css": "--ds-text-3" }
       },
       "accent": {
         "$type": "color",
-        "$value": "#c9984d",
+        "$value": "#d9a62e",
         "$description": "Primäraktion, Fokus, aktive Zustände",
         "$extensions": { "css": "--ds-accent" }
       },
       "accentHover": {
         "$type": "color",
-        "$value": "#b8842f",
+        "$value": "#c8951f",
         "$description": "Primäraktion :hover",
         "$extensions": { "css": "--ds-accent-hover" }
       },
       "accentSoft": {
         "$type": "color",
-        "$value": "rgba(201, 152, 77, 0.16)",
+        "$value": "rgba(217, 166, 46, 0.16)",
         "$description": "Ausgewählte Zeile, aktive Fläche",
         "$extensions": { "css": "--ds-accent-soft" }
       },
       "onAccent": {
         "$type": "color",
-        "$value": "#14213a",
+        "$value": "#111111",
         "$description": "Text und Icons auf Akzent",
         "$extensions": { "css": "--ds-on-accent" }
+      },
+      "accentBright": {
+        "$type": "color",
+        "$value": "#e0b423",
+        "$description": "Hellgelber Zweitakzent: Fortschritt, Spitzen im Visualizer (nie als Text)",
+        "$extensions": { "css": "--ds-accent-bright" }
       },
       "link": {
         "$type": "color",

@@ -123,11 +123,11 @@ describe('Kontrast (WCAG AA, mindestens 4.5:1)', () => {
 
 describe('tokens-v2.ts', () => {
   it('liefert Farbwerte, Variablennamen und var()-Ausdrücke', () => {
-    expect(colorTokenV2('dark', 'accent')).toBe('#d4a257')
-    expect(colorTokenV2('light', 'accent')).toBe('#c9984d')
+    expect(colorTokenV2('dark', 'accent')).toBe('#d4a843')
+    expect(colorTokenV2('light', 'accent')).toBe('#d9a62e')
     expect(colorCssVarV2('text2')).toBe('--ds-text-2')
     expect(cssVarV2('text2')).toBe('var(--ds-text-2)')
-    expect(cssVarV2('surface1', '#111d33')).toBe('var(--ds-surface-1, #111d33)')
+    expect(cssVarV2('surface1', '#131313')).toBe('var(--ds-surface-1, #131313)')
   })
 
   it('liefert eine flache Farbkarte je Theme', () => {

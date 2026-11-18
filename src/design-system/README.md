@@ -19,6 +19,20 @@ Radien, Schrift und Bewegung. Werte werden im Playlist Generator gepflegt und hi
 `src/assets/styles/main.css` importiert `tokens-v2.css` als erste Regel und lädt **Supreme** in 400,
 500 und 700 aus `src/assets/fonts/` (gebündelt von Vite, 600 fällt auf Bold).
 
+## Abweichung vom gemeinsamen Set: Schwarz-Gold
+
+Der Musikplayer nutzt seit dem Redesign eigene **Farbwerte** (Struktur, Namen, Abstände, Radien,
+Typografie und Regeln bleiben wie im gemeinsamen Set):
+
+- Dark: neutrales Schwarz (`--ds-surface-0` `#0a0a0a`), Gold `#d4a843`, Text warmweiß.
+- Light: Flächen unverändert, Text neutral schwarz, Gold `#d9a62e` mit `--ds-on-accent` `#111111`
+  (Kontrast ≥ 7:1, damit Goldflächen mit Schrift im hellen Modus gut lesbar sind).
+- Neu: `--ds-accent-bright` (JSON `accentBright`), hellgelber Zweitakzent für Fortschrittsbalken
+  und Visualizer-Spitzen. Nie als Textfarbe verwenden.
+
+Beim nächsten Abgleich mit dem Playlist Generator diese Werte nicht überschreiben, sondern
+entweder dort übernehmen oder hier bewusst beibehalten.
+
 ## Theme-Mechanik
 
 - Standard ist Light. Ein Inline-Skript im `<head>` beider Astro-Seiten setzt `html[data-theme]`,
@@ -44,7 +58,7 @@ Radien, Schrift und Bewegung. Werte werden im Playlist Generator gepflegt und hi
 
 ## Regeln
 
-Gold füllt eine Fläche pro Ansicht (Wiedergabe-Button bzw. Haupt-CTA), sonst zeigt es nur Zustand
+Gold füllt nur Hauptaktionen (Wiedergabe-Button, „Dateien auswählen“, Logo), sonst zeigt es nur Zustand
 (`--ds-accent-soft` plus 1-px-Akzentrahmen, Slider-Daumen, Fokus-Ring, Umschalter „an“). Ein Rahmen
 (1 px), drei Radien, Schatten nur für Overlays (Dialog, Toast, schwebender Kürzel-Button). Hover
 ändert Farbe, nie Größe. Löschen ist `--ds-danger` als Icon-Farbe auf flacher Fläche. Toasts zeigen

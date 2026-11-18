@@ -197,13 +197,11 @@
 
   /* Dropzone: Eingabefläche mit gestricheltem Rahmen, beim Ziehen ausgewählt */
   .uploader {
-    max-width: min(600px, 100%);
-    margin: 0 auto var(--ds-space-4);
-    padding: var(--ds-space-6);
+    padding: var(--ds-space-3) var(--ds-space-4);
     border: var(--ds-border-width) dashed var(--ds-border-strong);
     border-radius: var(--ds-radius-md);
-    background: var(--ds-surface-2);
-    text-align: center;
+    background: var(--ds-surface-1);
+    text-align: left;
     transition:
       background-color var(--ds-duration) var(--ds-ease),
       border-color var(--ds-duration) var(--ds-ease);
@@ -219,18 +217,24 @@
     background: var(--ds-accent-soft);
   }
 
+  /* Eine Zeile: Symbol, Text, Buttons; bricht schmal um */
   .uploader__drop-area {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
-    gap: var(--ds-space-3);
+    gap: var(--ds-space-3) var(--ds-space-4);
   }
 
   .uploader__badge {
+    width: var(--ds-control-lg);
+    height: var(--ds-control-lg);
+    flex-shrink: 0;
     display: grid;
     place-items: center;
-    color: var(--ds-text-2);
-    font-size: var(--ds-text-3xl);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-surface-2);
+    color: var(--ds-accent);
+    font-size: var(--ds-icon-md);
     line-height: 1;
     transition: color var(--ds-duration) var(--ds-ease);
   }
@@ -241,15 +245,16 @@
   }
 
   .uploader__text {
+    flex: 1;
+    min-width: 180px;
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-1);
   }
 
   /* panel-title */
   .uploader__title {
     margin: 0;
-    font-size: var(--ds-text-lg);
+    font-size: var(--ds-text-md);
     font-weight: var(--ds-weight-semibold);
     color: var(--ds-text);
   }
@@ -264,9 +269,7 @@
   .uploader__buttons {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: var(--ds-space-2);
-    margin-top: var(--ds-space-1);
   }
 
   /* Button secondary: Fläche 2, kräftiger Rahmen; Hover nur Farbe */
@@ -299,19 +302,26 @@
     font-size: var(--ds-icon-sm);
   }
 
-  /* Hauptaktion des Uploaders: kräftiger Text, aber keine zweite Goldfläche
-     (Gold füllt in dieser Ansicht nur der Wiedergabe-Button). */
+  /* Hauptaktion des Uploaders: Goldfläche mit --ds-on-accent (≥ 7:1 in beiden Themes) */
   .uploader__btn--primary {
+    border-color: var(--ds-accent);
+    background: var(--ds-accent);
+    color: var(--ds-on-accent);
     font-weight: var(--ds-weight-semibold);
   }
 
+  .uploader__btn--primary:hover {
+    border-color: var(--ds-accent-hover);
+    background: var(--ds-accent-hover);
+  }
+
   .uploader__btn--primary i {
-    color: var(--ds-text);
+    color: var(--ds-on-accent);
   }
 
   @media (max-width: 480px) {
     .uploader {
-      padding: var(--ds-space-4);
+      padding: var(--ds-space-3);
     }
 
     .uploader__buttons {

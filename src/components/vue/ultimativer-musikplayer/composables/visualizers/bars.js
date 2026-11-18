@@ -15,17 +15,19 @@ export const drawBars = (ctx, w, h, cx, cy, dataArray, vizIntensity) => {
     const bh = v * maxH * (0.5 + vizIntensity * 0.9)
     if (bh < 1) continue
     const x = i * slot + (slot - bw) / 2
-    const hue = 200 + (i / bars) * 120
+    // Schwarz-Gold: Gold zur Mitte, hellgelbe Spitzen; rechts etwas dunkler
+    const hue = 44 - (i / bars) * 8
+    const lit = 56 - (i / bars) * 12
     const r = Math.min(bw / 2, 4)
 
     const gr = ctx.createLinearGradient(x, cy - bh, x, cy + bh)
-    gr.addColorStop(0, `hsl(${hue + 25},95%,82%)`)
-    gr.addColorStop(0.45, `hsl(${hue},85%,58%)`)
-    gr.addColorStop(0.55, `hsl(${hue},85%,58%)`)
-    gr.addColorStop(1, `hsl(${hue + 25},95%,82%)`)
+    gr.addColorStop(0, `hsl(48,100%,77%)`)
+    gr.addColorStop(0.45, `hsl(${hue},62%,${lit}%)`)
+    gr.addColorStop(0.55, `hsl(${hue},62%,${lit}%)`)
+    gr.addColorStop(1, `hsl(48,100%,77%)`)
 
     ctx.save()
-    glow(ctx, `hsl(${hue},90%,65%)`, 10 + vizIntensity * 14)
+    glow(ctx, `hsl(${hue},70%,50%)`, 4 + vizIntensity * 6)
     ctx.fillStyle = gr
 
     ctx.beginPath()

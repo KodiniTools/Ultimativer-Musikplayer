@@ -84,7 +84,7 @@ describe('settingsStore', () => {
     expect(html.classList.contains('dark')).toBe(true)
     expect(document.body.classList.contains('light-theme')).toBe(false)
     expect(document.querySelector('meta[name="theme-color"]').getAttribute('content')).toBe(
-      '#0a1324'
+      '#0a0a0a'
     )
     expect(localStorage.getItem('theme')).toBe('dark')
     expect(document.querySelector('.global-nav-theme-icon').textContent).toBe('☀️')

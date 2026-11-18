@@ -7,6 +7,9 @@
    ändern, sondern im Playlist Generator pflegen und übernehmen.
    Maschinenlesbar: tokens-v2.json · typisiert: tokens-v2.ts · Doku: README.md
 
+   Abweichung: Farbwerte Schwarz-Gold (eigene Palette des Musikplayers),
+   Struktur und Regeln weiter wie im gemeinsamen Set. Plus --ds-accent-bright.
+
    Theme-Mechanik: Dark auf :root, Light auf body.light-theme (App) und
    html[data-theme='light'] (SSI-Partials, Inline-Skript vor dem ersten Paint).
    Beide Light-Selektoren tragen den vollständigen Satz.
@@ -18,23 +21,24 @@
 /* === Dark (Standard) === */
 :root {
   /* Flächen */
-  --ds-surface-0: #0a1324;
-  --ds-surface-1: #111d33;
-  --ds-surface-2: #182741;
-  --ds-surface-3: #1f3050;
-  --ds-border: #223553;
-  --ds-border-strong: #2f4668;
+  --ds-surface-0: #0a0a0a;
+  --ds-surface-1: #131313;
+  --ds-surface-2: #1b1b1b;
+  --ds-surface-3: #242424;
+  --ds-border: #262626;
+  --ds-border-strong: #363636;
 
   /* Text */
-  --ds-text: #f2eee2;
-  --ds-text-2: #a7b3c4;
-  --ds-text-3: #8593a8;
+  --ds-text: #f5f3ee;
+  --ds-text-2: #b3b0a8;
+  --ds-text-3: #918e86;
 
   /* Akzent */
-  --ds-accent: #d4a257;
-  --ds-accent-hover: #e0b06a;
-  --ds-accent-soft: rgba(212, 162, 87, 0.14);
-  --ds-on-accent: #0a1324;
+  --ds-accent: #d4a843;
+  --ds-accent-hover: #e2b955;
+  --ds-accent-soft: rgba(212, 168, 67, 0.14);
+  --ds-on-accent: #0a0a0a;
+  --ds-accent-bright: #ffe48a;
   --ds-link: #6aaef5;
 
   /* Status */
@@ -122,14 +126,15 @@
   --ds-border: #e2dfd7;
   --ds-border-strong: #cbc6ba;
 
-  --ds-text: #14213a;
-  --ds-text-2: #3f4a60;
-  --ds-text-3: #5f6b84;
+  --ds-text: #141414;
+  --ds-text-2: #45443f;
+  --ds-text-3: #66645d;
 
-  --ds-accent: #c9984d;
-  --ds-accent-hover: #b8842f;
-  --ds-accent-soft: rgba(201, 152, 77, 0.16);
-  --ds-on-accent: #14213a;
+  --ds-accent: #d9a62e;
+  --ds-accent-hover: #c8951f;
+  --ds-accent-soft: rgba(217, 166, 46, 0.16);
+  --ds-on-accent: #111111;
+  --ds-accent-bright: #e0b423;
   --ds-link: #0f5aa8;
 
   --ds-success: #177a42;
@@ -150,14 +155,15 @@
   --ds-border: #e2dfd7;
   --ds-border-strong: #cbc6ba;
 
-  --ds-text: #14213a;
-  --ds-text-2: #3f4a60;
-  --ds-text-3: #5f6b84;
+  --ds-text: #141414;
+  --ds-text-2: #45443f;
+  --ds-text-3: #66645d;
 
-  --ds-accent: #c9984d;
-  --ds-accent-hover: #b8842f;
-  --ds-accent-soft: rgba(201, 152, 77, 0.16);
-  --ds-on-accent: #14213a;
+  --ds-accent: #d9a62e;
+  --ds-accent-hover: #c8951f;
+  --ds-accent-soft: rgba(217, 166, 46, 0.16);
+  --ds-on-accent: #111111;
+  --ds-accent-bright: #e0b423;
   --ds-link: #0f5aa8;
 
   --ds-success: #177a42;
