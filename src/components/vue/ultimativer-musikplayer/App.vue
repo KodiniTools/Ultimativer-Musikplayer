@@ -3,17 +3,19 @@
     <AppHeader />
 
     <main class="app__main">
-      <section class="panel">
-        <div class="panel__body">
-          <AudioUploader @files-loaded="handleFilesLoaded" />
-
+      <section class="panel stage">
+        <div class="stage__viz">
           <AudioVisualizer :on-init="visualizer.initCanvas" />
 
           <div class="viz-controls-bar">
             <VisualizerControls />
           </div>
+        </div>
 
-          <EqualizerControls class="eq-bar" />
+        <div class="panel__body stage__body">
+          <AudioUploader @files-loaded="handleFilesLoaded" />
+
+          <EqualizerControls />
         </div>
       </section>
 
@@ -266,15 +268,12 @@
 </script>
 
 <style scoped>
-  .eq-bar {
-    margin-top: var(--ds-space-3);
-  }
-
   /* Freistehender Icon-Button über der Player-Leiste: schwebt, daher Overlay-Schatten */
   .shortcuts-fab {
     position: fixed;
     left: var(--ds-space-4);
-    bottom: 96px;
+    /* über der schwebenden Player-Leiste */
+    bottom: calc(var(--ds-space-16) + var(--ds-space-16));
     z-index: var(--ds-z-player);
     width: var(--ds-control-lg);
     height: var(--ds-control-lg);

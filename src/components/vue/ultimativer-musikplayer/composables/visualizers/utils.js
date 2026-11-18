@@ -21,6 +21,15 @@ export const energy = (data) => {
   return e / (data.length * 255)
 }
 
+/**
+ * Schwarz-Gold-Palette aller Visualizer: Farbton von Kupfer (r = 0, Hue 30)
+ * über Gold (r = 0.6, Hue 42) bis Hellgelb (r = 1, Hue 50). r wird auf 0…1 begrenzt.
+ */
+export const goldHue = (r) => 30 + Math.max(0, Math.min(1, r)) * 20
+
+/** Hellgelb der Spitzen und Kerne, entspricht --ds-accent-bright (#ffe48a). */
+export const BRIGHT_HUE = 48
+
 export const glow = (ctx, color, blur) => {
   ctx.shadowColor = color
   ctx.shadowBlur = blur

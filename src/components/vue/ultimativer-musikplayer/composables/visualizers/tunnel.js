@@ -1,4 +1,4 @@
-import { energy, glow, noGlow } from './utils.js'
+import { BRIGHT_HUE, energy, glow, goldHue, noGlow } from './utils.js'
 
 export const drawTunnel = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   const data = dataArray
@@ -17,7 +17,7 @@ export const drawTunnel = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
     if (alpha < 0.01) continue
     const bi = Math.floor((i / rings) * data.length * 0.7)
     const v = data[bi] / 255
-    const hue = ((i / rings) * 160 + t * 0.25) % 360
+    const hue = goldHue((i / rings + t * 0.001) % 1)
 
     ctx.save()
     glow(ctx, `hsl(${hue},85%,65%)`, 5 + vizIntensity * 8)
@@ -39,7 +39,7 @@ export const drawTunnel = (ctx, w, h, cx, cy, t, dataArray, vizIntensity) => {
   }
 
   const dr = 3 + en * 14
-  const dh = (t * 0.4) % 360
+  const dh = BRIGHT_HUE
   const dg = ctx.createRadialGradient(cx, cy, 0, cx, cy, dr * 3)
   dg.addColorStop(0, `hsla(${dh},90%,96%,${0.7 + en * 0.3})`)
   dg.addColorStop(1, `hsla(${dh},85%,65%,0)`)

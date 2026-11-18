@@ -1,7 +1,8 @@
 import { glow, noGlow } from './utils.js'
 
-// Classic LED colors: green up to 60 %, yellow up to 82 %, red above.
-const segmentHue = (ratio) => (ratio < 0.6 ? 130 : ratio < 0.82 ? 55 : 0)
+// Schwarz-Gold-LEDs: Kupfer bis 60 %, Gold bis 82 %, darüber Hellgelb.
+const segmentHue = (ratio) => (ratio < 0.6 ? 36 : ratio < 0.82 ? 43 : 49)
+const segmentLit = (ratio) => (ratio < 0.6 ? 44 : ratio < 0.82 ? 54 : 70)
 
 /**
  * LED-style equalizer with peak-hold indicators.
@@ -34,7 +35,7 @@ export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, state) => {
       const sy = baseY - (s + 1) * segH
       const ratio = s / segCnt
       const hue = segmentHue(ratio)
-      ctx.fillStyle = `hsla(${hue},90%,52%,${0.6 + ratio * 0.4})`
+      ctx.fillStyle = `hsla(${hue},85%,${segmentLit(ratio)}%,${0.6 + ratio * 0.4})`
       ctx.fillRect(x, sy, barW, segNet)
     }
 
@@ -46,8 +47,8 @@ export const drawEqualizer = (ctx, w, h, dataArray, vizIntensity, state) => {
       const py = baseY - (ps + 1) * segH
       const phue = segmentHue(ps / segCnt)
       ctx.save()
-      glow(ctx, `hsl(${phue},90%,65%)`, 6)
-      ctx.fillStyle = `hsl(${phue},90%,76%)`
+      glow(ctx, `hsl(${phue},90%,60%)`, 6)
+      ctx.fillStyle = `hsl(${phue},100%,78%)`
       ctx.fillRect(x, py, barW, segNet)
       noGlow(ctx)
       ctx.restore()

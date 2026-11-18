@@ -22,7 +22,7 @@ import '../../assets/styles/main.css'
       document.documentElement.setAttribute('data-theme', storedTheme)
       document.documentElement.classList.toggle('dark', storedTheme === 'dark')
       var themeMeta = document.querySelector('meta[name="theme-color"]')
-      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#0a1324' : '#f6f5f1')
+      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#0a0a0a' : '#f6f5f1')
     } catch {
       document.documentElement.setAttribute('data-theme', 'light')
     }

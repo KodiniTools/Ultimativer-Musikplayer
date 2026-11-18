@@ -1,4 +1,4 @@
-import { energy } from './utils.js'
+import { energy, goldHue } from './utils.js'
 
 export const drawSparks = (ctx, w, h, cx, cy, dataArray, vizIntensity, state) => {
   const data = dataArray
@@ -14,7 +14,8 @@ export const drawSparks = (ctx, w, h, cx, cy, dataArray, vizIntensity, state) =>
   for (let i = 0; i < spawn && state.particles.length < maxP; i++) {
     const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * (beat ? 1.4 : 0.5)
     const spd = (1.8 + Math.random() * 4.5) * (0.5 + vizIntensity) * (0.4 + en * 1.8)
-    const hue = beat ? 35 + Math.random() * 35 : 195 + Math.random() * 150
+    // Beat: hellgelbe Funken, sonst Kupfer bis Gold
+    const hue = beat ? goldHue(0.75 + Math.random() * 0.25) : goldHue(Math.random() * 0.7)
     state.particles.push({
       x: cx + (Math.random() - 0.5) * 25 * (beat ? 2.5 : 1),
       y: cy + (Math.random() - 0.5) * 15,
