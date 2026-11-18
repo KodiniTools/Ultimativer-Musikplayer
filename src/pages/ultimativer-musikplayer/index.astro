@@ -8,7 +8,36 @@ import '../../assets/styles/main.css'
 import de from '../../components/vue/ultimativer-musikplayer/i18n/locales/de.js'
 import en from '../../components/vue/ultimativer-musikplayer/i18n/locales/en.js'
 import { pageMeta } from '../../config/pageMeta.js'
+import promoDe1000 from '../../assets/images/promo-de-1000.webp'
+import promoDe2000 from '../../assets/images/promo-de-2000.webp'
+import promoEn1000 from '../../assets/images/promo-en-1000.webp'
+import promoEn2000 from '../../assets/images/promo-en-2000.webp'
 const t = de
+
+/** App-Seite je Sprache: Englisch über ?lang=en (hat in der App Vorrang). */
+const APP_URL = { de: '/ultimativer-musikplayer/app/', en: '/ultimativer-musikplayer/app/?lang=en' }
+
+/**
+ * Werbebild je Sprache. Beide stehen im HTML; sichtbar ist das zur Dokumentsprache
+ * passende (siehe .promo--de/.promo--en), damit es ohne JavaScript auch in der
+ * vom Build erzeugten index.en.html stimmt.
+ */
+const promos = [
+  {
+    lang: 'de',
+    href: APP_URL.de,
+    small: promoDe1000,
+    large: promoDe2000,
+    alt: 'Ultimativer Musikplayer starten – spielt MP3, WAV, FLAC und OGG im Browser',
+  },
+  {
+    lang: 'en',
+    href: APP_URL.en,
+    small: promoEn1000,
+    large: promoEn2000,
+    alt: 'Start the Ultimate Music Player – plays MP3, WAV, FLAC and OGG in your browser',
+  },
+]
 ---
 
 <html lang="de">
@@ -169,6 +198,31 @@ const t = de
       font-size: var(--ds-text-md);
     }
 
+    /* Werbebild als Link zur App; Rahmen und Radius wie die Karten */
+    .promo {
+      display: block;
+      border: var(--ds-border-width) solid var(--ds-border);
+      border-radius: var(--ds-radius-lg);
+      overflow: hidden;
+      transition: border-color var(--ds-duration) var(--ds-ease);
+    }
+
+    .promo:hover {
+      border-color: var(--ds-accent);
+    }
+
+    .promo img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Nur die Fassung zur Sprache des Dokuments zeigen */
+    html[lang='en'] .promo--de,
+    html:not([lang='en']) .promo--en {
+      display: none;
+    }
+
     /* section-title: 20, fett */
     .section-title {
       margin-bottom: var(--ds-space-5);
@@ -214,6 +268,24 @@ const t = de
         <span data-i18n="hero.cta">{t.hero.cta}</span>
       </a>
     </section>
+
+    <!-- Werbebild, verlinkt mit der App-Seite der jeweiligen Sprache -->
+    {
+      promos.map((promo) => (
+        <a href={promo.href} class={`promo promo--${promo.lang}`} lang={promo.lang}>
+          <img
+            src={promo.large.src}
+            srcset={`${promo.small.src} ${promo.small.width}w, ${promo.large.src} ${promo.large.width}w`}
+            sizes="(max-width: 992px) 100vw, 960px"
+            width={promo.large.width}
+            height={promo.large.height}
+            alt={promo.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ))
+    }
 
     <!-- Hauptfeatures -->
     <section>
