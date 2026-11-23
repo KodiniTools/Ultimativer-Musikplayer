@@ -49,7 +49,15 @@ Visualizer-Rahmen (Einstellungen darunter), die goldene Markierung des aktuellen
 `--ds-accent-soft` plus 1-px-Akzentrahmen) und die gestapelte Player-Leiste bis 480 px stehen in
 `kodini-player-stage4.css` (Etappe 4).
 
-Das Seitenlayout dazu steht in `src/assets/styles/kodini-layout-stage1.css` (nur Tokens, keine
+**Landingpage = Audio-Normalizer-Palette.** Auf der Landingpage (`html.kodini-player-page--landing`)
+gilt `tokens-normalizer.css`: Werte 1:1 aus `KodiniTools/Audio-Normalizer` (Dark und Light), alle
+Gewichts-Tokens 400 (nur Supreme Regular, `font-synthesis: none`), dazu `--ds-heading-accent`
+(cyanfarbene Unterzeile), `--ds-glow-*`, `--ds-container-landing` (1160 px) und die Verlaufs-Tokens
+`--ds-landing-backdrop`/`--ds-card-gradient`. Layout und Maße stehen in `kodini-landing.css`
+(Hero 0.9fr/1.1fr, Bildrahmen 1120 × 630, Karten, FAQ 720 px). Der Player behält Blau-Gold.
+Bei Änderungen am Normalizer die Werte dort nachziehen; `landingNormalizer.spec.ts` prüft sie.
+
+Das Seitenlayout des Players steht in `src/assets/styles/kodini-layout-stage1.css` (nur Tokens, keine
 eigenen Variablen); beide Astro-Seiten setzen dafür `html.kodini-player-page`.
 
 Beim nächsten Abgleich mit dem Playlist Generator diese Werte nicht überschreiben, sondern

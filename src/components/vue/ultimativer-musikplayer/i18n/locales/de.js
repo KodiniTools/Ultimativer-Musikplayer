@@ -1,6 +1,7 @@
 export default {
   hero: {
     title: 'Ultimativer Musikplayer',
+    subtitle: 'Kostenloser MP3-Player mit Visualizer, Playlist und Equalizer',
     desc: 'Erleben Sie Musik auf eine völlig neue Art mit unserem kostenlosen Musikplayer. Ausgestattet mit fortschrittlicher Audio-Visualisierung, umfassenden Playlist-Funktionen und modernem, responsivem Design.',
     cta: 'Musikplayer jetzt starten',
   },

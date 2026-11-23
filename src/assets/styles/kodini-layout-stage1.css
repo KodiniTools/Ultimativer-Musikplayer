@@ -1,66 +1,17 @@
-/* Grundlayout Etappe 1 für Landingpage und Player (Blau-Gold).
+/* Grundlayout Etappe 1 für den Player (Blau-Gold). Die Landingpage steht in
+   kodini-landing.css (Muster des Audio Normalizers).
    Farben, Verlauf, Abstände und Schriftgrade kommen ausschließlich aus
    src/design-system/tokens-v2.css. Die Seiten setzen dafür die Klasse
    kodini-player-page auf <html>. */
-.kodini-player-page body {
+.kodini-player-page--app body {
   background-image: var(--ds-page-backdrop);
   background-repeat: no-repeat;
 }
 
-html.kodini-player-page :is(.landing, .app) {
+html.kodini-player-page .app {
   max-width: var(--ds-container-wide);
   padding-inline: clamp(var(--ds-space-3), 2.5vw, var(--ds-space-6));
   color: var(--ds-text);
-}
-
-html.kodini-player-page .landing {
-  gap: clamp(var(--ds-space-6), 4vw, var(--ds-space-12));
-}
-
-html.kodini-player-page .landing .hero--intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(var(--ds-space-6), 4vw, var(--ds-space-12));
-  padding: clamp(var(--ds-space-4), 3vw, var(--ds-space-10)) 0;
-  border: 0;
-  background: transparent;
-  text-align: left;
-}
-
-html.kodini-player-page .landing .hero--intro h1 {
-  font-size: var(--ds-text-display);
-  line-height: var(--ds-leading-display);
-  letter-spacing: var(--ds-tracking-display);
-  overflow-wrap: anywhere;
-  text-align: inherit;
-}
-
-html.kodini-player-page .landing .hero--intro p {
-  max-width: 46ch;
-  margin-inline: 0;
-}
-
-.hero__copy {
-  min-width: 0;
-}
-
-.hero__image {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  border: var(--ds-border-width) solid var(--ds-border);
-  border-radius: var(--ds-radius-lg);
-}
-
-html.kodini-player-page .landing .features-grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
-}
-
-html.kodini-player-page .landing .feature-card i {
-  color: var(--ds-link);
 }
 
 .kodini-player-page--app .app__main > :is(.stage, .playlist-panel, .tool-cards) {
@@ -69,13 +20,6 @@ html.kodini-player-page .landing .feature-card i {
 
 .kodini-player-page--app .app__main {
   gap: clamp(var(--ds-space-3), 1.5vw, var(--ds-space-5));
-}
-
-/* Ab 901 px: Text und Kopfhörer-Motiv nebeneinander */
-@media (min-width: 901px) {
-  html.kodini-player-page .landing .hero--intro {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
 }
 
 @media (min-width: 1025px) {

@@ -13,12 +13,19 @@ const tokensCss = read('../design-system/tokens-v2.css')
 const rootBlock = parseBlock(tokensCss, ':root', 'tokens-v2.css')
 
 describe('Stylesheet Etappe 2', () => {
-  it.each(['index', 'app'])('%s.astro bindet es nach Etappe 1 ein', (page) => {
+  it.each(['index', 'app'])('%s.astro bindet es nach main.css ein', (page) => {
     const src = read(`../pages/ultimativer-musikplayer/${page}.astro`)
-    const stage1 = src.indexOf("import '../../assets/styles/kodini-layout-stage1.css'")
+    const main = src.indexOf("import '../../assets/styles/main.css'")
     const stage2 = src.indexOf("import '../../assets/styles/kodini-header-stage2.css'")
-    expect(stage1).toBeGreaterThan(-1)
-    expect(stage2).toBeGreaterThan(stage1)
+    expect(main).toBeGreaterThan(-1)
+    expect(stage2).toBeGreaterThan(main)
+  })
+
+  it('bindet es im Player nach Etappe 1 ein', () => {
+    const src = read('../pages/ultimativer-musikplayer/app.astro')
+    expect(src.indexOf('kodini-header-stage2.css')).toBeGreaterThan(
+      src.indexOf('kodini-layout-stage1.css')
+    )
   })
 
   it('nutzt weder Farbwerte noch Verlauf noch Outline-Fokus noch feste Pixelgrade', () => {
