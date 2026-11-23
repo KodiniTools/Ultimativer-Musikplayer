@@ -45,6 +45,10 @@ Bedienfelder des Players (Uploader, Equalizer, Visualizer-Regler, Wiedergabe, Ta
 stehen in `kodini-controls-stage3.css` (Etappe 3), ebenfalls nur über Tokens; der Fokus nutzt
 `--ds-focus-ring`. Bis 600 px stehen die zehn Equalizer-Bänder in zwei Reihen.
 
+Visualizer-Rahmen (Einstellungen darunter), die goldene Markierung des aktuellen Titels (Fläche
+`--ds-accent-soft` plus 1-px-Akzentrahmen) und die gestapelte Player-Leiste bis 480 px stehen in
+`kodini-player-stage4.css` (Etappe 4).
+
 Das Seitenlayout dazu steht in `src/assets/styles/kodini-layout-stage1.css` (nur Tokens, keine
 eigenen Variablen); beide Astro-Seiten setzen dafür `html.kodini-player-page`.
 
