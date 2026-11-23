@@ -1,0 +1,313 @@
+/* Landingpage nach dem Muster des Audio Normalizers (Hero mit Bildrahmen, Funktionskarten, FAQ).
+   Maße, Abstände und Schriftgrade stammen aus dessen LandingPage.vue und kodini-layout-stage1.css;
+   Farben, Verläufe und Gewichte aus src/design-system/tokens-normalizer.css. Nur Tokens, Schrift
+   ausschließlich Supreme Regular (400) ohne künstliches Fett. */
+html.kodini-player-page--landing body {
+  font-synthesis: none;
+}
+
+html.kodini-player-page--landing :is(h1, h2, h3, h4, h5, h6, b, strong, th) {
+  font-weight: var(--ds-weight-regular);
+}
+
+.landing-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background-color: var(--ds-surface-0);
+  background-image: var(--ds-landing-backdrop);
+  background-repeat: no-repeat;
+  background-size: 100% 42rem;
+  color: var(--ds-text);
+  font-size: var(--ds-text-md);
+  line-height: var(--ds-leading);
+}
+
+.landing-page > section > .container {
+  max-width: var(--ds-container-landing);
+  margin: 0 auto;
+  padding-inline: clamp(var(--ds-space-3), 3vw, var(--ds-space-6));
+}
+
+/* Hero */
+.landing-page .hero {
+  text-align: center;
+  padding-block: clamp(var(--ds-space-8), 7vw, 6rem) clamp(var(--ds-space-8), 5vw, 4rem);
+}
+
+.landing-page .hero > .container {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(var(--ds-space-6), 5vw, var(--ds-space-16));
+}
+
+.landing-page .hero-content {
+  max-width: 680px;
+  margin: 0;
+  text-align: start;
+}
+
+.landing-page .hero-title {
+  margin-bottom: var(--ds-space-3);
+  color: var(--ds-text);
+  font-size: var(--ds-text-display);
+  font-weight: var(--ds-weight-bold);
+  letter-spacing: var(--ds-tracking-display);
+  line-height: var(--ds-leading-display);
+  overflow-wrap: anywhere;
+  text-align: inherit;
+}
+
+.landing-page .hero-subtitle {
+  margin-bottom: var(--ds-space-3);
+  color: var(--ds-heading-accent);
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-medium);
+}
+
+.landing-page .hero-description {
+  margin-bottom: var(--ds-space-6);
+  color: var(--ds-text-2);
+  font-size: var(--ds-text-md);
+}
+
+.landing-page .btn-hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--ds-control-lg);
+  padding: 0 var(--ds-space-5);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-accent);
+  color: var(--ds-on-accent);
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-semibold);
+  text-decoration: none;
+  transition: background-color var(--ds-duration) var(--ds-ease);
+}
+
+.landing-page .btn-hero:hover {
+  background: var(--ds-accent-hover);
+  color: var(--ds-on-accent);
+}
+
+.landing-page .btn-hero:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+/* Wiederholung am Seitenende: Gold bleibt einmalig */
+.landing-page .btn-hero--secondary {
+  border: var(--ds-border-width) solid var(--ds-border-strong);
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+}
+
+.landing-page .btn-hero--secondary:hover {
+  background: var(--ds-surface-3);
+  color: var(--ds-text);
+}
+
+/* Bildrahmen 1120 × 630: nie breiter als 800 px, Platz über width/height + aspect-ratio reserviert */
+.landing-page .hero-media {
+  max-width: 800px;
+  margin: 0;
+  border: var(--ds-border-width) solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-2);
+  box-shadow: var(--ds-shadow-overlay);
+  overflow: hidden;
+}
+
+.landing-page .hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1120 / 630;
+  object-fit: cover;
+}
+
+/* Abschnitte: Funktionen und FAQ auf Fläche 1, Karten darauf auf Fläche 0 bzw. im Kartenverlauf */
+.landing-page :is(.features, .faq, .cta) {
+  padding-block: clamp(var(--ds-space-8), 5vw, var(--ds-space-16));
+}
+
+.landing-page :is(.features, .faq) {
+  background: var(--ds-surface-1);
+  border-top: var(--ds-border-width) solid var(--ds-border);
+  border-bottom: var(--ds-border-width) solid var(--ds-border);
+}
+
+.landing-page .section-title {
+  margin-bottom: var(--ds-space-8);
+  font-size: var(--ds-text-2xl);
+  font-weight: var(--ds-weight-bold);
+  letter-spacing: var(--ds-tracking-tight);
+  line-height: var(--ds-leading-tight);
+  text-align: center;
+}
+
+.landing-page .features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--ds-gap);
+}
+
+.landing-page :is(.feature-card, .faq-item) {
+  border: var(--ds-border-width) solid var(--ds-border);
+  background: var(--ds-card-gradient);
+  transition: border-color var(--ds-duration) var(--ds-ease);
+}
+
+.landing-page .feature-card {
+  padding: var(--ds-space-5);
+  border-radius: var(--ds-radius-lg);
+}
+
+.landing-page .feature-card:hover,
+.landing-page .faq-item:hover,
+.landing-page .faq-open {
+  border-color: var(--ds-border-strong);
+}
+
+.landing-page .feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-control-lg);
+  height: var(--ds-control-lg);
+  margin-bottom: var(--ds-space-3);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-2);
+  font-size: var(--ds-text-xl);
+}
+
+.landing-page .feature-card h3 {
+  margin-bottom: var(--ds-space-2);
+  color: var(--ds-text);
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-semibold);
+  line-height: var(--ds-leading-tight);
+}
+
+.landing-page .feature-card p {
+  margin: 0;
+  color: var(--ds-text-2);
+  font-size: var(--ds-text-md);
+}
+
+/* FAQ */
+.landing-page .faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.landing-page .faq-item {
+  border-radius: var(--ds-radius-md);
+  overflow: hidden;
+}
+
+.landing-page .faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  width: 100%;
+  min-height: var(--ds-row-height);
+  padding: var(--ds-space-3) var(--ds-space-5);
+  border: none;
+  background: none;
+  color: var(--ds-text);
+  font: inherit;
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-medium);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--ds-duration) var(--ds-ease);
+}
+
+.landing-page .faq-question:hover {
+  background: var(--ds-surface-2);
+}
+
+.landing-page .faq-question:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring-inset);
+}
+
+.landing-page .faq-icon {
+  flex-shrink: 0;
+  color: var(--ds-text-2);
+  font-size: var(--ds-text-xl);
+}
+
+.landing-page .faq-answer {
+  padding: 0 var(--ds-space-5) var(--ds-space-4);
+  color: var(--ds-text-2);
+  font-size: var(--ds-text-md);
+}
+
+.landing-page .faq-answer[hidden] {
+  display: none;
+}
+
+.landing-page .faq-answer p {
+  margin: 0;
+}
+
+/* Schluss-Aufruf */
+.landing-page .cta {
+  text-align: center;
+}
+
+.landing-page .cta-text {
+  margin-bottom: var(--ds-space-5);
+  color: var(--ds-text-2);
+  font-size: var(--ds-text-md);
+}
+
+@media (max-width: 760px) {
+  .landing-page .hero > .container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-page .section-title {
+    margin-bottom: var(--ds-space-6);
+    font-size: var(--ds-text-xl);
+  }
+
+  .landing-page .faq-question {
+    padding: var(--ds-space-3) var(--ds-space-4);
+    font-size: var(--ds-text-md);
+  }
+
+  .landing-page .faq-answer {
+    padding: 0 var(--ds-space-4) var(--ds-space-3);
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-page .hero-subtitle {
+    font-size: var(--ds-text-md);
+  }
+
+  .landing-page .hero-media {
+    border-radius: var(--ds-radius-md);
+  }
+
+  .landing-page .btn-hero {
+    width: 100%;
+    max-width: 320px;
+    height: var(--ds-row-height);
+  }
+
+  .landing-page .feature-card {
+    padding: var(--ds-space-4);
+  }
+}

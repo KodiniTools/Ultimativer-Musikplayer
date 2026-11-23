@@ -166,6 +166,7 @@ describe('Design-Tokens in Styles', () => {
       'none',
       'var(--ds-shadow-overlay)',
       'var(--ds-focus-ring)',
+      'var(--ds-focus-ring-inset)',
       'inset 0 0 0 var(--ds-border-width) var(--ds-accent)',
     ]
     expect(offending((d) => d.property === 'box-shadow' && !allowed.includes(d.value))).toEqual([])
@@ -234,16 +235,28 @@ describe('Typografie', () => {
 describe('Theme vor dem ersten Paint', () => {
   const pages = collectFiles(join(SRC_DIR, 'pages'), '.astro')
 
+  /** Fläche 0 je Theme; die Landingpage nutzt die Palette aus tokens-normalizer.css. */
+  const landingCss = readFileSync(join(SRC_DIR, 'design-system/tokens-normalizer.css'), 'utf8')
+  const landingSurface0 = (block: string) =>
+    landingCss.slice(landingCss.indexOf(block)).match(/--ds-surface-0:\s*(#[0-9a-f]{6})/)?.[1]
+  const expectedSurface0 = (page: string) =>
+    page.endsWith('index.astro')
+      ? {
+          light: landingSurface0("html.kodini-player-page--landing[data-theme='light']"),
+          dark: landingSurface0('/* === Dark === */'),
+        }
+      : { light: themeColorsV2('light').surface0, dark: themeColorsV2('dark').surface0 }
+
   it.each(pages.map((file) => relative(SRC_DIR, file)))('%s', (page) => {
     const text = readFileSync(join(SRC_DIR, page), 'utf8')
     const head = text.slice(0, text.indexOf('</head>'))
+    const surface0 = expectedSurface0(page)
+    expect(surface0.light).toMatch(/^#[0-9a-f]{6}$/)
     expect(head).toMatch(
       /<script is:inline>[\s\S]*localStorage\.getItem\('theme'\)[\s\S]*data-theme/
     )
-    expect(head).toContain(
-      `<meta name="theme-color" content="${themeColorsV2('light').surface0}" />`
-    )
-    expect(head).toContain(themeColorsV2('dark').surface0)
+    expect(head).toContain(`<meta name="theme-color" content="${surface0.light}" />`)
+    expect(head).toContain(surface0.dark)
     expect(text).toMatch(/<body>\s*<script is:inline>[\s\S]*light-theme/)
   })
 })
