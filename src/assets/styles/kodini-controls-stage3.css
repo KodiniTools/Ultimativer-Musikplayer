@@ -1,0 +1,146 @@
+/* Etappe 3: Bedienfelder der App. Die Vue-Struktur steuert alle Zustände; Farben, Abstände,
+   Fokus und Theme kommen aus src/design-system/tokens-v2.css (kein eigener Light-Block). */
+.kodini-player-page--app .uploader {
+  padding: clamp(var(--ds-space-3), 2vw, var(--ds-space-5));
+  border-color: var(--ds-border-strong);
+  background: var(--ds-surface-2);
+}
+
+.kodini-player-page--app .uploader:focus-within,
+.kodini-player-page--app .uploader--hover {
+  border-color: var(--ds-link);
+}
+
+.kodini-player-page--app .uploader.uploader--dragging {
+  border-color: var(--ds-link);
+  background: var(--ds-surface-3);
+}
+
+.kodini-player-page--app .uploader .uploader__badge {
+  color: var(--ds-link);
+  border: var(--ds-border-width) solid var(--ds-border-strong);
+}
+
+.kodini-player-page--app .uploader .uploader__text {
+  min-width: min(100%, calc(var(--ds-space-10) * 4));
+}
+
+.kodini-player-page--app .uploader .uploader__btn {
+  min-height: var(--ds-control-lg);
+  height: auto;
+  padding-block: var(--ds-space-2);
+  line-height: var(--ds-leading-tight);
+}
+
+.kodini-player-page--app .uploader .uploader__btn:not(.uploader__btn--primary):hover {
+  border-color: var(--ds-link);
+}
+
+.kodini-player-page--app .eq .eq__header {
+  background: var(--ds-surface-2);
+}
+
+.kodini-player-page--app .eq .eq__toggle > i:first-child {
+  color: var(--ds-link);
+}
+
+.kodini-player-page--app .eq .eq__preset {
+  min-width: 0;
+}
+
+.kodini-player-page--app .eq .eq__preset select {
+  max-width: 100%;
+}
+
+.kodini-player-page--app .eq .eq__bands {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: var(--ds-space-1);
+}
+
+.kodini-player-page--app .eq .eq__band {
+  padding-block: var(--ds-space-2);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-2);
+}
+
+.kodini-player-page--app .eq .eq__slider {
+  appearance: auto;
+  width: min(100%, var(--ds-space-6));
+  accent-color: var(--ds-link);
+}
+
+.kodini-player-page--app .eq .eq__slider:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+.kodini-player-page--app .viz-controls-bar {
+  max-width: calc(100% - 2 * var(--ds-space-3));
+  border-color: var(--ds-border-strong);
+  border-radius: var(--ds-radius-md);
+}
+
+.kodini-player-page--app .viz-controls {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.kodini-player-page--app .viz-controls select {
+  max-width: 100%;
+  border-color: var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-2);
+}
+
+.kodini-player-page--app :is(.viz-slider, .volume-slider):hover {
+  background: var(--ds-link);
+}
+
+.kodini-player-page--app .player-bar .progress-bar__fill {
+  background: var(--ds-accent);
+}
+
+.kodini-player-page--app .player-bar .progress-bar__fill::after {
+  background: var(--ds-accent);
+}
+
+.kodini-player-page--app .player-bar .pbar-btn:focus-visible,
+.kodini-player-page--app .player-bar .control-btn-sm:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+.kodini-player-page--app .shortcuts-overlay .shortcuts-modal {
+  border-color: var(--ds-border-strong);
+  max-height: min(85vh, 85dvh);
+}
+
+.kodini-player-page--app .shortcuts-modal .shortcuts-modal__header {
+  background: var(--ds-surface-2);
+}
+
+.kodini-player-page--app .shortcuts-modal .shortcuts-modal__title i {
+  color: var(--ds-link);
+}
+
+.kodini-player-page--app .shortcuts-modal .shortcuts-modal__close {
+  flex-shrink: 0;
+  border: var(--ds-border-width) solid var(--ds-border-strong);
+}
+
+.kodini-player-page--app .shortcuts-modal .shortcuts-list__row {
+  flex-wrap: wrap;
+}
+
+.kodini-player-page--app .shortcuts-modal .shortcuts-list__keys {
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .kodini-player-page--app .eq .eq__bands {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    row-gap: var(--ds-space-2);
+  }
+}
