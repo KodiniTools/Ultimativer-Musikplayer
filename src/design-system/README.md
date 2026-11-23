@@ -37,6 +37,10 @@ Typografie und Regeln bleiben wie im gemeinsamen Set; davor Schwarz-Gold):
 - `--ds-text-display`, `--ds-leading-display`, `--ds-tracking-display`: fließender
   Einstiegstitel der Landingpage. `--ds-container-wide` (1232 px): Inhaltsbreite beider Seiten.
 
+Navigation (SSI-Partial) und Player-Header (`kodini-header-stage2.css`, Etappe 2) legen die
+`--nav-*`-Variablen des Partials auf Tokens, ohne eigenen Light-Block. Der Fokus der Navigation
+nutzt `--ds-focus-ring`, nicht `outline`.
+
 Das Seitenlayout dazu steht in `src/assets/styles/kodini-layout-stage1.css` (nur Tokens, keine
 eigenen Variablen); beide Astro-Seiten setzen dafür `html.kodini-player-page`.
 
