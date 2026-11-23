@@ -3,7 +3,7 @@
  *
  * Portiert aus KodiniTools/Collage-Maker (src/tests/designTokens.spec.ts). Dort
  * prüft der Test Tailwind-Klassen; der Musikplayer hat kein Tailwind, deshalb
- * prüft er hier die CSS-Deklarationen selbst: main.css, die <style>-Blöcke
+ * prüft er hier die CSS-Deklarationen selbst: alle Dateien in assets/styles, die <style>-Blöcke
  * aller Vue-Komponenten und die der Astro-Seiten. Er verhindert die Rückkehr
  * der alten Glas-/3D-Palette, von Gradients, Blur, Glow, Skalierung, freien
  * Schriftgrößen, Radien und Schatten und stellt sicher, dass Supreme in allen
@@ -32,9 +32,12 @@ interface StyleSource {
   css: string
 }
 
-/** main.css plus alle <style>-Blöcke aus .vue- und .astro-Dateien, ohne Kommentare. */
+/** Alle Stylesheets aus assets/styles plus alle <style>-Blöcke aus .vue- und .astro-Dateien, ohne Kommentare. */
 function styleSources(): StyleSource[] {
-  const sources: StyleSource[] = [{ file: MAIN_CSS, css: readFileSync(MAIN_CSS, 'utf8') }]
+  const sources: StyleSource[] = collectFiles(dirname(MAIN_CSS), '.css').map((file) => ({
+    file,
+    css: readFileSync(file, 'utf8'),
+  }))
   const components = [...collectFiles(SRC_DIR, '.vue'), ...collectFiles(SRC_DIR, '.astro')]
   for (const file of components) {
     const text = readFileSync(file, 'utf8')
@@ -72,6 +75,9 @@ const offending = (predicate: (d: Declaration) => boolean) =>
 describe('Design-Tokens in Styles', () => {
   it('findet die Styles aller Komponenten', () => {
     expect(styleSources().length).toBeGreaterThanOrEqual(8)
+    expect(styleSources().map(({ file }) => relative(SRC_DIR, file))).toContain(
+      'assets/styles/kodini-layout-stage1.css'
+    )
     expect(ALL.length).toBeGreaterThan(300)
   })
 
@@ -95,7 +101,7 @@ describe('Design-Tokens in Styles', () => {
     ).toEqual([])
   })
 
-  it('nutzen keine Gradients, Blur, Glow, Drop-Shadow oder color-mix', () => {
+  it('nutzen keine Gradients (außer über --ds-page-backdrop), Blur, Glow, Drop-Shadow oder color-mix', () => {
     expect(
       offending(
         (d) =>

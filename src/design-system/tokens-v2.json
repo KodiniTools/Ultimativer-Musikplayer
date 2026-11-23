@@ -6,79 +6,79 @@
     "dark": {
       "surface0": {
         "$type": "color",
-        "$value": "#0a0a0a",
+        "$value": "#081220",
         "$description": "Seite",
         "$extensions": { "css": "--ds-surface-0" }
       },
       "surface1": {
         "$type": "color",
-        "$value": "#131313",
+        "$value": "#101e31",
         "$description": "Panel, Kopfzeile, Player, Toast",
         "$extensions": { "css": "--ds-surface-1" }
       },
       "surface2": {
         "$type": "color",
-        "$value": "#1b1b1b",
+        "$value": "#152941",
         "$description": "Eingaben, Dropzone, Chips, aktives Segment, Sekundär-Button",
         "$extensions": { "css": "--ds-surface-2" }
       },
       "surface3": {
         "$type": "color",
-        "$value": "#242424",
+        "$value": "#1c3550",
         "$description": "Hover auf Flächen und Zeilen",
         "$extensions": { "css": "--ds-surface-3" }
       },
       "border": {
         "$type": "color",
-        "$value": "#262626",
+        "$value": "#29435b",
         "$description": "Rahmen, Trennlinien",
         "$extensions": { "css": "--ds-border" }
       },
       "borderStrong": {
         "$type": "color",
-        "$value": "#363636",
+        "$value": "#506e8b",
         "$description": "Rahmen von Feldern und Sekundär-Buttons",
         "$extensions": { "css": "--ds-border-strong" }
       },
       "text": {
         "$type": "color",
-        "$value": "#f5f3ee",
+        "$value": "#f2f7ff",
         "$description": "Primärtext",
         "$extensions": { "css": "--ds-text" }
       },
       "text2": {
         "$type": "color",
-        "$value": "#b3b0a8",
+        "$value": "#b4c7dc",
         "$description": "Sekundärtext, Labels, Meta",
         "$extensions": { "css": "--ds-text-2" }
       },
       "text3": {
         "$type": "color",
-        "$value": "#918e86",
+        "$value": "#a2b8cf",
         "$description": "Tertiärtext, Platzhalter, Icons in Ruhe",
         "$extensions": { "css": "--ds-text-3" }
       },
       "accent": {
         "$type": "color",
-        "$value": "#d4a843",
+        "$value": "#f3c56b",
         "$description": "Primäraktion, Fokus, aktive Zustände",
         "$extensions": { "css": "--ds-accent" }
       },
       "accentHover": {
         "$type": "color",
-        "$value": "#e2b955",
+        "$value": "#ffd789",
         "$description": "Primäraktion :hover",
         "$extensions": { "css": "--ds-accent-hover" }
       },
       "accentSoft": {
         "$type": "color",
-        "$value": "rgba(212, 168, 67, 0.14)",
+        "$value": "rgba(243, 197, 107, 0.16)",
         "$description": "Ausgewählte Zeile, aktive Fläche",
         "$extensions": { "css": "--ds-accent-soft" }
       },
       "onAccent": {
         "$type": "color",
-        "$value": "#0a0a0a",
+        "$value": "#221605",
         "$description": "Text und Icons auf Akzent",
         "$extensions": { "css": "--ds-on-accent" }
       },
@@ -90,7 +90,7 @@
       },
       "link": {
         "$type": "color",
-        "$value": "#6aaef5",
+        "$value": "#79dcf2",
         "$description": "Links im Fließtext",
         "$extensions": { "css": "--ds-link" }
       },
@@ -104,85 +104,99 @@
         "$value": "#e3b341",
         "$extensions": { "css": "--ds-warning" }
       },
-      "danger": { "$type": "color", "$value": "#ef6b6b", "$extensions": { "css": "--ds-danger" } },
-      "info": { "$type": "color", "$value": "#6aaef5", "$extensions": { "css": "--ds-info" } }
+      "danger": {
+        "$type": "color",
+        "$value": "#ef6b6b",
+        "$extensions": { "css": "--ds-danger" }
+      },
+      "info": {
+        "$type": "color",
+        "$value": "#6aaef5",
+        "$extensions": { "css": "--ds-info" }
+      },
+      "pageGlow": {
+        "$type": "color",
+        "$value": "#123550",
+        "$description": "Lichtpunkt des Seitenverlaufs (nur in --ds-page-backdrop)",
+        "$extensions": { "css": "--ds-page-glow" }
+      }
     },
     "light": {
       "surface0": {
         "$type": "color",
-        "$value": "#f6f5f1",
+        "$value": "#eef5fc",
         "$description": "Seite",
         "$extensions": { "css": "--ds-surface-0" }
       },
       "surface1": {
         "$type": "color",
-        "$value": "#ffffff",
+        "$value": "#fbfdff",
         "$description": "Panel, Kopfzeile, Player, Toast",
         "$extensions": { "css": "--ds-surface-1" }
       },
       "surface2": {
         "$type": "color",
-        "$value": "#f0eee8",
+        "$value": "#e5eff9",
         "$description": "Eingaben, Dropzone, Chips, aktives Segment",
         "$extensions": { "css": "--ds-surface-2" }
       },
       "surface3": {
         "$type": "color",
-        "$value": "#e8e5dd",
+        "$value": "#d6e6f5",
         "$description": "Hover auf Flächen und Zeilen",
         "$extensions": { "css": "--ds-surface-3" }
       },
       "border": {
         "$type": "color",
-        "$value": "#e2dfd7",
+        "$value": "#b2c8dd",
         "$description": "Rahmen, Trennlinien",
         "$extensions": { "css": "--ds-border" }
       },
       "borderStrong": {
         "$type": "color",
-        "$value": "#cbc6ba",
+        "$value": "#768fa8",
         "$description": "Rahmen von Feldern und Sekundär-Buttons",
         "$extensions": { "css": "--ds-border-strong" }
       },
       "text": {
         "$type": "color",
-        "$value": "#141414",
+        "$value": "#132c46",
         "$description": "Primärtext",
         "$extensions": { "css": "--ds-text" }
       },
       "text2": {
         "$type": "color",
-        "$value": "#45443f",
+        "$value": "#435f79",
         "$description": "Sekundärtext, Labels, Meta",
         "$extensions": { "css": "--ds-text-2" }
       },
       "text3": {
         "$type": "color",
-        "$value": "#66645d",
+        "$value": "#516c85",
         "$description": "Tertiärtext, Platzhalter, Icons in Ruhe",
         "$extensions": { "css": "--ds-text-3" }
       },
       "accent": {
         "$type": "color",
-        "$value": "#d9a62e",
+        "$value": "#f3c56b",
         "$description": "Primäraktion, Fokus, aktive Zustände",
         "$extensions": { "css": "--ds-accent" }
       },
       "accentHover": {
         "$type": "color",
-        "$value": "#c8951f",
+        "$value": "#eab453",
         "$description": "Primäraktion :hover",
         "$extensions": { "css": "--ds-accent-hover" }
       },
       "accentSoft": {
         "$type": "color",
-        "$value": "rgba(217, 166, 46, 0.16)",
+        "$value": "rgba(243, 197, 107, 0.16)",
         "$description": "Ausgewählte Zeile, aktive Fläche",
         "$extensions": { "css": "--ds-accent-soft" }
       },
       "onAccent": {
         "$type": "color",
-        "$value": "#111111",
+        "$value": "#221605",
         "$description": "Text und Icons auf Akzent",
         "$extensions": { "css": "--ds-on-accent" }
       },
@@ -194,7 +208,7 @@
       },
       "link": {
         "$type": "color",
-        "$value": "#0f5aa8",
+        "$value": "#076779",
         "$description": "Links im Fließtext",
         "$extensions": { "css": "--ds-link" }
       },
@@ -208,8 +222,22 @@
         "$value": "#9a6416",
         "$extensions": { "css": "--ds-warning" }
       },
-      "danger": { "$type": "color", "$value": "#c93c3c", "$extensions": { "css": "--ds-danger" } },
-      "info": { "$type": "color", "$value": "#0f5aa8", "$extensions": { "css": "--ds-info" } }
+      "danger": {
+        "$type": "color",
+        "$value": "#c93c3c",
+        "$extensions": { "css": "--ds-danger" }
+      },
+      "info": {
+        "$type": "color",
+        "$value": "#0f5aa8",
+        "$extensions": { "css": "--ds-info" }
+      },
+      "pageGlow": {
+        "$type": "color",
+        "$value": "#d3e9fa",
+        "$description": "Lichtpunkt des Seitenverlaufs (nur in --ds-page-backdrop)",
+        "$extensions": { "css": "--ds-page-glow" }
+      }
     }
   },
   "effect": {
@@ -217,7 +245,7 @@
     "dark": {
       "focusRing": {
         "$type": "shadow",
-        "$value": "0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-accent)",
+        "$value": "0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-link)",
         "$description": "Fokus-Ring mit 2 px Abstand, ersetzt den Glow",
         "$extensions": { "css": "--ds-focus-ring" }
       },
@@ -226,12 +254,18 @@
         "$value": "0 8px 24px rgba(0, 0, 0, 0.35)",
         "$description": "Einziger Schatten: Dialog, Popover, Menü",
         "$extensions": { "css": "--ds-shadow-overlay" }
+      },
+      "pageBackdrop": {
+        "$type": "gradient",
+        "$value": "radial-gradient(ellipse at 78% 0%, var(--ds-page-glow), transparent 52rem)",
+        "$description": "Einziger erlaubter Verlauf: dezenter Seitenhintergrund hinter Landingpage und Player",
+        "$extensions": { "css": "--ds-page-backdrop" }
       }
     },
     "light": {
       "focusRing": {
         "$type": "shadow",
-        "$value": "0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-accent)",
+        "$value": "0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-link)",
         "$description": "Fokus-Ring mit 2 px Abstand, ersetzt den Glow",
         "$extensions": { "css": "--ds-focus-ring" }
       },
@@ -240,6 +274,12 @@
         "$value": "0 8px 24px rgba(20, 33, 58, 0.12)",
         "$description": "Einziger Schatten: Dialog, Popover, Menü",
         "$extensions": { "css": "--ds-shadow-overlay" }
+      },
+      "pageBackdrop": {
+        "$type": "gradient",
+        "$value": "radial-gradient(ellipse at 78% 0%, var(--ds-page-glow), transparent 52rem)",
+        "$description": "Einziger erlaubter Verlauf: dezenter Seitenhintergrund hinter Landingpage und Player",
+        "$extensions": { "css": "--ds-page-backdrop" }
       }
     }
   },
@@ -298,6 +338,12 @@
         "$value": "32px",
         "$description": "Hero",
         "$extensions": { "css": "--ds-text-3xl" }
+      },
+      "display": {
+        "$type": "dimension",
+        "$value": "clamp(36px, 5.6vw, 76px)",
+        "$description": "Einstiegstitel der Landingpage, fließend",
+        "$extensions": { "css": "--ds-text-display" }
       }
     },
     "weight": {
@@ -316,15 +362,29 @@
         "$value": 600,
         "$extensions": { "css": "--ds-weight-semibold" }
       },
-      "bold": { "$type": "fontWeight", "$value": 700, "$extensions": { "css": "--ds-weight-bold" } }
+      "bold": {
+        "$type": "fontWeight",
+        "$value": 700,
+        "$extensions": { "css": "--ds-weight-bold" }
+      }
     },
     "leading": {
-      "base": { "$type": "number", "$value": 1.5, "$extensions": { "css": "--ds-leading" } },
+      "base": {
+        "$type": "number",
+        "$value": 1.5,
+        "$extensions": { "css": "--ds-leading" }
+      },
       "tight": {
         "$type": "number",
         "$value": 1.25,
         "$description": "Titel ab 24 px",
         "$extensions": { "css": "--ds-leading-tight" }
+      },
+      "display": {
+        "$type": "number",
+        "$value": 1.02,
+        "$description": "Einstiegstitel",
+        "$extensions": { "css": "--ds-leading-display" }
       }
     },
     "tracking": {
@@ -333,21 +393,67 @@
         "$value": "-0.01em",
         "$description": "Titel ab 24 px",
         "$extensions": { "css": "--ds-tracking-tight" }
+      },
+      "display": {
+        "$type": "dimension",
+        "$value": "-0.045em",
+        "$description": "Einstiegstitel",
+        "$extensions": { "css": "--ds-tracking-display" }
       }
     }
   },
   "spacing": {
     "$description": "4er-Raster. Schlüssel = Vielfaches von 4 px.",
-    "1": { "$type": "dimension", "$value": "4px", "$extensions": { "css": "--ds-space-1" } },
-    "2": { "$type": "dimension", "$value": "8px", "$extensions": { "css": "--ds-space-2" } },
-    "3": { "$type": "dimension", "$value": "12px", "$extensions": { "css": "--ds-space-3" } },
-    "4": { "$type": "dimension", "$value": "16px", "$extensions": { "css": "--ds-space-4" } },
-    "5": { "$type": "dimension", "$value": "20px", "$extensions": { "css": "--ds-space-5" } },
-    "6": { "$type": "dimension", "$value": "24px", "$extensions": { "css": "--ds-space-6" } },
-    "8": { "$type": "dimension", "$value": "32px", "$extensions": { "css": "--ds-space-8" } },
-    "10": { "$type": "dimension", "$value": "40px", "$extensions": { "css": "--ds-space-10" } },
-    "12": { "$type": "dimension", "$value": "48px", "$extensions": { "css": "--ds-space-12" } },
-    "16": { "$type": "dimension", "$value": "64px", "$extensions": { "css": "--ds-space-16" } }
+    "1": {
+      "$type": "dimension",
+      "$value": "4px",
+      "$extensions": { "css": "--ds-space-1" }
+    },
+    "2": {
+      "$type": "dimension",
+      "$value": "8px",
+      "$extensions": { "css": "--ds-space-2" }
+    },
+    "3": {
+      "$type": "dimension",
+      "$value": "12px",
+      "$extensions": { "css": "--ds-space-3" }
+    },
+    "4": {
+      "$type": "dimension",
+      "$value": "16px",
+      "$extensions": { "css": "--ds-space-4" }
+    },
+    "5": {
+      "$type": "dimension",
+      "$value": "20px",
+      "$extensions": { "css": "--ds-space-5" }
+    },
+    "6": {
+      "$type": "dimension",
+      "$value": "24px",
+      "$extensions": { "css": "--ds-space-6" }
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": "32px",
+      "$extensions": { "css": "--ds-space-8" }
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": "40px",
+      "$extensions": { "css": "--ds-space-10" }
+    },
+    "12": {
+      "$type": "dimension",
+      "$value": "48px",
+      "$extensions": { "css": "--ds-space-12" }
+    },
+    "16": {
+      "$type": "dimension",
+      "$value": "64px",
+      "$extensions": { "css": "--ds-space-16" }
+    }
   },
   "radius": {
     "sm": {
@@ -483,20 +589,52 @@
     },
     "breakpoint": {
       "$description": "Nur für Media Queries und JS.",
-      "phone": { "$type": "dimension", "$value": "480px" },
+      "phone": {
+        "$type": "dimension",
+        "$value": "480px"
+      },
       "tablet": {
         "$type": "dimension",
         "$value": "768px",
         "$description": "Panels stapeln sich darunter"
       },
-      "desktop": { "$type": "dimension", "$value": "1024px" }
+      "desktop": {
+        "$type": "dimension",
+        "$value": "1024px"
+      }
+    },
+    "containerWide": {
+      "$type": "dimension",
+      "$value": "1232px",
+      "$description": "Inhaltsbreite von Landingpage und Player",
+      "$extensions": { "css": "--ds-container-wide" }
     }
   },
   "zIndex": {
-    "topbar": { "$type": "number", "$value": 500, "$extensions": { "css": "--ds-z-topbar" } },
-    "player": { "$type": "number", "$value": 900, "$extensions": { "css": "--ds-z-player" } },
-    "backdrop": { "$type": "number", "$value": 1000, "$extensions": { "css": "--ds-z-backdrop" } },
-    "dialog": { "$type": "number", "$value": 1001, "$extensions": { "css": "--ds-z-dialog" } },
-    "toast": { "$type": "number", "$value": 9999, "$extensions": { "css": "--ds-z-toast" } }
+    "topbar": {
+      "$type": "number",
+      "$value": 500,
+      "$extensions": { "css": "--ds-z-topbar" }
+    },
+    "player": {
+      "$type": "number",
+      "$value": 900,
+      "$extensions": { "css": "--ds-z-player" }
+    },
+    "backdrop": {
+      "$type": "number",
+      "$value": 1000,
+      "$extensions": { "css": "--ds-z-backdrop" }
+    },
+    "dialog": {
+      "$type": "number",
+      "$value": 1001,
+      "$extensions": { "css": "--ds-z-dialog" }
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 9999,
+      "$extensions": { "css": "--ds-z-toast" }
+    }
   }
 }

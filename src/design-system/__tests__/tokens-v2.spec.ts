@@ -123,8 +123,8 @@ describe('Kontrast (WCAG AA, mindestens 4.5:1)', () => {
 
 describe('tokens-v2.ts', () => {
   it('liefert Farbwerte, Variablennamen und var()-Ausdrücke', () => {
-    expect(colorTokenV2('dark', 'accent')).toBe('#d4a843')
-    expect(colorTokenV2('light', 'accent')).toBe('#d9a62e')
+    expect(colorTokenV2('dark', 'accent')).toBe('#f3c56b')
+    expect(colorTokenV2('light', 'accent')).toBe('#f3c56b')
     expect(colorCssVarV2('text2')).toBe('--ds-text-2')
     expect(cssVarV2('text2')).toBe('var(--ds-text-2)')
     expect(cssVarV2('surface1', '#131313')).toBe('var(--ds-surface-1, #131313)')
@@ -132,7 +132,7 @@ describe('tokens-v2.ts', () => {
 
   it('liefert eine flache Farbkarte je Theme', () => {
     expect(Object.keys(themeColorsV2('dark'))).toEqual(Object.keys(tokens.color.dark))
-    expect(themeColorsV2('light').surface0).toBe('#f6f5f1')
+    expect(themeColorsV2('light').surface0).toBe('#eef5fc')
   })
 
   it('liefert Größen und Breakpoints als Zahlen', () => {
