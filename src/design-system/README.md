@@ -41,6 +41,10 @@ Navigation (SSI-Partial) und Player-Header (`kodini-header-stage2.css`, Etappe 2
 `--nav-*`-Variablen des Partials auf Tokens, ohne eigenen Light-Block. Der Fokus der Navigation
 nutzt `--ds-focus-ring`, nicht `outline`.
 
+Bedienfelder des Players (Uploader, Equalizer, Visualizer-Regler, Wiedergabe, Tastaturhilfe)
+stehen in `kodini-controls-stage3.css` (Etappe 3), ebenfalls nur über Tokens; der Fokus nutzt
+`--ds-focus-ring`. Bis 600 px stehen die zehn Equalizer-Bänder in zwei Reihen.
+
 Das Seitenlayout dazu steht in `src/assets/styles/kodini-layout-stage1.css` (nur Tokens, keine
 eigenen Variablen); beide Astro-Seiten setzen dafür `html.kodini-player-page`.
 
