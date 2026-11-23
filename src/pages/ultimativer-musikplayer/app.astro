@@ -6,13 +6,15 @@
  */
 import App from '../../components/vue/ultimativer-musikplayer/App.vue'
 import '../../assets/styles/main.css'
+import '../../assets/styles/kodini-layout-stage1.css'
+import '../../assets/styles/kodini-header-stage2.css'
 ---
 
-<html lang="de">
+<html lang="de" class="kodini-player-page kodini-player-page--app">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f6f5f1" />
+  <meta name="theme-color" content="#eef5fc" />
   <!-- Theme vor dem ersten Paint setzen (Tokens: Dark auf :root, Light über
        data-theme), damit Light-Nutzer keinen dunklen Flash sehen. Danach
        übernehmen SSI-Navigation bzw. der Settings-Store der App. -->
@@ -22,7 +24,7 @@ import '../../assets/styles/main.css'
       document.documentElement.setAttribute('data-theme', storedTheme)
       document.documentElement.classList.toggle('dark', storedTheme === 'dark')
       var themeMeta = document.querySelector('meta[name="theme-color"]')
-      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#0a0a0a' : '#f6f5f1')
+      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#081220' : '#eef5fc')
     } catch {
       document.documentElement.setAttribute('data-theme', 'light')
     }

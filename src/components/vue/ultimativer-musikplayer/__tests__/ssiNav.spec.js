@@ -43,7 +43,7 @@ describe('SSI-Navigation', () => {
     stop = initStaticPartialSync()
     expect(document.body.classList.contains('light-theme')).toBe(true)
     expect(document.querySelector('meta[name="theme-color"]').getAttribute('content')).toBe(
-      '#f6f5f1'
+      '#eef5fc'
     )
 
     document.documentElement.setAttribute('data-theme', 'dark')
@@ -51,7 +51,7 @@ describe('SSI-Navigation', () => {
     expect(document.body.classList.contains('light-theme')).toBe(false)
     expect(document.documentElement.classList.contains('dark')).toBe(true)
     expect(document.querySelector('meta[name="theme-color"]').getAttribute('content')).toBe(
-      '#0a0a0a'
+      '#081220'
     )
     expect(document.querySelector('.global-nav-theme-icon').textContent).toBe('☀️')
   })

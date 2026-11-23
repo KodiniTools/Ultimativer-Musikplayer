@@ -1,0 +1,107 @@
+/* Etappe 2: Navigation (SSI-Partial) und Player-Header auf beiden Musikplayer-Routen.
+   Das Partial liefert Navigation und Umschalter; hier werden nur seine Variablen auf
+   die Tokens aus src/design-system/tokens-v2.css gelegt. Das Theme folgt den Tokens,
+   deshalb gibt es keinen eigenen Light-Block. */
+html.kodini-player-page .global-nav {
+  --nav-bg: var(--ds-surface-1);
+  --nav-text: var(--ds-text);
+  --nav-text-hover: var(--ds-text);
+  --nav-bg-hover: var(--ds-surface-3);
+  --nav-border: var(--ds-border-strong);
+  --dropdown-bg: var(--ds-surface-2);
+  --dropdown-border: var(--nav-border);
+  --dropdown-shadow: var(--ds-shadow-overlay);
+  --accent-color: var(--ds-link);
+  --nav-selected: var(--ds-accent);
+  --nav-on-selected: var(--ds-on-accent);
+
+  /* Das aktuelle SSI-Partial setzt im Dunkelmodus den Hintergrund mit !important. */
+  background: var(--nav-bg) !important;
+  border-bottom-color: var(--nav-border);
+  box-shadow: none;
+}
+
+html.kodini-player-page
+  .global-nav
+  :is(.global-nav-brand, .global-nav-link, .global-nav-dropdown-toggle, .global-nav-dropdown-item) {
+  color: var(--nav-text);
+}
+
+html.kodini-player-page
+  .global-nav
+  :is(
+    .global-nav-brand,
+    .global-nav-link,
+    .global-nav-dropdown-toggle,
+    .global-nav-dropdown-item
+  ):hover {
+  color: var(--nav-text-hover);
+}
+
+html.kodini-player-page .global-nav-container {
+  max-width: var(--ds-container-wide);
+  padding-inline: clamp(var(--ds-space-3), 2.5vw, var(--ds-space-6));
+}
+
+html.kodini-player-page .global-nav .global-nav-lang-btn.active {
+  background: var(--nav-selected);
+  color: var(--nav-on-selected);
+}
+
+/* Fokus-Ring wie überall im Player (Token), kein Outline */
+html.kodini-player-page .global-nav :is(a, button):focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+.kodini-player-page .app .app__header {
+  gap: clamp(var(--ds-space-2), 2vw, var(--ds-space-4));
+  padding: clamp(var(--ds-space-2), 2vw, var(--ds-space-4));
+  border: var(--ds-border-width) solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-1);
+}
+
+.kodini-player-page .app__header .brand {
+  min-width: 0;
+  justify-content: center;
+}
+
+.kodini-player-page .app__header #main-title {
+  font-size: var(--ds-text-xl);
+  overflow-wrap: anywhere;
+}
+
+.kodini-player-page .app__home:hover {
+  border-color: var(--ds-link);
+}
+
+@media (min-width: 641px) {
+  .kodini-player-page .app__header #main-title {
+    font-size: var(--ds-text-2xl);
+  }
+}
+
+@media (max-width: 768px) {
+  html.kodini-player-page .global-nav .global-nav-links {
+    background: var(--nav-bg);
+  }
+
+  html.kodini-player-page .global-nav .global-nav-dropdown .global-nav-dropdown-menu {
+    background: var(--dropdown-bg);
+  }
+}
+
+@media (max-width: 640px) {
+  .kodini-player-page .app .app__header {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .kodini-player-page .app__header .brand {
+    justify-content: flex-start;
+  }
+
+  .kodini-player-page .app__header #main-title {
+    text-align: start;
+  }
+}

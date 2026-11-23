@@ -10,7 +10,6 @@
       <span class="app__home-label">{{ t('nav.home') }}</span>
     </a>
     <div class="brand">
-      <span class="brand__logo" aria-hidden="true"><i class="fa-solid fa-music"></i></span>
       <h1 id="main-title">{{ t('nav.title') }}</h1>
     </div>
   </header>

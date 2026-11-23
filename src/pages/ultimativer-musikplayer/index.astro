@@ -5,9 +5,13 @@
  * Übersetzungen kommen aus den gemeinsamen Locale-Dateien (Single Source of Truth).
  */
 import '../../assets/styles/main.css'
+import '../../assets/styles/kodini-layout-stage1.css'
+import '../../assets/styles/kodini-header-stage2.css'
 import de from '../../components/vue/ultimativer-musikplayer/i18n/locales/de.js'
 import en from '../../components/vue/ultimativer-musikplayer/i18n/locales/en.js'
 import { pageMeta } from '../../config/pageMeta.js'
+import heroSmall from '../../assets/images/music-listening-640.webp'
+import heroLarge from '../../assets/images/music-listening-1200.webp'
 import promoDe1000 from '../../assets/images/promo-de-1000.webp'
 import promoDe2000 from '../../assets/images/promo-de-2000.webp'
 import promoEn1000 from '../../assets/images/promo-en-1000.webp'
@@ -40,11 +44,11 @@ const promos = [
 ]
 ---
 
-<html lang="de">
+<html lang="de" class="kodini-player-page kodini-player-page--landing">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f6f5f1" />
+  <meta name="theme-color" content="#eef5fc" />
   <!-- Theme vor dem ersten Paint setzen (Tokens: Dark auf :root, Light über
        data-theme), damit Light-Nutzer keinen dunklen Flash sehen. Danach
        übernehmen SSI-Navigation bzw. der Settings-Store der App. -->
@@ -54,7 +58,7 @@ const promos = [
       document.documentElement.setAttribute('data-theme', storedTheme)
       document.documentElement.classList.toggle('dark', storedTheme === 'dark')
       var themeMeta = document.querySelector('meta[name="theme-color"]')
-      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#0a0a0a' : '#f6f5f1')
+      if (themeMeta) themeMeta.setAttribute('content', storedTheme === 'dark' ? '#081220' : '#eef5fc')
     } catch {
       document.documentElement.setAttribute('data-theme', 'light')
     }
@@ -266,32 +270,26 @@ const promos = [
 
   <main class="landing ds-app">
     <!-- Hero Section -->
-    <section class="hero">
-      <h1 data-i18n="hero.title">{t.hero.title}</h1>
-      <p data-i18n="hero.desc">{t.hero.desc}</p>
-      <a href="/ultimativer-musikplayer/app/" class="cta-button">
-        <i class="fa-solid fa-play"></i>
-        <span data-i18n="hero.cta">{t.hero.cta}</span>
-      </a>
-    </section>
-
-    <!-- Werbebild, verlinkt mit der App-Seite der jeweiligen Sprache -->
-    {
-      promos.map((promo) => (
-        <a href={promo.href} class={`promo promo--${promo.lang}`} lang={promo.lang}>
-          <img
-            src={promo.large.src}
-            srcset={`${promo.small.src} ${promo.small.width}w, ${promo.large.src} ${promo.large.width}w`}
-            sizes="(max-width: 992px) 100vw, 960px"
-            width={promo.large.width}
-            height={promo.large.height}
-            alt={promo.alt}
-            loading="lazy"
-            decoding="async"
-          />
+    <section class="hero hero--intro">
+      <div class="hero__copy">
+        <h1 data-i18n="hero.title">{t.hero.title}</h1>
+        <p data-i18n="hero.desc">{t.hero.desc}</p>
+        <a href="/ultimativer-musikplayer/app/" class="cta-button">
+          <i class="fa-solid fa-play"></i>
+          <span data-i18n="hero.cta">{t.hero.cta}</span>
         </a>
-      ))
-    }
+      </div>
+      <img
+        class="hero__image"
+        src={heroLarge.src}
+        srcset={`${heroSmall.src} ${heroSmall.width}w, ${heroLarge.src} ${heroLarge.width}w`}
+        sizes="(min-width: 1232px) 550px, (min-width: 901px) 46vw, 94vw"
+        width={heroLarge.width}
+        height={heroLarge.height}
+        alt=""
+        fetchpriority="high"
+      />
+    </section>
 
     <!-- Hauptfeatures -->
     <section>
@@ -334,6 +332,24 @@ const promos = [
         </div>
       </div>
     </section>
+
+    <!-- Werbebild, verlinkt mit der App-Seite der jeweiligen Sprache -->
+    {
+      promos.map((promo) => (
+        <a href={promo.href} class={`promo promo--${promo.lang}`} lang={promo.lang}>
+          <img
+            src={promo.large.src}
+            srcset={`${promo.small.src} ${promo.small.width}w, ${promo.large.src} ${promo.large.width}w`}
+            sizes="(min-width: 1232px) 1184px, 94vw"
+            width={promo.large.width}
+            height={promo.large.height}
+            alt={promo.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ))
+    }
 
     <!-- FAQ Section -->
     <section class="content-section">

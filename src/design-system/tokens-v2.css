@@ -7,8 +7,10 @@
    ändern, sondern im Playlist Generator pflegen und übernehmen.
    Maschinenlesbar: tokens-v2.json · typisiert: tokens-v2.ts · Doku: README.md
 
-   Abweichung: Farbwerte Schwarz-Gold (eigene Palette des Musikplayers),
-   Struktur und Regeln weiter wie im gemeinsamen Set. Plus --ds-accent-bright.
+   Abweichung: Farbwerte Blau-Gold (eigene Palette des Musikplayers, Etappe 1),
+   Struktur und Regeln weiter wie im gemeinsamen Set. Plus --ds-accent-bright,
+   --ds-page-glow/--ds-page-backdrop (einziger Verlauf), Display-Titel und
+   --ds-container-wide.
 
    Theme-Mechanik: Dark auf :root, Light auf body.light-theme (App) und
    html[data-theme='light'] (SSI-Partials, Inline-Skript vor dem ersten Paint).
@@ -21,25 +23,26 @@
 /* === Dark (Standard) === */
 :root {
   /* Flächen */
-  --ds-surface-0: #0a0a0a;
-  --ds-surface-1: #131313;
-  --ds-surface-2: #1b1b1b;
-  --ds-surface-3: #242424;
-  --ds-border: #262626;
-  --ds-border-strong: #363636;
+  --ds-surface-0: #081220;
+  --ds-surface-1: #101e31;
+  --ds-surface-2: #152941;
+  --ds-surface-3: #1c3550;
+  --ds-border: #29435b;
+  --ds-border-strong: #506e8b;
 
   /* Text */
-  --ds-text: #f5f3ee;
-  --ds-text-2: #b3b0a8;
-  --ds-text-3: #918e86;
+  --ds-text: #f2f7ff;
+  --ds-text-2: #b4c7dc;
+  --ds-text-3: #a2b8cf;
 
   /* Akzent */
-  --ds-accent: #d4a843;
-  --ds-accent-hover: #e2b955;
-  --ds-accent-soft: rgba(212, 168, 67, 0.14);
-  --ds-on-accent: #0a0a0a;
+  --ds-accent: #f3c56b;
+  --ds-accent-hover: #ffd789;
+  --ds-accent-soft: rgba(243, 197, 107, 0.16);
+  --ds-on-accent: #221605;
   --ds-accent-bright: #ffe48a;
-  --ds-link: #6aaef5;
+  --ds-link: #79dcf2;
+  --ds-page-glow: #123550;
 
   /* Status */
   --ds-success: #5fcf8a;
@@ -48,8 +51,9 @@
   --ds-info: #6aaef5;
 
   /* Effekte (theme-abhängig) */
-  --ds-focus-ring: 0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-accent);
+  --ds-focus-ring: 0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-link);
   --ds-shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --ds-page-backdrop: radial-gradient(ellipse at 78% 0%, var(--ds-page-glow), transparent 52rem);
 
   /* === Typografie === */
   --ds-font-sans: 'Supreme', sans-serif;
@@ -61,13 +65,16 @@
   --ds-text-xl: 20px;
   --ds-text-2xl: 24px;
   --ds-text-3xl: 32px;
+  --ds-text-display: clamp(36px, 5.6vw, 76px);
   --ds-weight-regular: 400;
   --ds-weight-medium: 500;
   --ds-weight-semibold: 600;
   --ds-weight-bold: 700;
   --ds-leading: 1.5;
   --ds-leading-tight: 1.25;
+  --ds-leading-display: 1.02;
   --ds-tracking-tight: -0.01em;
+  --ds-tracking-display: -0.045em;
 
   /* === Abstände (4er-Raster) === */
   --ds-space-1: 4px;
@@ -106,6 +113,7 @@
 
   /* === Layout === */
   --ds-container: 1200px;
+  --ds-container-wide: 1232px;
   --ds-gutter: 24px;
   --ds-gap: 20px;
 
@@ -119,58 +127,62 @@
 
 /* === Light (App) === */
 .light-theme {
-  --ds-surface-0: #f6f5f1;
-  --ds-surface-1: #ffffff;
-  --ds-surface-2: #f0eee8;
-  --ds-surface-3: #e8e5dd;
-  --ds-border: #e2dfd7;
-  --ds-border-strong: #cbc6ba;
+  --ds-surface-0: #eef5fc;
+  --ds-surface-1: #fbfdff;
+  --ds-surface-2: #e5eff9;
+  --ds-surface-3: #d6e6f5;
+  --ds-border: #b2c8dd;
+  --ds-border-strong: #768fa8;
 
-  --ds-text: #141414;
-  --ds-text-2: #45443f;
-  --ds-text-3: #66645d;
+  --ds-text: #132c46;
+  --ds-text-2: #435f79;
+  --ds-text-3: #516c85;
 
-  --ds-accent: #d9a62e;
-  --ds-accent-hover: #c8951f;
-  --ds-accent-soft: rgba(217, 166, 46, 0.16);
-  --ds-on-accent: #111111;
+  --ds-accent: #f3c56b;
+  --ds-accent-hover: #eab453;
+  --ds-accent-soft: rgba(243, 197, 107, 0.16);
+  --ds-on-accent: #221605;
   --ds-accent-bright: #e0b423;
-  --ds-link: #0f5aa8;
+  --ds-link: #076779;
+  --ds-page-glow: #d3e9fa;
 
   --ds-success: #177a42;
   --ds-warning: #9a6416;
   --ds-danger: #c93c3c;
   --ds-info: #0f5aa8;
 
-  --ds-focus-ring: 0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-accent);
+  --ds-focus-ring: 0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-link);
   --ds-shadow-overlay: 0 8px 24px rgba(20, 33, 58, 0.12);
+  --ds-page-backdrop: radial-gradient(ellipse at 78% 0%, var(--ds-page-glow), transparent 52rem);
 }
 
 /* === Light (SSI-Partials, spiegelt .light-theme vollständig) === */
 :root[data-theme='light'] {
-  --ds-surface-0: #f6f5f1;
-  --ds-surface-1: #ffffff;
-  --ds-surface-2: #f0eee8;
-  --ds-surface-3: #e8e5dd;
-  --ds-border: #e2dfd7;
-  --ds-border-strong: #cbc6ba;
+  --ds-surface-0: #eef5fc;
+  --ds-surface-1: #fbfdff;
+  --ds-surface-2: #e5eff9;
+  --ds-surface-3: #d6e6f5;
+  --ds-border: #b2c8dd;
+  --ds-border-strong: #768fa8;
 
-  --ds-text: #141414;
-  --ds-text-2: #45443f;
-  --ds-text-3: #66645d;
+  --ds-text: #132c46;
+  --ds-text-2: #435f79;
+  --ds-text-3: #516c85;
 
-  --ds-accent: #d9a62e;
-  --ds-accent-hover: #c8951f;
-  --ds-accent-soft: rgba(217, 166, 46, 0.16);
-  --ds-on-accent: #111111;
+  --ds-accent: #f3c56b;
+  --ds-accent-hover: #eab453;
+  --ds-accent-soft: rgba(243, 197, 107, 0.16);
+  --ds-on-accent: #221605;
   --ds-accent-bright: #e0b423;
-  --ds-link: #0f5aa8;
+  --ds-link: #076779;
+  --ds-page-glow: #d3e9fa;
 
   --ds-success: #177a42;
   --ds-warning: #9a6416;
   --ds-danger: #c93c3c;
   --ds-info: #0f5aa8;
 
-  --ds-focus-ring: 0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-accent);
+  --ds-focus-ring: 0 0 0 2px var(--ds-surface-0), 0 0 0 4px var(--ds-link);
   --ds-shadow-overlay: 0 8px 24px rgba(20, 33, 58, 0.12);
+  --ds-page-backdrop: radial-gradient(ellipse at 78% 0%, var(--ds-page-glow), transparent 52rem);
 }

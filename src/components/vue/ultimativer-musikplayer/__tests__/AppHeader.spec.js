@@ -17,6 +17,14 @@ describe('AppHeader', () => {
     expect(wrapper.get('h1').text()).toBe('Ultimativer Musikplayer')
   })
 
+  it('zeigt im Header nur den Titel, das Logo gehört in die globale Navigation', () => {
+    const wrapper = mount(AppHeader, { global: { plugins: [i18n] } })
+    expect(wrapper.find('.brand__logo').exists()).toBe(false)
+    expect(wrapper.find('.brand i').exists()).toBe(false)
+    expect(wrapper.get('.brand').element.children).toHaveLength(1)
+    expect(wrapper.get('.brand > h1').attributes('id')).toBe('main-title')
+  })
+
   it('übersetzt den Rücklink', async () => {
     i18n.global.locale.value = 'en'
     const wrapper = mount(AppHeader, { global: { plugins: [i18n] } })

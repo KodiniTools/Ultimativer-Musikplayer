@@ -19,16 +19,30 @@ Radien, Schrift und Bewegung. Werte werden im Playlist Generator gepflegt und hi
 `src/assets/styles/main.css` importiert `tokens-v2.css` als erste Regel und lädt **Supreme** in 400,
 500 und 700 aus `src/assets/fonts/` (gebündelt von Vite, 600 fällt auf Bold).
 
-## Abweichung vom gemeinsamen Set: Schwarz-Gold
+## Abweichung vom gemeinsamen Set: Blau-Gold
 
-Der Musikplayer nutzt seit dem Redesign eigene **Farbwerte** (Struktur, Namen, Abstände, Radien,
-Typografie und Regeln bleiben wie im gemeinsamen Set):
+Der Musikplayer nutzt seit Etappe 1 eigene **Farbwerte** (Struktur, Namen, Abstände, Radien,
+Typografie und Regeln bleiben wie im gemeinsamen Set; davor Schwarz-Gold):
 
-- Dark: neutrales Schwarz (`--ds-surface-0` `#0a0a0a`), Gold `#d4a843`, Text warmweiß.
-- Light: Flächen unverändert, Text neutral schwarz, Gold `#d9a62e` mit `--ds-on-accent` `#111111`
-  (Kontrast ≥ 7:1, damit Goldflächen mit Schrift im hellen Modus gut lesbar sind).
-- Neu: `--ds-accent-bright` (JSON `accentBright`), hellgelber Zweitakzent für Fortschrittsbalken
+- Dark: dunkelblaue Flächen (`--ds-surface-0` `#081220`), Gold `#f3c56b`, Text kühles Weiß,
+  Link Cyan `#79dcf2`.
+- Light: hellblaue Flächen (`#eef5fc`), Text Dunkelblau, Gold wie Dark mit `--ds-on-accent`
+  `#221605`, Link Petrol `#076779`.
+- Fokus-Ring in `--ds-link` (Cyan/Petrol) statt Gold, damit er sich von goldenen Flächen abhebt.
+- `--ds-accent-bright` (JSON `accentBright`), hellgelber Zweitakzent für Fortschrittsbalken
   und Visualizer-Spitzen. Nie als Textfarbe verwenden.
+- `--ds-page-glow` und `--ds-page-backdrop`: dezenter radialer Verlauf hinter Landingpage und
+  Player. Das ist der **einzige** erlaubte Verlauf; Styles nutzen ihn nur als
+  `background-image: var(--ds-page-backdrop)`.
+- `--ds-text-display`, `--ds-leading-display`, `--ds-tracking-display`: fließender
+  Einstiegstitel der Landingpage. `--ds-container-wide` (1232 px): Inhaltsbreite beider Seiten.
+
+Navigation (SSI-Partial) und Player-Header (`kodini-header-stage2.css`, Etappe 2) legen die
+`--nav-*`-Variablen des Partials auf Tokens, ohne eigenen Light-Block. Der Fokus der Navigation
+nutzt `--ds-focus-ring`, nicht `outline`.
+
+Das Seitenlayout dazu steht in `src/assets/styles/kodini-layout-stage1.css` (nur Tokens, keine
+eigenen Variablen); beide Astro-Seiten setzen dafür `html.kodini-player-page`.
 
 Beim nächsten Abgleich mit dem Playlist Generator diese Werte nicht überschreiben, sondern
 entweder dort übernehmen oder hier bewusst beibehalten.
@@ -59,8 +73,8 @@ entweder dort übernehmen oder hier bewusst beibehalten.
 ## Regeln
 
 Gold füllt nur Hauptaktionen (Wiedergabe-Button, „Dateien auswählen“, Logo), sonst zeigt es nur Zustand
-(`--ds-accent-soft` plus 1-px-Akzentrahmen, Slider-Daumen, Fokus-Ring, Umschalter „an“). Ein Rahmen
+(`--ds-accent-soft` plus 1-px-Akzentrahmen, Slider-Daumen, Umschalter „an“). Ein Rahmen
 (1 px), drei Radien, Schatten nur für Overlays (Dialog, Toast, schwebender Kürzel-Button). Hover
 ändert Farbe, nie Größe. Löschen ist `--ds-danger` als Icon-Farbe auf flacher Fläche. Toasts zeigen
 Status als Icon und 3-px-Linie. `src/tests/designTokens.spec.ts` verhindert die Rückkehr der alten
-Glas-/3D-Palette, von Gradients, Blur, Glow, Skalierung, freien Schriftgraden, Radien und Schatten.
+Glas-/3D-Palette, von Gradients (außer `--ds-page-backdrop`), Blur, Glow, Skalierung, freien Schriftgraden, Radien und Schatten.
