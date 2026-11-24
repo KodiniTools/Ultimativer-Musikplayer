@@ -80,3 +80,11 @@ describe('Gefüllte Gold-Buttons nutzen die Fill-Tokens', () => {
       )
   })
 })
+
+describe('Sprachumschalter in der SSI-Navigation', () => {
+  it('markiert die aktive Sprache mit !important und Fill-Tokens (wie Playlist Generator)', () => {
+    expect(headerCss).toMatch(
+      /\.global-nav-lang-btn\.active\.active\.active \{\s*background: var\(--nav-selected\) !important;\s*color: var\(--nav-on-selected\) !important;/
+    )
+  })
+})
