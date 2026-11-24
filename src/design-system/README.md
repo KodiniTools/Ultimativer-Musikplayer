@@ -27,6 +27,7 @@ Typografie und Regeln bleiben wie im gemeinsamen Set; davor Schwarz-Gold):
 - Dark: dunkelblaue Flächen (`--ds-surface-0` `#081220`), Gold `#f3c56b`, Text kühles Weiß,
   Link Cyan `#79dcf2`.
 - Light: hellblaue Flächen (`#eef5fc`), Text Dunkelblau, Gold wie Dark mit `--ds-on-accent`
+- Gefüllte Gold-Buttons (Primär, Wiedergabe, aktive Sprache, Landing-CTA) wie im Playlist Generator: `--ds-accent-fill` (#8f6320), Hover `--ds-accent-fill-hover` (Dark #9a6b24, Light #7d561c), Text `--ds-on-accent-fill` (#ffffff). `--ds-accent` bleibt für Rahmen, Fokus und Akzentflächen ohne Text.
   `#221605`, Link Petrol `#076779`.
 - Fokus-Ring in `--ds-link` (Cyan/Petrol) statt Gold, damit er sich von goldenen Flächen abhebt.
 - `--ds-accent-bright` (JSON `accentBright`), hellgelber Zweitakzent für Fortschrittsbalken

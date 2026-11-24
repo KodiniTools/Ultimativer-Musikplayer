@@ -34,6 +34,9 @@ html.kodini-player-page--landing {
   --ds-accent-hover: #e0b06a;
   --ds-accent-soft: rgba(212, 162, 87, 0.14);
   --ds-on-accent: #0a1324;
+  --ds-accent-fill: #8f6320;
+  --ds-accent-fill-hover: #9a6b24;
+  --ds-on-accent-fill: #ffffff;
   --ds-link: #6aaef5;
 
   --ds-glow-blue: rgba(55, 114, 202, 0.2);
@@ -76,6 +79,9 @@ html.kodini-player-page--landing[data-theme='light'] body {
   --ds-accent-hover: #b8842f;
   --ds-accent-soft: rgba(201, 152, 77, 0.16);
   --ds-on-accent: #14213a;
+  --ds-accent-fill: #8f6320;
+  --ds-accent-fill-hover: #7d561c;
+  --ds-on-accent-fill: #ffffff;
   --ds-link: #0f5aa8;
 
   --ds-glow-blue: rgba(86, 147, 216, 0.15);

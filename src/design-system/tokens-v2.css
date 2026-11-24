@@ -40,6 +40,10 @@
   --ds-accent-hover: #ffd789;
   --ds-accent-soft: rgba(243, 197, 107, 0.16);
   --ds-on-accent: #221605;
+  /* Gefüllte Gold-Buttons (Primär, aktive Sprache): wie Playlist Generator */
+  --ds-accent-fill: #8f6320;
+  --ds-accent-fill-hover: #9a6b24;
+  --ds-on-accent-fill: #ffffff;
   --ds-accent-bright: #ffe48a;
   --ds-link: #79dcf2;
   --ds-page-glow: #123550;
@@ -142,6 +146,10 @@
   --ds-accent-hover: #eab453;
   --ds-accent-soft: rgba(243, 197, 107, 0.16);
   --ds-on-accent: #221605;
+  /* Gefüllte Gold-Buttons (Primär, aktive Sprache): wie Playlist Generator */
+  --ds-accent-fill: #8f6320;
+  --ds-accent-fill-hover: #7d561c;
+  --ds-on-accent-fill: #ffffff;
   --ds-accent-bright: #e0b423;
   --ds-link: #076779;
   --ds-page-glow: #d3e9fa;
@@ -173,6 +181,10 @@
   --ds-accent-hover: #eab453;
   --ds-accent-soft: rgba(243, 197, 107, 0.16);
   --ds-on-accent: #221605;
+  /* Gefüllte Gold-Buttons (Primär, aktive Sprache): wie Playlist Generator */
+  --ds-accent-fill: #8f6320;
+  --ds-accent-fill-hover: #7d561c;
+  --ds-on-accent-fill: #ffffff;
   --ds-accent-bright: #e0b423;
   --ds-link: #076779;
   --ds-page-glow: #d3e9fa;

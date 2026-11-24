@@ -302,21 +302,21 @@
     font-size: var(--ds-icon-sm);
   }
 
-  /* Hauptaktion des Uploaders: Goldfläche mit --ds-on-accent (≥ 7:1 in beiden Themes) */
+  /* Hauptaktion des Uploaders: Gold-Fläche wie Playlist Generator: --ds-accent-fill, Text --ds-on-accent-fill */
   .uploader__btn--primary {
-    border-color: var(--ds-accent);
-    background: var(--ds-accent);
-    color: var(--ds-on-accent);
+    border-color: var(--ds-accent-fill);
+    background: var(--ds-accent-fill);
+    color: var(--ds-on-accent-fill);
     font-weight: var(--ds-weight-semibold);
   }
 
   .uploader__btn--primary:hover {
-    border-color: var(--ds-accent-hover);
-    background: var(--ds-accent-hover);
+    border-color: var(--ds-accent-fill-hover);
+    background: var(--ds-accent-fill-hover);
   }
 
   .uploader__btn--primary i {
-    color: var(--ds-on-accent);
+    color: var(--ds-on-accent-fill);
   }
 
   @media (max-width: 480px) {
