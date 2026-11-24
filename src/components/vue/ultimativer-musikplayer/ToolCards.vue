@@ -45,5 +45,20 @@
       url: 'https://kodinitools.com/equaliser19/',
       icon: 'fa-solid fa-sliders',
     },
+    {
+      key: 'visualizer',
+      url: 'https://kodinitools.com/visualizer/',
+      icon: 'fa-solid fa-wave-square',
+    },
+    {
+      key: 'normalizer',
+      url: 'https://kodinitools.com/audionormalisierer/',
+      icon: 'fa-solid fa-volume-high',
+    },
+    {
+      key: 'cutter',
+      url: 'https://kodinitools.com/audio-cutter/',
+      icon: 'fa-solid fa-scissors',
+    },
   ]
 </script>

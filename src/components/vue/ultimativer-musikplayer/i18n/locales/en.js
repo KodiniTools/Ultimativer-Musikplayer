@@ -147,6 +147,18 @@ export default {
       name: 'Equalizer',
       desc: 'Fine-tune audio frequencies with a professional 19-band equalizer.',
     },
+    visualizer: {
+      name: 'Visualizer',
+      desc: 'Create music videos with audio visualization and export them as MP4.',
+    },
+    normalizer: {
+      name: 'Audio Normalizer',
+      desc: 'Match loudness to EBU R128, for several files at once.',
+    },
+    cutter: {
+      name: 'Audio Cutter',
+      desc: 'Cut audio files with millisecond precision in the browser, no upload.',
+    },
   },
   faq: {
     title: 'Frequently Asked Questions (FAQ)',

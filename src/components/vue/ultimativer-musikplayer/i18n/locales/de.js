@@ -147,6 +147,18 @@ export default {
       name: 'Equalizer',
       desc: 'Audio-Frequenzen mit einem professionellen 19-Band-Equalizer anpassen.',
     },
+    visualizer: {
+      name: 'Visualizer',
+      desc: 'Musikvideos mit Audio-Visualisierung erstellen und als MP4 exportieren.',
+    },
+    normalizer: {
+      name: 'Audio Normalizer',
+      desc: 'Lautstärke nach EBU R128 angleichen, auch für mehrere Dateien gleichzeitig.',
+    },
+    cutter: {
+      name: 'Audio Cutter',
+      desc: 'Audiodateien millisekundengenau im Browser schneiden, ohne Upload.',
+    },
   },
   faq: {
     title: 'Häufig gestellte Fragen (FAQ)',
