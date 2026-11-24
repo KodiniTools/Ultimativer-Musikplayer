@@ -79,8 +79,8 @@ html.kodini-player-page--landing :is(h1, h2, h3, h4, h5, h6, b, strong, th) {
   height: var(--ds-control-lg);
   padding: 0 var(--ds-space-5);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-accent);
-  color: var(--ds-on-accent);
+  background: var(--ds-accent-fill);
+  color: var(--ds-on-accent-fill);
   font-size: var(--ds-text-lg);
   font-weight: var(--ds-weight-semibold);
   text-decoration: none;
@@ -88,8 +88,8 @@ html.kodini-player-page--landing :is(h1, h2, h3, h4, h5, h6, b, strong, th) {
 }
 
 .landing-page .btn-hero:hover {
-  background: var(--ds-accent-hover);
-  color: var(--ds-on-accent);
+  background: var(--ds-accent-fill-hover);
+  color: var(--ds-on-accent-fill);
 }
 
 .landing-page .btn-hero:focus-visible {

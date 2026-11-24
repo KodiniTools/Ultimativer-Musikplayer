@@ -82,6 +82,24 @@
         "$description": "Text und Icons auf Akzent",
         "$extensions": { "css": "--ds-on-accent" }
       },
+      "accentFill": {
+        "$type": "color",
+        "$value": "#8f6320",
+        "$description": "Gefüllte Gold-Buttons (wie Playlist Generator): dunkles Gold, Text --ds-on-accent-fill",
+        "$extensions": { "css": "--ds-accent-fill" }
+      },
+      "accentFillHover": {
+        "$type": "color",
+        "$value": "#9a6b24",
+        "$description": "Hover der gefüllten Gold-Buttons",
+        "$extensions": { "css": "--ds-accent-fill-hover" }
+      },
+      "onAccentFill": {
+        "$type": "color",
+        "$value": "#ffffff",
+        "$description": "Text und Icons auf gefüllten Gold-Buttons",
+        "$extensions": { "css": "--ds-on-accent-fill" }
+      },
       "accentBright": {
         "$type": "color",
         "$value": "#ffe48a",
@@ -199,6 +217,24 @@
         "$value": "#221605",
         "$description": "Text und Icons auf Akzent",
         "$extensions": { "css": "--ds-on-accent" }
+      },
+      "accentFill": {
+        "$type": "color",
+        "$value": "#8f6320",
+        "$description": "Gefüllte Gold-Buttons (wie Playlist Generator): dunkles Gold, Text --ds-on-accent-fill",
+        "$extensions": { "css": "--ds-accent-fill" }
+      },
+      "accentFillHover": {
+        "$type": "color",
+        "$value": "#7d561c",
+        "$description": "Hover der gefüllten Gold-Buttons",
+        "$extensions": { "css": "--ds-accent-fill-hover" }
+      },
+      "onAccentFill": {
+        "$type": "color",
+        "$value": "#ffffff",
+        "$description": "Text und Icons auf gefüllten Gold-Buttons",
+        "$extensions": { "css": "--ds-on-accent-fill" }
       },
       "accentBright": {
         "$type": "color",

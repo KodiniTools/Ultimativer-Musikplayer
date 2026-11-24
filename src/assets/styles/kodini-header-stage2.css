@@ -12,8 +12,8 @@ html.kodini-player-page .global-nav {
   --dropdown-border: var(--nav-border);
   --dropdown-shadow: var(--ds-shadow-overlay);
   --accent-color: var(--ds-link);
-  --nav-selected: var(--ds-accent);
-  --nav-on-selected: var(--ds-on-accent);
+  --nav-selected: var(--ds-accent-fill);
+  --nav-on-selected: var(--ds-on-accent-fill);
 
   /* Das aktuelle SSI-Partial setzt im Dunkelmodus den Hintergrund mit !important. */
   background: var(--nav-bg) !important;
