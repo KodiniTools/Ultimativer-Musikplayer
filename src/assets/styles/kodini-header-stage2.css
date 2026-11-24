@@ -43,9 +43,12 @@ html.kodini-player-page .global-nav-container {
   padding-inline: clamp(var(--ds-space-3), 2.5vw, var(--ds-space-6));
 }
 
-html.kodini-player-page .global-nav .global-nav-lang-btn.active {
-  background: var(--nav-selected);
-  color: var(--nav-on-selected);
+/* Aktive Sprache wie im Playlist Generator: dunkles Gold mit weißem Text. main.css setzt die
+   Textfarbe aller SSI-Partial-Elemente mit !important und hoher Spezifität (0,5,5), das Partial
+   selbst setzt Farben ebenfalls mit !important. Darum !important und .active dreifach (0,6,2). */
+html.kodini-player-page body .global-nav .global-nav-lang-btn.active.active.active {
+  background: var(--nav-selected) !important;
+  color: var(--nav-on-selected) !important;
 }
 
 /* Fokus-Ring wie überall im Player (Token), kein Outline */
