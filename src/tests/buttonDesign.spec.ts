@@ -40,31 +40,44 @@ describe('Button-Tokens (Vorbild Playlist Generator)', () => {
   })
 })
 
+describe('Button-Verlauf (Equalizer-19-Muster)', () => {
+  it.each(BLOCKS)('%s: jeder Stopp erreicht mit weißer Schrift 4.5:1', (_n, block) => {
+    for (const token of ['--ds-accent-fill-grad', '--ds-accent-fill-grad-hover']) {
+      const stops = (block[token] ?? '').match(/#[0-9a-f]{6}/gi) ?? []
+      expect(stops).toHaveLength(3)
+      for (const stop of stops)
+        expect(contrastRatio(block['--ds-on-accent-fill'] as string, stop)).toBeGreaterThanOrEqual(
+          4.5
+        )
+    }
+  })
+})
+
 describe('Gefüllte Gold-Buttons nutzen die Fill-Tokens', () => {
   it('Landingpage: .btn-hero', () => {
     expect(landingCss).toMatch(
-      /\.landing-page \.btn-hero \{[^}]*background: var\(--ds-accent-fill\);\s*color: var\(--ds-on-accent-fill\);/
+      /\.landing-page \.btn-hero \{[^}]*background: var\(--ds-accent-fill\) var\(--ds-accent-fill-grad\);\s*color: var\(--ds-on-accent-fill\);/
     )
     expect(landingCss).toMatch(
-      /\.landing-page \.btn-hero:hover \{\s*background: var\(--ds-accent-fill-hover\);\s*color: var\(--ds-on-accent-fill\);/
+      /\.landing-page \.btn-hero:hover \{\s*background: var\(--ds-accent-fill-hover\) var\(--ds-accent-fill-grad-hover\);\s*color: var\(--ds-on-accent-fill\);/
     )
   })
 
   it('Player: Wiedergabe-Taste', () => {
     expect(mainCss).toMatch(
-      /\.pbar-btn--play \{[^}]*background: var\(--ds-accent-fill\);\s*color: var\(--ds-on-accent-fill\);/
+      /\.pbar-btn--play \{[^}]*background: var\(--ds-accent-fill\) var\(--ds-accent-fill-grad\);\s*color: var\(--ds-on-accent-fill\);/
     )
     expect(mainCss).toMatch(
-      /\.pbar-btn--play:hover \{[^}]*background: var\(--ds-accent-fill-hover\);/
+      /\.pbar-btn--play:hover \{[^}]*background: var\(--ds-accent-fill-hover\) var\(--ds-accent-fill-grad-hover\);/
     )
   })
 
   it('Uploader: Hauptaktion', () => {
     expect(uploader).toMatch(
-      /\.uploader__btn--primary \{[^}]*background: var\(--ds-accent-fill\);\s*color: var\(--ds-on-accent-fill\);/
+      /\.uploader__btn--primary \{[^}]*background: var\(--ds-accent-fill\) var\(--ds-accent-fill-grad\);\s*color: var\(--ds-on-accent-fill\);/
     )
     expect(uploader).toMatch(
-      /\.uploader__btn--primary:hover \{[^}]*background: var\(--ds-accent-fill-hover\);/
+      /\.uploader__btn--primary:hover \{[^}]*background: var\(--ds-accent-fill-hover\) var\(--ds-accent-fill-grad-hover\);/
     )
   })
 
@@ -84,7 +97,7 @@ describe('Gefüllte Gold-Buttons nutzen die Fill-Tokens', () => {
 describe('Sprachumschalter in der SSI-Navigation', () => {
   it('markiert die aktive Sprache mit !important und Fill-Tokens (wie Playlist Generator)', () => {
     expect(headerCss).toMatch(
-      /\.global-nav-lang-btn\.active\.active\.active \{\s*background: var\(--nav-selected\) !important;\s*color: var\(--nav-on-selected\) !important;/
+      /\.global-nav-lang-btn\.active\.active\.active \{\s*background: var\(--nav-selected\) var\(--nav-selected-grad\) !important;\s*color: var\(--nav-on-selected\) !important;/
     )
   })
 })

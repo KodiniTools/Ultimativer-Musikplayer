@@ -305,14 +305,14 @@
   /* Hauptaktion des Uploaders: Gold-Fläche wie Playlist Generator: --ds-accent-fill, Text --ds-on-accent-fill */
   .uploader__btn--primary {
     border-color: var(--ds-accent-fill);
-    background: var(--ds-accent-fill);
+    background: var(--ds-accent-fill) var(--ds-accent-fill-grad);
     color: var(--ds-on-accent-fill);
     font-weight: var(--ds-weight-semibold);
   }
 
   .uploader__btn--primary:hover {
     border-color: var(--ds-accent-fill-hover);
-    background: var(--ds-accent-fill-hover);
+    background: var(--ds-accent-fill-hover) var(--ds-accent-fill-grad-hover);
   }
 
   .uploader__btn--primary i {

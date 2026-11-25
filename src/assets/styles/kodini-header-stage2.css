@@ -14,6 +14,7 @@ html.kodini-player-page .global-nav {
   --accent-color: var(--ds-link);
   --nav-selected: var(--ds-accent-fill);
   --nav-on-selected: var(--ds-on-accent-fill);
+  --nav-selected-grad: var(--ds-accent-fill-grad);
 
   /* Das aktuelle SSI-Partial setzt im Dunkelmodus den Hintergrund mit !important. */
   background: var(--nav-bg) !important;
@@ -47,8 +48,12 @@ html.kodini-player-page .global-nav-container {
    Textfarbe aller SSI-Partial-Elemente mit !important und hoher Spezifität (0,5,5), das Partial
    selbst setzt Farben ebenfalls mit !important. Darum !important und .active dreifach (0,6,2). */
 html.kodini-player-page body .global-nav .global-nav-lang-btn.active.active.active {
-  background: var(--nav-selected) !important;
+  background: var(--nav-selected) var(--nav-selected-grad) !important;
   color: var(--nav-on-selected) !important;
+}
+
+html.kodini-player-page body .global-nav .global-nav-lang-btn.active.active.active:hover {
+  background: var(--ds-accent-fill-hover) var(--ds-accent-fill-grad-hover) !important;
 }
 
 /* Fokus-Ring wie überall im Player (Token), kein Outline */

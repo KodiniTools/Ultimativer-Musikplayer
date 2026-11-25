@@ -46,7 +46,7 @@ describe('Stylesheet Etappe 1 (Player)', () => {
 })
 
 describe('Tokens Blau-Gold', () => {
-  it('nutzt den einzigen Verlauf in --ds-page-backdrop, in Dark und beiden Light-Blöcken', () => {
+  it('nutzt Verläufe nur in --ds-page-backdrop und den Button-Verläufen, in Dark und beiden Light-Blöcken', () => {
     const blocks = [':root', '.light-theme', ":root[data-theme='light']"].map((selector) =>
       parseBlock(tokensCss, selector, 'tokens-v2.css')
     )
@@ -54,7 +54,11 @@ describe('Tokens Blau-Gold', () => {
       expect(block['--ds-page-backdrop']).toContain('var(--ds-page-glow)')
       expect(block['--ds-page-glow']).toMatch(/^#[0-9a-f]{6}$/)
       const withGradient = Object.entries(block).filter(([, value]) => /gradient\(/.test(value))
-      expect(withGradient.map(([name]) => name)).toEqual(['--ds-page-backdrop'])
+      expect(withGradient.map(([name]) => name).sort()).toEqual([
+        '--ds-accent-fill-grad',
+        '--ds-accent-fill-grad-hover',
+        '--ds-page-backdrop',
+      ])
     }
   })
 })
