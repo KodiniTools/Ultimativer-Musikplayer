@@ -314,14 +314,14 @@ h1 {
   height: var(--ds-row-height);
   margin-inline: var(--ds-space-1);
   border-color: var(--ds-accent-fill);
-  background: var(--ds-accent-fill);
+  background: var(--ds-accent-fill) var(--ds-accent-fill-grad);
   color: var(--ds-on-accent-fill);
   font-size: var(--ds-text-lg);
 }
 
 .pbar-btn--play:hover {
   border-color: var(--ds-accent-fill-hover);
-  background: var(--ds-accent-fill-hover);
+  background: var(--ds-accent-fill-hover) var(--ds-accent-fill-grad-hover);
   color: var(--ds-on-accent-fill);
 }
 
