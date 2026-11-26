@@ -191,3 +191,32 @@ describe('Landingpage-Palette (aus dem Audio Normalizer)', () => {
     ).toBeGreaterThanOrEqual(4.5)
   })
 })
+
+describe('Zweifarbiger Titel', () => {
+  const T = [
+    ['dark', DARK, '#e6bc76', '#48a0d8'],
+    ['light', LIGHT, '#775115', '#0058a0'],
+  ] as const
+
+  it.each(T)('%s: Gold und Blau wie vorgegeben, Kontrast ≥ 4.5:1', (_n, block, gold, blue) => {
+    expect(block['--ds-title-gold']).toBe(gold)
+    expect(block['--ds-title-blue']).toBe(blue)
+    for (const c of [gold, blue])
+      expect(contrastRatio(c, block['--ds-surface-0'] as string)).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it('setzt erstes Wort in Gold, zweites in Blau, per Token und ohne Hex', () => {
+    const css = readFileSync(
+      new URL('../assets/styles/kodini-landing.css', import.meta.url),
+      'utf8'
+    )
+    expect(css).toMatch(/\.hero-title__accent \{\s*color: var\(--ds-title-gold\);/)
+    expect(css).toMatch(/\.hero-title__main \{\s*color: var\(--ds-title-blue\);/)
+    const page = readFileSync(
+      new URL('../pages/ultimativer-musikplayer/index.astro', import.meta.url),
+      'utf8'
+    )
+    expect(page).toContain('data-i18n="hero.titleAccent"')
+    expect(page).toContain('data-i18n="hero.titleMain"')
+  })
+})
