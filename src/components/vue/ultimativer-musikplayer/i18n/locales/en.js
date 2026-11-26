@@ -1,6 +1,8 @@
 export default {
   hero: {
     title: 'Ultimate Music Player',
+    titleAccent: 'Ultimate',
+    titleMain: 'Music Player',
     subtitle: 'Free MP3 player with visualizer, playlist and equalizer',
     desc: 'Experience music in a completely new way with our free music player. Equipped with advanced audio visualization, comprehensive playlist functions and modern, responsive design.',
     cta: 'Start Music Player',

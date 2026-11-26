@@ -80,7 +80,10 @@ const t = de
     <section class="hero">
       <div class="container">
         <div class="hero-content">
-          <h1 class="hero-title" data-i18n="hero.title">{t.hero.title}</h1>
+          <h1 class="hero-title">
+            <span class="hero-title__accent" data-i18n="hero.titleAccent">{t.hero.titleAccent}</span>{' '}
+            <span class="hero-title__main" data-i18n="hero.titleMain">{t.hero.titleMain}</span>
+          </h1>
           <p class="hero-subtitle" data-i18n="hero.subtitle">{t.hero.subtitle}</p>
           <p class="hero-description" data-i18n="hero.desc">{t.hero.desc}</p>
           <a href="/ultimativer-musikplayer/app/" class="btn-hero">

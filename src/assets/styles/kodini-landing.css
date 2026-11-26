@@ -59,6 +59,15 @@ html.kodini-player-page--landing :is(h1, h2, h3, h4, h5, h6, b, strong, th) {
   text-align: inherit;
 }
 
+/* Titel zweifarbig: erstes Wort Gold, zweites Blau (Werte aus tokens-normalizer.css) */
+.landing-page .hero-title__accent {
+  color: var(--ds-title-gold);
+}
+
+.landing-page .hero-title__main {
+  color: var(--ds-title-blue);
+}
+
 .landing-page .hero-subtitle {
   margin-bottom: var(--ds-space-3);
   color: var(--ds-heading-accent);
